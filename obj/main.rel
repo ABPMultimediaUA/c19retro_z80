@@ -1,0 +1,29 @@
+XL2
+H 2 areas E global symbols
+M cpct_keyboard
+S rendersys_update Ref0000
+S physicssys_update Ref0000
+S cpct_setPalette_asm Ref0000
+S cpct_setPALColour_asm Ref0000
+S .__.ABS. Def0000
+S entityman_init Ref0000
+S cpct_waitVSYNC_asm Ref0000
+S cpct_setVideoMode_asm Ref0000
+S rendersys_init Ref0000
+S physicssys_init Ref0000
+S get_entity_array Ref0000
+S cpct_disableFirmware_asm Ref0000
+S cpct_getScreenPtr_asm Ref0000
+A _CODE size 1E flags 0 addr 0
+S _main Def0000
+A _DATA size 0 flags 0 addr 0
+T 00 00
+R 00 00 00 00
+T 00 00 CD 00 00 0E 00 CD 00 00 21 10 00 CD 00 00
+R 00 00 00 00 02 03 0B 00 02 08 07 00 02 0E 03 00
+T 0E 00 CD 00 00
+R 00 00 00 00 02 03 08 00
+T 11 00
+R 00 00 00 00
+T 11 00 CD 00 00 CD 00 00 CD 00 00 76 76 18 F3
+R 00 00 00 00 02 03 01 00 02 06 00 00 02 09 06 00
