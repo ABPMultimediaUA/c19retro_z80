@@ -2742,7 +2742,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm
@@ -2806,28 +2806,28 @@ Hexadecimal [16-Bits]
                              50 ;;
    4000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   4000 CD 60 41      [17]   53    call cpct_disableFirmware_asm
+   4000 CD 48 41      [17]   53    call cpct_disableFirmware_asm
                              54    
    4003 0E 00         [ 7]   55    ld    c, #0
-   4005 CD 4B 41      [17]   56    call  cpct_setVideoMode_asm    
+   4005 CD 33 41      [17]   56    call  cpct_setVideoMode_asm    
                              57 
    0008                      58    cpctm_setBorder_asm HW_WHITE
                               1    .radix h
    0008                       2    cpctm_setBorder_raw_asm \HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
    4008 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   400B CD 41 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   400B CD 29 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
                              59 
                              60    ;call  entityman_init
-   400E CD 50 40      [17]   61    call  rendersys_init
+   400E CD 41 40      [17]   61    call  rendersys_init
                              62 
                              63 ;; Loop forever
    4011                      64 loop:
    4011 CD 1F 40      [17]   65    call  physicssys_update
-   4014 CD 6F 40      [17]   66    call  rendersys_update
+   4014 CD 60 40      [17]   66    call  rendersys_update
                              67 
-   4017 CD 58 41      [17]   68    call  cpct_waitVSYNC_asm
+   4017 CD 40 41      [17]   68    call  cpct_waitVSYNC_asm
    401A 76            [ 4]   69    halt
    401B 76            [ 4]   70    halt
                              71 

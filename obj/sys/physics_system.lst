@@ -16,7 +16,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm
@@ -66,33 +66,22 @@ Hexadecimal [16-Bits]
    0001 CD 00 00      [17]    9   call  get_entity_array
                              10 
    0004                      11 physicssys_loop:    
-   0004 DD 4E 01      [19]   12   ld    c, e_x(ix)                  ;; C = x coordinate       
-   0007 DD 46 02      [19]   13   ld    b, e_y(ix)                  ;; B = y coordinate  
-   000A DD 6E 03      [19]   14   ld    l, e_vx(ix)                 ;; L = x velocity       
-   000D DD 66 04      [19]   15   ld    h, e_vy(ix)                 ;; H = y velocity  
-                             16 
-   0010 09            [11]   17   add   hl, bc
+   0004 F5            [11]   12   push  af
+                             13   
+   0005 DD 4E 01      [19]   14   ld    c, e_x(ix)                  ;; C = x coordinate       
+   0008 DD 7E 03      [19]   15   ld    a, e_vx(ix)                 ;; L = x velocity       
+   000B 81            [ 4]   16   add   a, c
+   000C DD 77 01      [19]   17   ld    e_x(ix), a
                              18 
-   0011 38 11         [12]   19   jr    c, invalid_position;
-                             20 
-   0013 4D            [ 4]   21   ld    c, l
-   0014 44            [ 4]   22   ld    b, h
-                             23   
-   0015 DD 71 01      [19]   24   ld    e_x(ix), c                  ;; C = x coordinate       
-   0018 DD 70 02      [19]   25   ld    e_y(ix), b                  ;; B = y coordinate  
+   000F DD 46 02      [19]   19   ld    b, e_y(ix)                  ;; B = y coordinate  
+   0012 DD 7E 04      [19]   20   ld    a, e_vy(ix)                 ;; H = y velocity  
+   0015 80            [ 4]   21   add   a, b
+   0016 DD 77 02      [19]   22   ld    e_y(ix), a
+                             23 
+   0019 01 08 00      [10]   24   ld    bc, #sizeof_e
+   001C DD 09         [15]   25   add   ix, bc
                              26 
-   001B 01 08 00      [10]   27   ld    bc, #sizeof_e
-   001E DD 09         [15]   28   add   ix, bc
-                             29 
-   0020 3D            [ 4]   30   dec   a  
-   0021 C8            [11]   31   ret   z
-   0022 18 E0         [12]   32   jr    physicssys_loop
-                             33 
-   0024                      34 invalid_position:
-   0024 F5            [11]   35   push  af
-   0025 3E FF         [ 7]   36   ld    a, #0xFF
-   0027 DD 77 00      [19]   37   ld    e_type(ix), a
-   002A F1            [10]   38   pop   af
-   002B 01 08 00      [10]   39   ld    bc, #sizeof_e
-   002E DD 09         [15]   40   add   ix, bc
-   0030 18 D2         [12]   41   jr    physicssys_loop
+   001E F1            [10]   27   pop   af
+   001F 3D            [ 4]   28   dec   a  
+   0020 C8            [11]   29   ret   z
+   0021 18 E1         [12]   30   jr    physicssys_loop

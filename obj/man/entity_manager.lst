@@ -25,7 +25,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm
@@ -60,44 +60,44 @@ Hexadecimal [16-Bits]
    0005 07 00                18 _last_elem_ptr: .dw _entity_array
    0007                      19 _entity_array:
                              20   ;.ds max_entities*sizeof_e
-   0007                      21   DefineStar alive_type, 79, 1,  -1, -1, 0x88, 0xCCCC
+   0007                      21   DefineStar alive_type, 79, 1,  0xFE, 0x00, 0x88, 0xCCCC
    0007 01                    1     .db alive_type
    0008 4F                    2     .db 79
    0009 01                    3     .db 1
-   000A FF                    4     .db -1
-   000B FF                    5     .db -1
+   000A FE                    4     .db 0xFE
+   000B 00                    5     .db 0x00
    000C 88                    6     .db 0x88    
    000D CC CC                 7     .dw 0xCCCC
-   000F                      22   DefineStar alive_type, 79, 4,  -2, -1, 0x88, 0xCCCC
+   000F                      22   DefineStar alive_type, 79, 4,  0xFD, 0x00, 0x88, 0xCCCC
    000F 01                    1     .db alive_type
    0010 4F                    2     .db 79
    0011 04                    3     .db 4
-   0012 FE                    4     .db -2
-   0013 FE                    5     .db -2
+   0012 FD                    4     .db 0xFD
+   0013 00                    5     .db 0x00
    0014 88                    6     .db 0x88    
    0015 CC CC                 7     .dw 0xCCCC
-   0017                      23   DefineStar alive_type, 79, 7,  -3, -1, 0x88, 0xCCCC
+   0017                      23   DefineStar alive_type, 79, 7,  0xFC, 0x00, 0x88, 0xCCCC
    0017 01                    1     .db alive_type
    0018 4F                    2     .db 79
    0019 07                    3     .db 7
-   001A FD                    4     .db -3
-   001B FD                    5     .db -3
+   001A FC                    4     .db 0xFC
+   001B 00                    5     .db 0x00
    001C 88                    6     .db 0x88    
    001D CC CC                 7     .dw 0xCCCC
-   001F                      24   DefineStar alive_type, 79, 10, -1, -1, 0x88, 0xCCCC
+   001F                      24   DefineStar alive_type, 79, 10, 0xFD, 0x00, 0x88, 0xCCCC
    001F 01                    1     .db alive_type
    0020 4F                    2     .db 79
    0021 0A                    3     .db 10
-   0022 FF                    4     .db -1
-   0023 FF                    5     .db -1
+   0022 FD                    4     .db 0xFD
+   0023 00                    5     .db 0x00
    0024 88                    6     .db 0x88    
    0025 CC CC                 7     .dw 0xCCCC
-   0027                      25   DefineStar alive_type, 79, 13, -3, -1, 0x88, 0xCCCC
+   0027                      25   DefineStar alive_type, 79, 13, 0xFC, 0x00, 0x88, 0xCCCC
    0027 01                    1     .db alive_type
    0028 4F                    2     .db 79
    0029 0D                    3     .db 13
-   002A FD                    4     .db -3
-   002B FD                    5     .db -3
+   002A FC                    4     .db 0xFC
+   002B 00                    5     .db 0x00
    002C 88                    6     .db 0x88    
    002D CC CC                 7     .dw 0xCCCC
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
@@ -105,54 +105,54 @@ Hexadecimal [16-Bits]
 
 
 
-   002F                      26   DefineStar alive_type, 79, 1,  -1, -1, 0x88, 0xCCCC
+   002F                      26   DefineStar alive_type, 79, 1,  0xFE, 0x00, 0x88, 0xCCCC
    002F 01                    1     .db alive_type
    0030 4F                    2     .db 79
    0031 01                    3     .db 1
-   0032 FF                    4     .db -1
-   0033 FF                    5     .db -1
+   0032 FE                    4     .db 0xFE
+   0033 00                    5     .db 0x00
    0034 88                    6     .db 0x88    
    0035 CC CC                 7     .dw 0xCCCC
-   0037                      27   DefineStar alive_type, 79, 4,  -2, -1, 0x88, 0xCCCC
+   0037                      27   DefineStar alive_type, 79, 4,  0xFA, 0x00, 0x88, 0xCCCC
    0037 01                    1     .db alive_type
    0038 4F                    2     .db 79
    0039 04                    3     .db 4
-   003A FE                    4     .db -2
-   003B FE                    5     .db -2
+   003A FA                    4     .db 0xFA
+   003B 00                    5     .db 0x00
    003C 88                    6     .db 0x88    
    003D CC CC                 7     .dw 0xCCCC
-   003F                      28   DefineStar alive_type, 79, 7,  -3, -1, 0x88, 0xCCCC
+   003F                      28   DefineStar alive_type, 79, 7,  0xF9, 0x00, 0x88, 0xCCCC
    003F 01                    1     .db alive_type
    0040 4F                    2     .db 79
    0041 07                    3     .db 7
-   0042 FD                    4     .db -3
-   0043 FD                    5     .db -3
+   0042 F9                    4     .db 0xF9
+   0043 00                    5     .db 0x00
    0044 88                    6     .db 0x88    
    0045 CC CC                 7     .dw 0xCCCC
-   0047                      29   DefineStar alive_type, 79, 10, -1, -1, 0x88, 0xCCCC
+   0047                      29   DefineStar alive_type, 79, 10, 0xFF, 0x00, 0x88, 0xCCCC
    0047 01                    1     .db alive_type
    0048 4F                    2     .db 79
    0049 0A                    3     .db 10
-   004A FF                    4     .db -1
-   004B FF                    5     .db -1
+   004A FF                    4     .db 0xFF
+   004B 00                    5     .db 0x00
    004C 88                    6     .db 0x88    
    004D CC CC                 7     .dw 0xCCCC
-   004F                      30   DefineStar alive_type, 79, 13, -3, -1, 0x88, 0xCCCC
+   004F                      30   DefineStar alive_type, 79, 13, 0xFE, 0x00, 0x88, 0xCCCC
    004F 01                    1     .db alive_type
    0050 4F                    2     .db 79
    0051 0D                    3     .db 13
-   0052 FD                    4     .db -3
-   0053 FD                    5     .db -3
+   0052 FE                    4     .db 0xFE
+   0053 00                    5     .db 0x00
    0054 88                    6     .db 0x88    
    0055 CC CC                 7     .dw 0xCCCC
                              31 
-   0057                      32 default: DefineStar 0xFF, 0x28, 0x28, 0xFE, 0xFE, 0xFF, 0xCCCC
-   0057 FF                    1     .db 0xFF
-   0058 28                    2     .db 0x28
-   0059 28                    3     .db 0x28
-   005A FE                    4     .db 0xFE
-   005B FE                    5     .db 0xFE
-   005C FF                    6     .db 0xFF    
+   0057                      32 default: DefineStar alive_type, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xCCCC
+   0057 01                    1     .db alive_type
+   0058 00                    2     .db 0x00
+   0059 00                    3     .db 0x00
+   005A 00                    4     .db 0x00
+   005B 00                    5     .db 0x00
+   005C F0                    6     .db 0xF0    
    005D CC CC                 7     .dw 0xCCCC
                              33 
                              34 ;;########################################################

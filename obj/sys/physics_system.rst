@@ -16,7 +16,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm
@@ -63,36 +63,25 @@ Hexadecimal [16-Bits]
    401E C9            [10]    6   ret
                               7 
    401F                       8 physicssys_update::
-   401F CD 26 41      [17]    9   call  get_entity_array
+   401F CD 0E 41      [17]    9   call  get_entity_array
                              10 
    4022                      11 physicssys_loop:    
-   4022 DD 4E 01      [19]   12   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4025 DD 46 02      [19]   13   ld    b, e_y(ix)                  ;; B = y coordinate  
-   4028 DD 6E 03      [19]   14   ld    l, e_vx(ix)                 ;; L = x velocity       
-   402B DD 66 04      [19]   15   ld    h, e_vy(ix)                 ;; H = y velocity  
-                             16 
-   402E 09            [11]   17   add   hl, bc
+   4022 F5            [11]   12   push  af
+                             13   
+   4023 DD 4E 01      [19]   14   ld    c, e_x(ix)                  ;; C = x coordinate       
+   4026 DD 7E 03      [19]   15   ld    a, e_vx(ix)                 ;; L = x velocity       
+   4029 81            [ 4]   16   add   a, c
+   402A DD 77 01      [19]   17   ld    e_x(ix), a
                              18 
-   402F 38 11         [12]   19   jr    c, invalid_position;
-                             20 
-   4031 4D            [ 4]   21   ld    c, l
-   4032 44            [ 4]   22   ld    b, h
-                             23   
-   4033 DD 71 01      [19]   24   ld    e_x(ix), c                  ;; C = x coordinate       
-   4036 DD 70 02      [19]   25   ld    e_y(ix), b                  ;; B = y coordinate  
+   402D DD 46 02      [19]   19   ld    b, e_y(ix)                  ;; B = y coordinate  
+   4030 DD 7E 04      [19]   20   ld    a, e_vy(ix)                 ;; H = y velocity  
+   4033 80            [ 4]   21   add   a, b
+   4034 DD 77 02      [19]   22   ld    e_y(ix), a
+                             23 
+   4037 01 08 00      [10]   24   ld    bc, #sizeof_e
+   403A DD 09         [15]   25   add   ix, bc
                              26 
-   4039 01 08 00      [10]   27   ld    bc, #sizeof_e
-   403C DD 09         [15]   28   add   ix, bc
-                             29 
-   403E 3D            [ 4]   30   dec   a  
-   403F C8            [11]   31   ret   z
-   4040 18 E0         [12]   32   jr    physicssys_loop
-                             33 
-   4042                      34 invalid_position:
-   4042 F5            [11]   35   push  af
-   4043 3E FF         [ 7]   36   ld    a, #0xFF
-   4045 DD 77 00      [19]   37   ld    e_type(ix), a
-   4048 F1            [10]   38   pop   af
-   4049 01 08 00      [10]   39   ld    bc, #sizeof_e
-   404C DD 09         [15]   40   add   ix, bc
-   404E 18 D2         [12]   41   jr    physicssys_loop
+   403C F1            [10]   27   pop   af
+   403D 3D            [ 4]   28   dec   a  
+   403E C8            [11]   29   ret   z
+   403F 18 E1         [12]   30   jr    physicssys_loop

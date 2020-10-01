@@ -10,7 +10,7 @@
     .db _x
     .db _y
     .db _vx
-    .db _vx
+    .db _vy
     .db _color    
     .dw _last_ptr
 .endm

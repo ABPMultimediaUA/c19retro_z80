@@ -9,33 +9,22 @@ physicssys_update::
   call  get_entity_array
 
 physicssys_loop:    
-  ld    c, e_x(ix)                  ;; C = x coordinate       
-  ld    b, e_y(ix)                  ;; B = y coordinate  
-  ld    l, e_vx(ix)                 ;; L = x velocity       
-  ld    h, e_vy(ix)                 ;; H = y velocity  
-
-  add   hl, bc
-
-  jr    c, invalid_position;
-
-  ld    c, l
-  ld    b, h
+  push  af
   
-  ld    e_x(ix), c                  ;; C = x coordinate       
-  ld    e_y(ix), b                  ;; B = y coordinate  
+  ld    c, e_x(ix)                  ;; C = x coordinate       
+  ld    a, e_vx(ix)                 ;; L = x velocity       
+  add   a, c
+  ld    e_x(ix), a
+
+  ld    b, e_y(ix)                  ;; B = y coordinate  
+  ld    a, e_vy(ix)                 ;; H = y velocity  
+  add   a, b
+  ld    e_y(ix), a
 
   ld    bc, #sizeof_e
   add   ix, bc
 
+  pop   af
   dec   a  
   ret   z
-  jr    physicssys_loop
-
-invalid_position:
-  push  af
-  ld    a, #0xFF
-  ld    e_type(ix), a
-  pop   af
-  ld    bc, #sizeof_e
-  add   ix, bc
   jr    physicssys_loop

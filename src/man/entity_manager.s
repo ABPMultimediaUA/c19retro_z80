@@ -18,18 +18,18 @@ _num_entities: .db 0x0A
 _last_elem_ptr: .dw _entity_array
 _entity_array:
   ;.ds max_entities*sizeof_e
-  DefineStar alive_type, 79, 1,  -1, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 4,  -2, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 7,  -3, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 10, -1, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 13, -3, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 1,  -1, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 4,  -2, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 7,  -3, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 10, -1, -1, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 13, -3, -1, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 1,  0xFE, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 4,  0xFD, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 7,  0xFC, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 10, 0xFD, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 13, 0xFC, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 1,  0xFE, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 4,  0xFA, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 7,  0xF9, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 10, 0xFF, 0x00, 0x88, 0xCCCC
+  DefineStar alive_type, 79, 13, 0xFE, 0x00, 0x88, 0xCCCC
 
-default: DefineStar 0xFF, 0x28, 0x28, 0xFE, 0xFE, 0xFF, 0xCCCC
+default: DefineStar alive_type, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xCCCC
 
 ;;########################################################
 ;;                   PUBLIC FUNCTIONS                    #             

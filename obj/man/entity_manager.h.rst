@@ -15,7 +15,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm

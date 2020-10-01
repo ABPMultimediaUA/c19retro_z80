@@ -16,7 +16,7 @@ Hexadecimal [16-Bits]
                              10     .db _x
                              11     .db _y
                              12     .db _vx
-                             13     .db _vx
+                             13     .db _vy
                              14     .db _color    
                              15     .dw _last_ptr
                              16 .endm
@@ -77,41 +77,41 @@ Hexadecimal [16-Bits]
                              20 ;  .db   HW_RED
                              21 ;  .db   HW_RED
                              22 
-   4050                      23 rendersys_init::  
+   4041                      23 rendersys_init::  
                              24   ;;ld    hl, #pallete
                              25   ;;call  cpct_setPalette_asm
                              26 
-   4050 CD 26 41      [17]   27   call get_entity_array
-   4053                      28 rendersys_init_loop:  
-   4053 F5            [11]   29   push af
+   4041 CD 0E 41      [17]   27   call get_entity_array
+   4044                      28 rendersys_init_loop:  
+   4044 F5            [11]   29   push af
                              30   ;; Calculate a video-memory location for printing a string
-   4054 11 00 C0      [10]   31   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
-   4057 DD 4E 01      [19]   32   ld    c, e_x(ix)                  ;; C = x coordinate       
-   405A DD 46 02      [19]   33   ld    b, e_y(ix)                  ;; B = y coordinate   
-   405D CD 71 41      [17]   34   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
+   4045 11 00 C0      [10]   31   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
+   4048 DD 4E 01      [19]   32   ld    c, e_x(ix)                  ;; C = x coordinate       
+   404B DD 46 02      [19]   33   ld    b, e_y(ix)                  ;; B = y coordinate   
+   404E CD 59 41      [17]   34   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
                              35 
-   4060 DD 4E 05      [19]   36   ld    c, e_color(ix)
-   4063 71            [ 7]   37   ld   (hl), c
-   4064 01 08 00      [10]   38   ld   bc, #sizeof_e
-   4067 DD 09         [15]   39   add  ix, bc
+   4051 DD 4E 05      [19]   36   ld    c, e_color(ix)
+   4054 71            [ 7]   37   ld   (hl), c
+   4055 01 08 00      [10]   38   ld   bc, #sizeof_e
+   4058 DD 09         [15]   39   add  ix, bc
                              40   
-   4069 F1            [10]   41   pop   af
-   406A 3D            [ 4]   42   dec   a
-   406B C8            [11]   43   ret   z
-   406C 18 E5         [12]   44   jr rendersys_init_loop
-   406E C9            [10]   45   ret
+   405A F1            [10]   41   pop   af
+   405B 3D            [ 4]   42   dec   a
+   405C C8            [11]   43   ret   z
+   405D 18 E5         [12]   44   jr rendersys_init_loop
+   405F C9            [10]   45   ret
                              46 
-   406F                      47 rendersys_update::
-   406F CD 26 41      [17]   48   call get_entity_array
+   4060                      47 rendersys_update::
+   4060 CD 0E 41      [17]   48   call get_entity_array
                              49 
-   4072                      50 rendersys_loop:
-   4072 F5            [11]   51   push af
+   4063                      50 rendersys_loop:
+   4063 F5            [11]   51   push af
                              52 
                              53   ;; Calculate a video-memory location for printing a string  
-   4073 DD 6E 06      [19]   54   ld    l, e_last_ptr_1(ix)          
-   4076 DD 66 07      [19]   55   ld    h, e_last_ptr_2(ix)          
-   4079 0E 00         [ 7]   56   ld    c, #00
-   407B 71            [ 7]   57   ld   (hl), c
+                             54   ;ld    l, e_last_ptr_1(ix)          
+                             55   ;ld    h, e_last_ptr_2(ix)          
+                             56   ;ld    c, #00
+                             57   ;ld   (hl), c
                              58 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
@@ -119,19 +119,19 @@ Hexadecimal [16-Bits]
 
 
                              59   ;; Calculate a video-memory location for printing a string
-   407C 11 00 C0      [10]   60   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
-   407F DD 4E 01      [19]   61   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4082 DD 46 02      [19]   62   ld    b, e_y(ix)                  ;; B = y coordinate   
-   4085 CD 71 41      [17]   63   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
+   4064 11 00 C0      [10]   60   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
+   4067 DD 4E 01      [19]   61   ld    c, e_x(ix)                  ;; C = x coordinate       
+   406A DD 46 02      [19]   62   ld    b, e_y(ix)                  ;; B = y coordinate   
+   406D CD 59 41      [17]   63   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
                              64 
-   4088 DD 75 06      [19]   65   ld  e_last_ptr_1(ix), l
-   408B DD 74 07      [19]   66   ld  e_last_ptr_2(ix), h
-   408E DD 4E 05      [19]   67   ld    c, e_color(ix)
-   4091 71            [ 7]   68   ld   (hl), c
-   4092 01 08 00      [10]   69   ld   bc, #sizeof_e
-   4095 DD 09         [15]   70   add  ix, bc
+   4070 DD 75 06      [19]   65   ld  e_last_ptr_1(ix), l
+   4073 DD 74 07      [19]   66   ld  e_last_ptr_2(ix), h
+   4076 DD 4E 05      [19]   67   ld    c, e_color(ix)
+   4079 71            [ 7]   68   ld   (hl), c
+   407A 01 08 00      [10]   69   ld   bc, #sizeof_e
+   407D DD 09         [15]   70   add  ix, bc
                              71 
-   4097 F1            [10]   72   pop   af
-   4098 3D            [ 4]   73   dec   a
-   4099 C8            [11]   74   ret   z
-   409A 18 D6         [12]   75   jr rendersys_loop
+   407F F1            [10]   72   pop   af
+   4080 3D            [ 4]   73   dec   a
+   4081 C8            [11]   74   ret   z
+   4082 18 DF         [12]   75   jr rendersys_loop

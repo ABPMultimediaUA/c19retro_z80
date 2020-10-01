@@ -51,10 +51,10 @@ rendersys_loop:
   push af
 
   ;; Calculate a video-memory location for printing a string  
-  ld    l, e_last_ptr_1(ix)          
-  ld    h, e_last_ptr_2(ix)          
-  ld    c, #00
-  ld   (hl), c
+  ;ld    l, e_last_ptr_1(ix)          
+  ;ld    h, e_last_ptr_2(ix)          
+  ;ld    c, #00
+  ;ld   (hl), c
 
   ;; Calculate a video-memory location for printing a string
   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
