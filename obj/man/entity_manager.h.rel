@@ -1,5 +1,6 @@
 XL2
-H 1 areas 5 global symbols
+H 1 areas 6 global symbols
+S entityman_create_one Ref0000
 S .__.ABS. Def0000
 S entityman_init Ref0000
 S entityman_set_dead Ref0000

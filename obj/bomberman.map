@@ -7,44 +7,54 @@ Area                                    Addr        Size        Decimal Bytes (A
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000000  .__.ABS.                           cpct_video
+     00000000  .__.ABS.                           cpct_random
      00000000  HW_WHITE                           cpct_keyboard
      00000000  l__DATA                         
      00000014  HW_BLACK                           cpct_keyboard
-     000001D0  l__CODE                         
+     00000230  l__CODE                         
      00004000  s__CODE                         
-     000041D0  s__DATA                         
+     00004230  s__DATA                         
+     0000C000  CPCT_VMEM_START_ASM                cpct_keyboard
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000001D0 =         464. bytes (REL,CON)
+_CODE                               00004000    00000230 =         560. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00004000  _main                              cpct_keyboard
-     0000402A  physicssys_init                    
-     0000402B  physicssys_update                  
-     0000405F  rendersys_init                     
-     0000406C  rendersys_update                   
-     0000409B  rendersys_delete_entity            
-     00004101  entityman_create                   
-     00004118  entityman_init                     
-     0000412B  entityman_update                   
-     00004176  get_entity_array                   
-     0000417E  entityman_set_dead                 
-     00004184  cpct_setPALColour_asm              cpct_video
-     0000418E  cpct_setVideoMode_asm              cpct_video
-     0000419B  _cpct_waitVSYNC                    cpct_video
-     0000419B  cpct_waitVSYNC_asm                 cpct_video
-     000041A3  _cpct_disableFirmware              cpct_firmware
-     000041A3  _cpct_removeInterruptHandler       cpct_firmware
-     000041A3  cpct_disableFirmware_asm           cpct_firmware
-     000041A3  cpct_removeInterruptHandler_asm    cpct_firmware
-     000041B3  _cpct_mode_rom_status              cpct_firmware
-     000041B4  cpct_getScreenPtr_asm              cpct_video
+     00004029  physicssys_init                    
+     0000402A  physicssys_update                  
+     0000405E  rendersys_init                     
+     0000406B  rendersys_update                   
+     0000409A  rendersys_delete_entity            
+     000040F7  entityman_new_entity               
+     0000410D  entityman_initialize_rand          
+     00004126  entityman_create_one               
+     0000412D  entityman_init                     
+     0000413F  entityman_update                   
+     0000418A  get_entity_array                   
+     00004192  entityman_set_dead                 
+     00004198  cpct_setPALColour_asm              cpct_video
+     000041A2  cpct_setVideoMode_asm              cpct_video
+     000041AF  _cpct_waitVSYNC                    cpct_video
+     000041AF  cpct_waitVSYNC_asm                 cpct_video
+     000041B7  _cpct_disableFirmware              cpct_firmware
+     000041B7  _cpct_removeInterruptHandler       cpct_firmware
+     000041B7  cpct_disableFirmware_asm           cpct_firmware
+     000041B7  cpct_removeInterruptHandler_asm    cpct_firmware
+     000041C7  _cpct_getRandom_mxor_u8            cpct_random
+     000041C7  cpct_getRandom_mxor_u8_asm         cpct_random
+     000041C8  cpct_randomIdx_mxor_u8             cpct_random
+     000041EC  _cpct_mode_rom_status              cpct_firmware
+     000041ED  cpct_getScreenPtr_asm              cpct_video
+     00004209  _cpct_mxor32_seed                  cpct_random
+     0000420D  _cpct_nextRandom_mxor_u32          cpct_random
+     0000420D  cpct_nextRandom_mxor_u32_asm       cpct_random
+
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 
 Files Linked                              [ module(s) ]
@@ -70,9 +80,15 @@ Libraries Linked                          [ object file ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_removeInterruptHandler.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getRandom_mxor_u8.rel ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpc_mode_rom_status.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_getScreenPtr_asmbindings.re ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_mxor32_seed.rel ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_nextRandom_mxor_u32.rel ]
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 

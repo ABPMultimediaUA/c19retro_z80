@@ -4,6 +4,9 @@
 .globl  cpct_getScreenPtr_asm
 .globl  cpct_waitVSYNC_asm
 .globl  cpct_setPALColour_asm
+.globl  cpct_getRandom_mxor_u8_asm
+
 .globl  HW_BLACK
 .globl  HW_WHITE
-CPCT_VMEM_START_ASM = 0xC000
+
+.globl  CPCT_VMEM_START_ASM

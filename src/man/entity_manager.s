@@ -4,70 +4,73 @@
 
 .include "entity_manager.h.s"
 .include "../sys/render_system.h.s"
+.include "../cpct_functions.h.s"
 
 
 ;;########################################################
 ;;                        VARIABLES                      #             
 ;;########################################################
+DefineStarArray _entity, max_entities, DefineStarDefault
 
-empty_type = 0x00
-alive_type = 0x01
-dead_type = 0xFE
-invalid_type = 0xFF
+;;########################################################
+;;                   PRIVATE FUNCTIONS                   #             
+;;########################################################
 
-_num_entities: .db 0x0A
-_last_elem_ptr: .dw max_entities*sizeof_e+_entity_array
-_entity_array:
-  ;.ds max_entities*sizeof_e
-  DefineStar alive_type, 79, 1,  0xFF, 0x00, 0x80, 0xCCCC
-  DefineStar alive_type, 79, 3,  0xFE, 0x00, 0x08, 0xCCCC
-  DefineStar alive_type, 79, 5,  0xFD, 0x00, 0x88, 0xCCCC
-  DefineStar alive_type, 79, 7, 0xFE, 0x00, 0x30, 0xCCCC
-  DefineStar alive_type, 79, 9, 0xFD, 0x00, 0x03, 0xCCCC
-  DefineStar alive_type, 79, 11,  0xFF, 0x00, 0x33, 0xCCCC
-  DefineStar alive_type, 79, 13,  0xFB, 0x00, 0x70, 0xCCCC
-  DefineStar alive_type, 79, 15,  0xFA, 0x00, 0x07, 0xCCCC
-  DefineStar alive_type, 79, 17, 0xFF, 0x00, 0x77, 0xCCCC
-  DefineStar alive_type, 79, 19, 0xFF, 0x00, 0xF0, 0xCCCC
-  .db empty_type
+;;
+;;  RETURN
+;;    hl with memory address of free space for new entity
+;;    ix with memory address of last created entity
+;;
+entityman_new_entity::
+  ld    a, (_entity_num)
+  inc   a
+  ld    (_entity_num), a
 
-default: DefineStar alive_type, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xCCCC
+  ld    ix, (_entity_last)    
+  ld    hl, (_entity_last)    
+  ld    bc, #sizeof_e
+  add   hl, bc
+  ld    (_entity_last), hl
+  ret
+
+;;
+;;  INPUT: 
+;;    ix with memory address of entity that must be initialized
+;;
+entityman_initialize_rand::  
+  ld    a, #0
+  ld    e_vy(ix), a               ;; set Y velocity  
+
+  call cpct_getRandom_mxor_u8_asm
+  ld    a, l
+  rra   
+  ld    e_y(ix), a                ;; set Y coordiante
+
+  neg 
+  ld    e_vx(ix), #0xFF               ;; set X velocity  
+
+  ld    a, #80                    
+  ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
+  ret
 
 ;;########################################################
 ;;                   PUBLIC FUNCTIONS                    #             
 ;;########################################################
 
-;;
-;;  INPUT: 
-;;    hl with memory address of default entity
-;;    de with memory address of free space for new entity
-;;  RETURN
-;;    hl with memory address of free space for new entity
-;;
-entityman_create::  
-  ld    bc, #sizeof_e
-  ldir
-
-  ld    a, (_num_entities)
-  inc   a
-  ld    (_num_entities), a
-
-  ld    hl, (_last_elem_ptr)    
-  ld    bc, #sizeof_e
-  add   hl, bc
-  ld    (_last_elem_ptr), hl
-
+entityman_create_one::
+  call  entityman_new_entity
+  call  entityman_initialize_rand
   ret
 
+
 entityman_init::
-  ld    a, #max_entities  
-  ld    de, (_last_elem_ptr)
+  ld    a, #max_entities
+  ld    de, (_entity_last)
 init_loop:
   push  af
   
-  ld    hl, #default  
-  call  entityman_create
-  ex    de, hl
+  call  entityman_new_entity
+  call  entityman_initialize_rand
   
   pop   af
   dec   a
@@ -77,7 +80,7 @@ init_loop:
 
 entityman_update::
   ld    ix, #_entity_array
-  ld     a, (_num_entities)
+  ld     a, (_entity_num)
   or     a
   ret    z
 
@@ -92,29 +95,29 @@ entityman_loop:
 
   ;; _last_element_ptr now points to the last entity in the array
   ;; si A 02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-  ld    a, (_last_elem_ptr)
+  ld    a, (_entity_last)
   sub   #sizeof_e
-  ld    (_last_elem_ptr), a
+  ld    (_entity_last), a
   jp    c, overflow
   jp    no_overflow    
   
 overflow:
-  ld    a, (_last_elem_ptr+1)
+  ld    a, (_entity_last+1)
   dec   a
-  ld    (_last_elem_ptr+1), a
+  ld    (_entity_last+1), a
 
 no_overflow:
   ;; move the last element to the hole left by the dead entity
   push  ix  
   pop   hl
   ld    bc, #sizeof_e       
-  ld    de, (_last_elem_ptr)
+  ld    de, (_entity_last)
   ex    de, hl
   ldir                        
   
-  ld    a, (_num_entities)
+  ld    a, (_entity_num)
   dec   a
-  ld    (_num_entities), a  
+  ld    (_entity_num), a  
 
   jp    continue_update
 
@@ -135,7 +138,7 @@ continue_update:
 ;;
 get_entity_array::
   ld ix, #_entity_array
-  ld  a, (_num_entities)
+  ld  a, (_entity_num)
   ret
 
 

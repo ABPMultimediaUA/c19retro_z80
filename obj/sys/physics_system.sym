@@ -4,14 +4,16 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     CPCT_VME=  C000     |     HW_BLACK   **** GX
-    HW_WHITE   **** GX  |   0 continue   0011 R   |   0 continue   001E R
-    cpct_dis   **** GX  |     cpct_get   **** GX  |     cpct_set   **** GX
-    cpct_set   **** GX  |     cpct_wai   **** GX  |     e_color =  0005 
+    .__.H$L.=  0000 L   |     CPCT_VME   **** GX  |     HW_BLACK   **** GX
+    HW_WHITE   **** GX  |     alive_ty=  0001     |   0 continue   0011 R
+  0 continue   001E R   |     cpct_dis   **** GX  |     cpct_get   **** GX
+    cpct_get   **** GX  |     cpct_set   **** GX  |     cpct_set   **** GX
+    cpct_wai   **** GX  |     dead_typ=  00FE     |     e_color =  0005 
     e_last_p=  0006     |     e_last_p=  0007     |     e_type  =  0000 
     e_vx    =  0003     |     e_vy    =  0004     |     e_x     =  0001 
-    e_y     =  0002     |     entityma   **** GX  |     entityma   **** GX
-    entityma   **** GX  |     get_enti   **** GX  |   0 invalid_   002B R
+    e_y     =  0002     |     empty_ty=  0000     |     entityma   **** GX
+    entityma   **** GX  |     entityma   **** GX  |     entityma   **** GX
+    get_enti   **** GX  |     invalid_=  00FF     |   0 invalid_   002B R
   0 invalid_   0030 R   |     max_enti=  000A     |   0 physicss   0000 GR
   0 physicss   0006 R   |   0 physicss   0001 GR  |     sizeof_e=  0008 
 

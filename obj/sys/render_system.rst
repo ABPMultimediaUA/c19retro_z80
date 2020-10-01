@@ -12,28 +12,73 @@ Hexadecimal [16-Bits]
                               6 .globl  get_entity_array
                               7 .globl  entityman_set_dead
                               8 .globl  entityman_update
-                              9 
-                             10 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
-                             11     .db _type
-                             12     .db _x
-                             13     .db _y
-                             14     .db _vx
-                             15     .db _vy
-                             16     .db _color    
-                             17     .dw _last_ptr
-                             18 .endm
-                             19 
-                     0000    20 e_type = 0
-                     0001    21 e_x = 1
-                     0002    22 e_y = 2
-                     0003    23 e_vx = 3
-                     0004    24 e_vy = 4
-                     0005    25 e_color = 5
-                     0006    26 e_last_ptr_1 = 6
-                     0007    27 e_last_ptr_2 = 7
-                     0008    28 sizeof_e = 8
-                     000A    29 max_entities = 10
+                              9 .globl  entityman_create_one
+                             10 
+                             11 ;;########################################################
+                             12 ;;                        MACROS                         #              
+                             13 ;;########################################################
+                             14 
+                             15 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
+                             16     .db _type
+                             17     .db _x
+                             18     .db _y
+                             19     .db _vx
+                             20     .db _vy
+                             21     .db _color    
+                             22     .dw _last_ptr
+                             23 .endm
+                             24 
+                             25 .macro DefineStarDefault
+                             26     .db alive_type
+                             27     .db 0x40
+                             28     .db 0x01
+                             29     .db 0xFE
+                             30     .db 0xFE
+                             31     .db 0xFF    
+                             32     .dw 0xCCCC
+                             33 .endm
+                             34 
+                             35 .macro DefineStarEmpty    
+                             36     .db empty_type
+                             37     .ds sizeof_e-1
+                             38 .endm
+                             39 
+                             40 .macro DefineStarArray _Tname,_N,_DefineStar
+                             41     _Tname'_num:    .db 0    
+                             42     _Tname'_last:   .dw _Tname'_array
+                             43     _Tname'_array: 
+                             44     .rept _N    
+                             45         _DefineStar
+                             46     .endm
+                             47 .endm
+                             48 
+                             49 ;;########################################################
+                             50 ;;                       CONSTANTS                       #             
+                             51 ;;########################################################
+                     0000    52 e_type = 0
+                     0001    53 e_x = 1
+                     0002    54 e_y = 2
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
+Hexadecimal [16-Bits]
+
+
+
+                     0003    55 e_vx = 3
+                     0004    56 e_vy = 4
+                     0005    57 e_color = 5
+                     0006    58 e_last_ptr_1 = 6
+                     0007    59 e_last_ptr_2 = 7
+                     0008    60 sizeof_e = 8
+                     000A    61 max_entities = 10
+                             62 
+                             63 ;;########################################################
+                             64 ;;                      ENTITY TYPES                     #             
+                             65 ;;########################################################
+                     0000    66 empty_type = 0x00
+                     0001    67 alive_type = 0x01
+                     00FE    68 dead_type = 0xFE
+                     00FF    69 invalid_type = 0xFF
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 
@@ -45,10 +90,13 @@ Hexadecimal [16-Bits]
                               4 .globl  cpct_getScreenPtr_asm
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
-                              7 .globl  HW_BLACK
-                              8 .globl  HW_WHITE
-                     C000     9 CPCT_VMEM_START_ASM = 0xC000
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
+                              7 .globl  cpct_getRandom_mxor_u8_asm
+                              8 
+                              9 .globl  HW_BLACK
+                             10 .globl  HW_WHITE
+                             11 
+                             12 .globl  CPCT_VMEM_START_ASM
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
 Hexadecimal [16-Bits]
 
 
@@ -57,7 +105,7 @@ Hexadecimal [16-Bits]
                               1 .globl  rendersys_init
                               2 .globl  rendersys_update
                               3 .globl  rendersys_delete_entity
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
 
@@ -81,82 +129,61 @@ Hexadecimal [16-Bits]
                              20 ;  .db   HW_RED
                              21 ;  .db   HW_RED
                              22 
-   405F                      23 rendersys_init::  
-   405F 0E 00         [ 7]   24   ld    c, #0
-   4061 CD 8E 41      [17]   25   call  cpct_setVideoMode_asm    
+   405E                      23 rendersys_init::  
+   405E 0E 00         [ 7]   24   ld    c, #0
+   4060 CD A2 41      [17]   25   call  cpct_setVideoMode_asm    
                              26 
-   4064 2E 00         [ 7]   27   ld    l, #0
-   4066 26 14         [ 7]   28   ld    h, #HW_BLACK
-   4068 CD 84 41      [17]   29   call  cpct_setPALColour_asm
-                             30 
-                             31 ;  call get_entity_array
-                             32 ;rendersys_init_loop:  
-                             33 ;  push af
-                             34 ;  ;; Calculate a video-memory location for printing a string
-                             35 ;  ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
-                             36 ;  ld    c, e_x(ix)                  ;; C = x coordinate       
-                             37 ;  ld    b, e_y(ix)                  ;; B = y coordinate   
-                             38 ;  call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
-                             39 ;
-                             40 ;  ld  e_last_ptr_1(ix), l
-                             41 ;  ld  e_last_ptr_2(ix), h
-                             42 ;  ld    c, e_color(ix)
-                             43 ;  ld   (hl), c
-                             44 ;  ld   bc, #sizeof_e
-                             45 ;  add  ix, bc
-                             46 ;  
-                             47 ;  pop   af
-                             48 ;  dec   a
-                             49 ;  ret   z
-                             50 ;  jr rendersys_init_loop
-   406B C9            [10]   51   ret
-                             52 
-   406C                      53 rendersys_update::
-   406C CD 76 41      [17]   54   call get_entity_array
-   406F B7            [ 4]   55   or     a
-   4070 C8            [11]   56   ret    z
-   4071                      57 rendersys_loop:
-   4071 F5            [11]   58   push af
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+   4063 2E 00         [ 7]   27   ld    l, #0
+   4065 26 14         [ 7]   28   ld    h, #HW_BLACK
+   4067 CD 98 41      [17]   29   call  cpct_setPALColour_asm
+   406A C9            [10]   30   ret
+                             31 
+   406B                      32 rendersys_update::
+   406B CD 8A 41      [17]   33   call get_entity_array
+   406E B7            [ 4]   34   or     a
+   406F C8            [11]   35   ret    z
+   4070                      36 rendersys_loop:
+   4070 F5            [11]   37   push af
+                             38 
+   4071 DD 6E 06      [19]   39   ld    l, e_last_ptr_1(ix)          
+   4074 DD 66 07      [19]   40   ld    h, e_last_ptr_2(ix)          
+   4077 0E 00         [ 7]   41   ld    c, #00
+   4079 71            [ 7]   42   ld   (hl), c
+                             43 
+                             44   ;; Calculate a video-memory location for printing a string
+   407A 11 00 C0      [10]   45   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
+   407D DD 4E 01      [19]   46   ld    c, e_x(ix)                  ;; C = x coordinate       
+   4080 DD 46 02      [19]   47   ld    b, e_y(ix)                  ;; B = y coordinate   
+   4083 CD ED 41      [17]   48   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
+                             49 
+   4086 DD 75 06      [19]   50   ld  e_last_ptr_1(ix), l
+   4089 DD 74 07      [19]   51   ld  e_last_ptr_2(ix), h
+   408C DD 4E 05      [19]   52   ld    c, e_color(ix)
+   408F 71            [ 7]   53   ld   (hl), c
+   4090 01 08 00      [10]   54   ld   bc, #sizeof_e
+   4093 DD 09         [15]   55   add  ix, bc
+                             56 
+   4095 F1            [10]   57   pop   af
+   4096 3D            [ 4]   58   dec   a
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
 Hexadecimal [16-Bits]
 
 
 
-                             59 
-   4072 DD 6E 06      [19]   60   ld    l, e_last_ptr_1(ix)          
-   4075 DD 66 07      [19]   61   ld    h, e_last_ptr_2(ix)          
-   4078 0E 00         [ 7]   62   ld    c, #00
-   407A 71            [ 7]   63   ld   (hl), c
-                             64 
-                             65   ;; Calculate a video-memory location for printing a string
-   407B 11 00 C0      [10]   66   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
-   407E DD 4E 01      [19]   67   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4081 DD 46 02      [19]   68   ld    b, e_y(ix)                  ;; B = y coordinate   
-   4084 CD B4 41      [17]   69   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
-                             70 
-   4087 DD 75 06      [19]   71   ld  e_last_ptr_1(ix), l
-   408A DD 74 07      [19]   72   ld  e_last_ptr_2(ix), h
-   408D DD 4E 05      [19]   73   ld    c, e_color(ix)
-   4090 71            [ 7]   74   ld   (hl), c
-   4091 01 08 00      [10]   75   ld   bc, #sizeof_e
-   4094 DD 09         [15]   76   add  ix, bc
-                             77 
-   4096 F1            [10]   78   pop   af
-   4097 3D            [ 4]   79   dec   a
-   4098 C8            [11]   80   ret   z
-   4099 18 D6         [12]   81   jr rendersys_loop
-                             82 
-                             83 
-                             84 ;;
-                             85 ;;  INPUT: 
-                             86 ;;    ix with memory address of entity that must be deleted
-                             87 ;;  DESTROY
-                             88 ;;    hl, c
-                             89 ;;
-   409B                      90 rendersys_delete_entity::
-                             91   ;; Calculate a video-memory location for printing a string  
-   409B DD 6E 06      [19]   92   ld    l, e_last_ptr_1(ix)          
-   409E DD 66 07      [19]   93   ld    h, e_last_ptr_2(ix)          
-   40A1 0E 00         [ 7]   94   ld    c, #00
-   40A3 71            [ 7]   95   ld   (hl), c
-   40A4 C9            [10]   96   ret
+   4097 C8            [11]   59   ret   z
+   4098 18 D6         [12]   60   jr rendersys_loop
+                             61 
+                             62 
+                             63 ;;
+                             64 ;;  INPUT: 
+                             65 ;;    ix with memory address of entity that must be deleted
+                             66 ;;  DESTROY
+                             67 ;;    hl, c
+                             68 ;;
+   409A                      69 rendersys_delete_entity::
+                             70   ;; Calculate a video-memory location for printing a string  
+   409A DD 6E 06      [19]   71   ld    l, e_last_ptr_1(ix)          
+   409D DD 66 07      [19]   72   ld    h, e_last_ptr_2(ix)          
+   40A0 0E 00         [ 7]   73   ld    c, #00
+   40A2 71            [ 7]   74   ld   (hl), c
+   40A3 C9            [10]   75   ret

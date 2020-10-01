@@ -12,28 +12,73 @@ Hexadecimal [16-Bits]
                               6 .globl  get_entity_array
                               7 .globl  entityman_set_dead
                               8 .globl  entityman_update
-                              9 
-                             10 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
-                             11     .db _type
-                             12     .db _x
-                             13     .db _y
-                             14     .db _vx
-                             15     .db _vy
-                             16     .db _color    
-                             17     .dw _last_ptr
-                             18 .endm
-                             19 
-                     0000    20 e_type = 0
-                     0001    21 e_x = 1
-                     0002    22 e_y = 2
-                     0003    23 e_vx = 3
-                     0004    24 e_vy = 4
-                     0005    25 e_color = 5
-                     0006    26 e_last_ptr_1 = 6
-                     0007    27 e_last_ptr_2 = 7
-                     0008    28 sizeof_e = 8
-                     000A    29 max_entities = 10
+                              9 .globl  entityman_create_one
+                             10 
+                             11 ;;########################################################
+                             12 ;;                        MACROS                         #              
+                             13 ;;########################################################
+                             14 
+                             15 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
+                             16     .db _type
+                             17     .db _x
+                             18     .db _y
+                             19     .db _vx
+                             20     .db _vy
+                             21     .db _color    
+                             22     .dw _last_ptr
+                             23 .endm
+                             24 
+                             25 .macro DefineStarDefault
+                             26     .db alive_type
+                             27     .db 0x40
+                             28     .db 0x01
+                             29     .db 0xFE
+                             30     .db 0xFE
+                             31     .db 0xFF    
+                             32     .dw 0xCCCC
+                             33 .endm
+                             34 
+                             35 .macro DefineStarEmpty    
+                             36     .db empty_type
+                             37     .ds sizeof_e-1
+                             38 .endm
+                             39 
+                             40 .macro DefineStarArray _Tname,_N,_DefineStar
+                             41     _Tname'_num:    .db 0    
+                             42     _Tname'_last:   .dw _Tname'_array
+                             43     _Tname'_array: 
+                             44     .rept _N    
+                             45         _DefineStar
+                             46     .endm
+                             47 .endm
+                             48 
+                             49 ;;########################################################
+                             50 ;;                       CONSTANTS                       #             
+                             51 ;;########################################################
+                     0000    52 e_type = 0
+                     0001    53 e_x = 1
+                     0002    54 e_y = 2
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
+Hexadecimal [16-Bits]
+
+
+
+                     0003    55 e_vx = 3
+                     0004    56 e_vy = 4
+                     0005    57 e_color = 5
+                     0006    58 e_last_ptr_1 = 6
+                     0007    59 e_last_ptr_2 = 7
+                     0008    60 sizeof_e = 8
+                     000A    61 max_entities = 10
+                             62 
+                             63 ;;########################################################
+                             64 ;;                      ENTITY TYPES                     #             
+                             65 ;;########################################################
+                     0000    66 empty_type = 0x00
+                     0001    67 alive_type = 0x01
+                     00FE    68 dead_type = 0xFE
+                     00FF    69 invalid_type = 0xFF
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 
@@ -41,7 +86,7 @@ Hexadecimal [16-Bits]
                               2 .include "physics_system.h.s"
                               1 .globl  physicssys_init
                               2 .globl  physicssys_update
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
 Hexadecimal [16-Bits]
 
 
@@ -53,53 +98,56 @@ Hexadecimal [16-Bits]
                               4 .globl  cpct_getScreenPtr_asm
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
-                              7 .globl  HW_BLACK
-                              8 .globl  HW_WHITE
-                     C000     9 CPCT_VMEM_START_ASM = 0xC000
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
+                              7 .globl  cpct_getRandom_mxor_u8_asm
+                              8 
+                              9 .globl  HW_BLACK
+                             10 .globl  HW_WHITE
+                             11 
+                             12 .globl  CPCT_VMEM_START_ASM
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
 
 
                               4 
-   402A                       5 physicssys_init::
-   402A C9            [10]    6   ret
+   4029                       5 physicssys_init::
+   4029 C9            [10]    6   ret
                               7 
-   402B                       8 physicssys_update::
-   402B CD 76 41      [17]    9   call  get_entity_array
-   402E B7            [ 4]   10   or     a
-   402F C8            [11]   11   ret    z
+   402A                       8 physicssys_update::
+   402A CD 8A 41      [17]    9   call  get_entity_array
+   402D B7            [ 4]   10   or     a
+   402E C8            [11]   11   ret    z
                              12 
-   4030                      13 physicssys_loop:    
-   4030 F5            [11]   14   push  af
+   402F                      13 physicssys_loop:    
+   402F F5            [11]   14   push  af
                              15 
-   4031 DD 4E 01      [19]   16   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4034 DD 7E 03      [19]   17   ld    a, e_vx(ix)                 ;; L = x velocity       
-   4037 81            [ 4]   18   add   a, c
-   4038 FA 55 40      [10]   19   jp    m, invalid_x
+   4030 DD 4E 01      [19]   16   ld    c, e_x(ix)                  ;; C = x coordinate       
+   4033 DD 7E 03      [19]   17   ld    a, e_vx(ix)                 ;; L = x velocity       
+   4036 81            [ 4]   18   add   a, c
+   4037 FA 54 40      [10]   19   jp    m, invalid_x
                              20 
-   403B                      21 continue_x:
-   403B DD 77 01      [19]   22   ld    e_x(ix), a  
+   403A                      21 continue_x:
+   403A DD 77 01      [19]   22   ld    e_x(ix), a  
                              23 
-   403E DD 46 02      [19]   24   ld    b, e_y(ix)                  ;; B = y coordinate  
-   4041 DD 7E 04      [19]   25   ld    a, e_vy(ix)                 ;; H = y velocity  
-   4044 80            [ 4]   26   add   a, b
-   4045 FA 5A 40      [10]   27   jp    m, invalid_y
-   4048                      28 continue_y:
-   4048 DD 77 02      [19]   29   ld    e_y(ix), a
+   403D DD 46 02      [19]   24   ld    b, e_y(ix)                  ;; B = y coordinate  
+   4040 DD 7E 04      [19]   25   ld    a, e_vy(ix)                 ;; H = y velocity  
+   4043 80            [ 4]   26   add   a, b
+   4044 FA 59 40      [10]   27   jp    m, invalid_y
+   4047                      28 continue_y:
+   4047 DD 77 02      [19]   29   ld    e_y(ix), a
                              30 
-   404B 01 08 00      [10]   31   ld    bc, #sizeof_e
-   404E DD 09         [15]   32   add   ix, bc
+   404A 01 08 00      [10]   31   ld    bc, #sizeof_e
+   404D DD 09         [15]   32   add   ix, bc
                              33 
-   4050 F1            [10]   34   pop   af
-   4051 3D            [ 4]   35   dec   a  
-   4052 C8            [11]   36   ret   z
-   4053 18 DB         [12]   37   jr    physicssys_loop
+   404F F1            [10]   34   pop   af
+   4050 3D            [ 4]   35   dec   a  
+   4051 C8            [11]   36   ret   z
+   4052 18 DB         [12]   37   jr    physicssys_loop
                              38 
-   4055                      39 invalid_x:
-   4055 CD 7E 41      [17]   40   call  entityman_set_dead
-   4058 18 E1         [12]   41   jr    continue_x
+   4054                      39 invalid_x:
+   4054 CD 92 41      [17]   40   call  entityman_set_dead
+   4057 18 E1         [12]   41   jr    continue_x
                              42 
-   405A                      43 invalid_y:
-   405A CD 7E 41      [17]   44   call  entityman_set_dead
-   405D 18 E9         [12]   45   jr    continue_y
+   4059                      43 invalid_y:
+   4059 CD 92 41      [17]   44   call  entityman_set_dead
+   405C 18 E9         [12]   45   jr    continue_y

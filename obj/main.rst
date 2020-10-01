@@ -2722,9 +2722,12 @@ Hexadecimal [16-Bits]
                               4 .globl  cpct_getScreenPtr_asm
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
-                              7 .globl  HW_BLACK
-                              8 .globl  HW_WHITE
-                     C000     9 CPCT_VMEM_START_ASM = 0xC000
+                              7 .globl  cpct_getRandom_mxor_u8_asm
+                              8 
+                              9 .globl  HW_BLACK
+                             10 .globl  HW_WHITE
+                             11 
+                             12 .globl  CPCT_VMEM_START_ASM
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 54.
 Hexadecimal [16-Bits]
 
@@ -2739,28 +2742,73 @@ Hexadecimal [16-Bits]
                               6 .globl  get_entity_array
                               7 .globl  entityman_set_dead
                               8 .globl  entityman_update
-                              9 
-                             10 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
-                             11     .db _type
-                             12     .db _x
-                             13     .db _y
-                             14     .db _vx
-                             15     .db _vy
-                             16     .db _color    
-                             17     .dw _last_ptr
-                             18 .endm
-                             19 
-                     0000    20 e_type = 0
-                     0001    21 e_x = 1
-                     0002    22 e_y = 2
-                     0003    23 e_vx = 3
-                     0004    24 e_vy = 4
-                     0005    25 e_color = 5
-                     0006    26 e_last_ptr_1 = 6
-                     0007    27 e_last_ptr_2 = 7
-                     0008    28 sizeof_e = 8
-                     000A    29 max_entities = 10
+                              9 .globl  entityman_create_one
+                             10 
+                             11 ;;########################################################
+                             12 ;;                        MACROS                         #              
+                             13 ;;########################################################
+                             14 
+                             15 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
+                             16     .db _type
+                             17     .db _x
+                             18     .db _y
+                             19     .db _vx
+                             20     .db _vy
+                             21     .db _color    
+                             22     .dw _last_ptr
+                             23 .endm
+                             24 
+                             25 .macro DefineStarDefault
+                             26     .db alive_type
+                             27     .db 0x40
+                             28     .db 0x01
+                             29     .db 0xFE
+                             30     .db 0xFE
+                             31     .db 0xFF    
+                             32     .dw 0xCCCC
+                             33 .endm
+                             34 
+                             35 .macro DefineStarEmpty    
+                             36     .db empty_type
+                             37     .ds sizeof_e-1
+                             38 .endm
+                             39 
+                             40 .macro DefineStarArray _Tname,_N,_DefineStar
+                             41     _Tname'_num:    .db 0    
+                             42     _Tname'_last:   .dw _Tname'_array
+                             43     _Tname'_array: 
+                             44     .rept _N    
+                             45         _DefineStar
+                             46     .endm
+                             47 .endm
+                             48 
+                             49 ;;########################################################
+                             50 ;;                       CONSTANTS                       #             
+                             51 ;;########################################################
+                     0000    52 e_type = 0
+                     0001    53 e_x = 1
+                     0002    54 e_y = 2
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 55.
+Hexadecimal [16-Bits]
+
+
+
+                     0003    55 e_vx = 3
+                     0004    56 e_vy = 4
+                     0005    57 e_color = 5
+                     0006    58 e_last_ptr_1 = 6
+                     0007    59 e_last_ptr_2 = 7
+                     0008    60 sizeof_e = 8
+                     000A    61 max_entities = 10
+                             62 
+                             63 ;;########################################################
+                             64 ;;                      ENTITY TYPES                     #             
+                             65 ;;########################################################
+                     0000    66 empty_type = 0x00
+                     0001    67 alive_type = 0x01
+                     00FE    68 dead_type = 0xFE
+                     00FF    69 invalid_type = 0xFF
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
 Hexadecimal [16-Bits]
 
 
@@ -2769,7 +2817,7 @@ Hexadecimal [16-Bits]
                               1 .globl  rendersys_init
                               2 .globl  rendersys_update
                               3 .globl  rendersys_delete_entity
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 57.
 Hexadecimal [16-Bits]
 
 
@@ -2777,7 +2825,7 @@ Hexadecimal [16-Bits]
                              24 .include "sys/physics_system.h.s"
                               1 .globl  physicssys_init
                               2 .globl  physicssys_update
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 57.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 58.
 Hexadecimal [16-Bits]
 
 
@@ -2810,40 +2858,38 @@ Hexadecimal [16-Bits]
                              50 ;;
    4000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   4000 CD A3 41      [17]   53    call cpct_disableFirmware_asm
+   4000 CD B7 41      [17]   53    call cpct_disableFirmware_asm
                              54    
    4003 0E 00         [ 7]   55    ld    c, #0
-   4005 CD 8E 41      [17]   56    call  cpct_setVideoMode_asm    
+   4005 CD A2 41      [17]   56    call  cpct_setVideoMode_asm    
                              57 
    4008 2E 00         [ 7]   58    ld    l, #0
    400A 26 14         [ 7]   59    ld    h, #HW_BLACK
-   400C CD 84 41      [17]   60    call  cpct_setPALColour_asm
+   400C CD 98 41      [17]   60    call  cpct_setPALColour_asm
                              61 
    000F                      62    cpctm_setBorder_asm #HW_WHITE
                               1    .radix h
    000F                       2    cpctm_setBorder_raw_asm \#HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
    400F 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   4012 CD 84 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   4012 CD 98 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
                              63 
-                             64    ;call  entityman_init
-   4015 CD 5F 40      [17]   65    call  rendersys_init
+   4015 CD 2D 41      [17]   64    call  entityman_init
+   4018 CD 5E 40      [17]   65    call  rendersys_init
                              66 
                              67 ;; Loop forever
-   4018                      68 loop:
-   4018 CD 2B 40      [17]   69    call  physicssys_update
-   401B CD 2B 41      [17]   70    call  entityman_update
-   401E CD 6C 40      [17]   71    call  rendersys_update
+   401B                      68 loop:
+   401B CD 2A 40      [17]   69    call  physicssys_update
+   401E CD 3F 41      [17]   70    call  entityman_update
+   4021 CD 6B 40      [17]   71    call  rendersys_update
                              72 
-   4021 CD 9B 41      [17]   73    call  cpct_waitVSYNC_asm
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 58.
+   4024 CD AF 41      [17]   73    call  cpct_waitVSYNC_asm
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 59.
 Hexadecimal [16-Bits]
 
 
 
-   4024 76            [ 4]   74    halt
-   4025 76            [ 4]   75    halt
-   4026 76            [ 4]   76    halt
-   4027 76            [ 4]   77    halt
-   4028 18 EE         [12]   78    jr    loop
+                             74    ;call  entityman_create_one
+                             75 
+   4027 18 F2         [12]   76    jr    loop

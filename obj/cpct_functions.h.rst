@@ -9,6 +9,9 @@ Hexadecimal [16-Bits]
                               4 .globl  cpct_getScreenPtr_asm
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
-                              7 .globl  HW_BLACK
-                              8 .globl  HW_WHITE
-                     C000     9 CPCT_VMEM_START_ASM = 0xC000
+                              7 .globl  cpct_getRandom_mxor_u8_asm
+                              8 
+                              9 .globl  HW_BLACK
+                             10 .globl  HW_WHITE
+                             11 
+                             12 .globl  CPCT_VMEM_START_ASM

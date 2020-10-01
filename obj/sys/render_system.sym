@@ -4,13 +4,15 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     CPCT_VME=  C000     |     HW_BLACK   **** GX
-    HW_WHITE   **** GX  |     cpct_dis   **** GX  |     cpct_get   **** GX
-    cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
+    .__.H$L.=  0000 L   |     CPCT_VME   **** GX  |     HW_BLACK   **** GX
+    HW_WHITE   **** GX  |     alive_ty=  0001     |     cpct_dis   **** GX
+    cpct_get   **** GX  |     cpct_get   **** GX  |     cpct_set   **** GX
+    cpct_set   **** GX  |     cpct_wai   **** GX  |     dead_typ=  00FE 
     e_color =  0005     |     e_last_p=  0006     |     e_last_p=  0007 
     e_type  =  0000     |     e_vx    =  0003     |     e_vy    =  0004 
-    e_x     =  0001     |     e_y     =  0002     |     entityma   **** GX
-    entityma   **** GX  |     entityma   **** GX  |     get_enti   **** GX
+    e_x     =  0001     |     e_y     =  0002     |     empty_ty=  0000 
+    entityma   **** GX  |     entityma   **** GX  |     entityma   **** GX
+    entityma   **** GX  |     get_enti   **** GX  |     invalid_=  00FF 
     max_enti=  000A     |   0 rendersy   003C GR  |   0 rendersy   0000 GR
   0 rendersy   0012 R   |   0 rendersy   000D GR  |     sizeof_e=  0008 
 

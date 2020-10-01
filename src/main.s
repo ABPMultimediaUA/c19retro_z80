@@ -61,7 +61,7 @@ _main::
 
    cpctm_setBorder_asm #HW_WHITE
 
-   ;call  entityman_init
+   call  entityman_init
    call  rendersys_init
 
 ;; Loop forever
@@ -71,6 +71,6 @@ loop:
    call  rendersys_update
 
    call  cpct_waitVSYNC_asm
-   halt
-   halt
+   call  entityman_create_one
+
    jr    loop
