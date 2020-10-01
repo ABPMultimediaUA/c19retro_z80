@@ -52,10 +52,14 @@ _main::
    ;; Disable firmware to prevent it from interfering with string drawing
    call cpct_disableFirmware_asm
    
-   ;ld    c, #0
-   ;call  cpct_setVideoMode_asm    
+   ld    c, #0
+   call  cpct_setVideoMode_asm    
 
-   cpctm_setBorder_asm HW_WHITE
+   ld    l, #0
+   ld    h, #HW_BLACK
+   call  cpct_setPALColour_asm
+
+   cpctm_setBorder_asm #HW_WHITE
 
    ;call  entityman_init
    call  rendersys_init
@@ -69,5 +73,4 @@ loop:
    call  cpct_waitVSYNC_asm
    halt
    halt
-
    jr    loop

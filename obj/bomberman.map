@@ -8,43 +8,43 @@ Area                                    Addr        Size        Decimal Bytes (A
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00000000  .__.ABS.                           cpct_video
+     00000000  HW_WHITE                           cpct_keyboard
      00000000  l__DATA                         
-     000001ED  l__CODE                         
+     00000014  HW_BLACK                           cpct_keyboard
+     000001D0  l__CODE                         
      00004000  s__CODE                         
-     000041ED  s__DATA                         
+     000041D0  s__DATA                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000001ED =         493. bytes (REL,CON)
+_CODE                               00004000    000001D0 =         464. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00004000  _main                              cpct_keyboard
-     0000401C  physicssys_init                    
-     0000401D  physicssys_update                  
-     00004051  rendersys_init                     
-     00004076  rendersys_update                   
-     000040A5  rendersys_delete_entity            
-     0000410B  entityman_create                   
-     00004122  entityman_init                     
-     00004135  entityman_update                   
-     00004180  get_entity_array                   
-     00004188  entityman_set_dead                 
-     0000418E  cpct_setPalette_asm                cpct_video
-     000041A1  cpct_setPALColour_asm              cpct_video
-     000041AB  cpct_setVideoMode_asm              cpct_video
-     000041B8  _cpct_waitVSYNC                    cpct_video
-     000041B8  cpct_waitVSYNC_asm                 cpct_video
-     000041C0  _cpct_disableFirmware              cpct_firmware
-     000041C0  _cpct_removeInterruptHandler       cpct_firmware
-     000041C0  cpct_disableFirmware_asm           cpct_firmware
-     000041C0  cpct_removeInterruptHandler_asm    cpct_firmware
-     000041D0  _cpct_mode_rom_status              cpct_firmware
-     000041D1  cpct_getScreenPtr_asm              cpct_video
-
+     0000402A  physicssys_init                    
+     0000402B  physicssys_update                  
+     0000405F  rendersys_init                     
+     0000406C  rendersys_update                   
+     0000409B  rendersys_delete_entity            
+     00004101  entityman_create                   
+     00004118  entityman_init                     
+     0000412B  entityman_update                   
+     00004176  get_entity_array                   
+     0000417E  entityman_set_dead                 
+     00004184  cpct_setPALColour_asm              cpct_video
+     0000418E  cpct_setVideoMode_asm              cpct_video
+     0000419B  _cpct_waitVSYNC                    cpct_video
+     0000419B  cpct_waitVSYNC_asm                 cpct_video
+     000041A3  _cpct_disableFirmware              cpct_firmware
+     000041A3  _cpct_removeInterruptHandler       cpct_firmware
+     000041A3  cpct_disableFirmware_asm           cpct_firmware
+     000041A3  cpct_removeInterruptHandler_asm    cpct_firmware
+     000041B3  _cpct_mode_rom_status              cpct_firmware
+     000041B4  cpct_getScreenPtr_asm              cpct_video
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 
 Files Linked                              [ module(s) ]
@@ -61,8 +61,6 @@ obj/man/entity_manager.h.rel              [  ]
 
 Libraries Linked                          [ object file ]
 
-/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
-                                          [ cpct_setPalette_asmbindings.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_setPALColour_asmbindings.re ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib

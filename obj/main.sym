@@ -15,7 +15,7 @@ Symbol Table
     FW_PINK =  0010     |     FW_PURPL=  0007     |     FW_RED  =  0003 
     FW_SEA_G=  0013     |     FW_SKY_B=  000B     |     FW_WHITE=  000D 
     FW_YELLO=  000C     |     GA_port =  7F00     |     GA_port_=  007F 
-    HW_BLACK=  0014     |     HW_BLUE =  0004     |     HW_BRIGH=  0015 
+    HW_BLACK=  0014 G   |     HW_BLUE =  0004     |     HW_BRIGH=  0015 
     HW_BRIGH=  0013     |     HW_BRIGH=  0012     |     HW_BRIGH=  000D 
     HW_BRIGH=  000C     |     HW_BRIGH=  000B     |     HW_BRIGH=  000A 
     HW_CYAN =  0006     |     HW_GREEN=  0016     |     HW_LIME =  001A 
@@ -23,7 +23,7 @@ Symbol Table
     HW_PASTE=  001F     |     HW_PASTE=  001B     |     HW_PASTE=  0019 
     HW_PASTE=  000F     |     HW_PASTE=  0003     |     HW_PINK =  0007 
     HW_PURPL=  0005     |     HW_RED  =  001C     |     HW_SEA_G=  0002 
-    HW_SKY_B=  0017     |     HW_WHITE=  0000     |     HW_YELLO=  001E 
+    HW_SKY_B=  0017     |     HW_WHITE=  0000 G   |     HW_YELLO=  001E 
     Joy0_Dow=  0209     |     Joy0_Fir=  1009     |     Joy0_Fir=  2009 
     Joy0_Fir=  4009     |     Joy0_Lef=  0409     |     Joy0_Rig=  0809 
     Joy0_Up =  0109     |     Joy1_Dow=  0206     |     Joy1_Fir=  1006 
@@ -57,26 +57,26 @@ Symbol Table
   0 _main      0000 GR  |     cpct_dis   **** GX  |     cpct_get   **** GX
     cpct_pag=  0000     |     cpct_pag=  0010     |     cpct_pag=  0020 
     cpct_pag=  0030     |     cpct_set   **** GX  |     cpct_set   **** GX
-    cpct_set   **** GX  |     cpct_wai   **** GX  |     e_color =  0005 
+    cpct_wai   **** GX  |     e_color =  0005     |     e_last_p=  0006 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 Symbol Table
 
-    e_last_p=  0006     |     e_last_p=  0007     |     e_type  =  0000 
-    e_vx    =  0003     |     e_vy    =  0004     |     e_x     =  0001 
-    e_y     =  0002     |     entityma   **** GX  |     entityma   **** GX
-    entityma   **** GX  |     get_enti   **** GX  |   0 loop       000C R
-    max_enti=  000A     |     opc_DI  =  00F3     |     opc_EI  =  00FB 
-    opc_JR  =  0018     |     opc_LD_D=  0016     |     physicss   **** GX
-    physicss   **** GX  |     rendersy   **** GX  |     rendersy   **** GX
-    rendersy   **** GX  |     sizeof_e=  0008 
+    e_last_p=  0007     |     e_type  =  0000     |     e_vx    =  0003 
+    e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
+    entityma   **** GX  |     entityma   **** GX  |     entityma   **** GX
+    get_enti   **** GX  |   0 loop       0018 R   |     max_enti=  000A 
+    opc_DI  =  00F3     |     opc_EI  =  00FB     |     opc_JR  =  0018 
+    opc_LD_D=  0016     |     physicss   **** GX  |     physicss   **** GX
+    rendersy   **** GX  |     rendersy   **** GX  |     rendersy   **** GX
+    sizeof_e=  0008 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   1C   flags    0
+   0 _CODE      size   2A   flags    0
    1 _DATA      size    0   flags    0
 

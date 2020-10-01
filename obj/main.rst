@@ -2719,11 +2719,12 @@ Hexadecimal [16-Bits]
                               1 
                               2 .globl  cpct_disableFirmware_asm
                               3 .globl  cpct_setVideoMode_asm
-                              4 .globl  cpct_setPalette_asm
-                              5 .globl  cpct_getScreenPtr_asm
-                              6 .globl  cpct_waitVSYNC_asm
-                              7 
-                     C000     8 CPCT_VMEM_START_ASM = 0xC000
+                              4 .globl  cpct_getScreenPtr_asm
+                              5 .globl  cpct_waitVSYNC_asm
+                              6 .globl  cpct_setPALColour_asm
+                              7 .globl  HW_BLACK
+                              8 .globl  HW_WHITE
+                     C000     9 CPCT_VMEM_START_ASM = 0xC000
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 54.
 Hexadecimal [16-Bits]
 
@@ -2809,30 +2810,40 @@ Hexadecimal [16-Bits]
                              50 ;;
    4000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   4000 CD C0 41      [17]   53    call cpct_disableFirmware_asm
+   4000 CD A3 41      [17]   53    call cpct_disableFirmware_asm
                              54    
-                             55    ;ld    c, #0
-                             56    ;call  cpct_setVideoMode_asm    
+   4003 0E 00         [ 7]   55    ld    c, #0
+   4005 CD 8E 41      [17]   56    call  cpct_setVideoMode_asm    
                              57 
-   0003                      58    cpctm_setBorder_asm HW_WHITE
+   4008 2E 00         [ 7]   58    ld    l, #0
+   400A 26 14         [ 7]   59    ld    h, #HW_BLACK
+   400C CD 84 41      [17]   60    call  cpct_setPALColour_asm
+                             61 
+   000F                      62    cpctm_setBorder_asm #HW_WHITE
                               1    .radix h
-   0003                       2    cpctm_setBorder_raw_asm \HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
+   000F                       2    cpctm_setBorder_raw_asm \#HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
-   4003 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   4006 CD A1 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   400F 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
+   4012 CD 84 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
-                             59 
-                             60    ;call  entityman_init
-   4009 CD 51 40      [17]   61    call  rendersys_init
-                             62 
-                             63 ;; Loop forever
-   400C                      64 loop:
-   400C CD 1D 40      [17]   65    call  physicssys_update
-   400F CD 35 41      [17]   66    call  entityman_update
-   4012 CD 76 40      [17]   67    call  rendersys_update
-                             68 
-   4015 CD B8 41      [17]   69    call  cpct_waitVSYNC_asm
-   4018 76            [ 4]   70    halt
-   4019 76            [ 4]   71    halt
+                             63 
+                             64    ;call  entityman_init
+   4015 CD 5F 40      [17]   65    call  rendersys_init
+                             66 
+                             67 ;; Loop forever
+   4018                      68 loop:
+   4018 CD 2B 40      [17]   69    call  physicssys_update
+   401B CD 2B 41      [17]   70    call  entityman_update
+   401E CD 6C 40      [17]   71    call  rendersys_update
                              72 
-   401A 18 F0         [12]   73    jr    loop
+   4021 CD 9B 41      [17]   73    call  cpct_waitVSYNC_asm
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 58.
+Hexadecimal [16-Bits]
+
+
+
+   4024 76            [ 4]   74    halt
+   4025 76            [ 4]   75    halt
+   4026 76            [ 4]   76    halt
+   4027 76            [ 4]   77    halt
+   4028 18 EE         [12]   78    jr    loop

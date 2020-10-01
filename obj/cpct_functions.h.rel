@@ -1,9 +1,11 @@
 XL2
-H 1 areas 6 global symbols
-S cpct_setPalette_asm Ref0000
+H 1 areas 8 global symbols
+S cpct_setPALColour_asm Ref0000
+S HW_BLACK Ref0000
 S .__.ABS. Def0000
 S cpct_waitVSYNC_asm Ref0000
 S cpct_setVideoMode_asm Ref0000
 S cpct_disableFirmware_asm Ref0000
+S HW_WHITE Ref0000
 S cpct_getScreenPtr_asm Ref0000
 A _CODE size 0 flags 0 addr 0
