@@ -4,19 +4,22 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |   0 _entity_   0007 R   |   0 _last_el   0005 R
-  0 _num_ent   0004 R   |   0 alive_ty   0001 R   |   0 dead_typ   0002 R
-  0 default    0057 R   |     e_color =  0005     |     e_last_p=  0006 
-    e_last_p=  0007     |     e_type  =  0000     |     e_vx    =  0003 
-    e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
-  0 empty_ty   0000 R   |   0 entityma   005F GR  |   0 entityma   0076 GR
-  0 entityma   0089 GR  |   0 get_enti   008A GR  |   0 init_loo   007C R
-  0 invalid_   0003 R   |     max_enti=  000A     |     sizeof_e=  0008 
+    .__.H$L.=  0000 L   |   0 _entity_   0003 R   |   0 _last_el   0001 R
+  0 _num_ent   0000 R   |     alive_ty=  0001     |   0 continue   00CB R
+    dead_typ=  00FE     |   0 default    0054 R   |     e_color =  0005 
+    e_last_p=  0006     |     e_last_p=  0007     |     e_type  =  0000 
+    e_vx    =  0003     |     e_vy    =  0004     |     e_x     =  0001 
+    e_y     =  0002     |     empty_ty=  0000     |   0 entityma   005C GR
+  0 entityma   0073 GR  |   0 entityma   008F R   |   0 entityma   00D9 GR
+  0 entityma   0086 GR  |   0 get_enti   00D1 GR  |   0 inc_inde   00C6 R
+  0 init_loo   0079 R   |     invalid_=  00FF     |     max_enti=  000A 
+  0 no_overf   00AF R   |   0 overflow   00A8 R   |     rendersy   **** GX
+    rendersy   **** GX  |     rendersy   **** GX  |     sizeof_e=  0008 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   92   flags    0
+   0 _CODE      size   DF   flags    0
 

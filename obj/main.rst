@@ -2736,27 +2736,29 @@ Hexadecimal [16-Bits]
                               4 
                               5 .globl  entityman_init
                               6 .globl  get_entity_array
-                              7 
-                              8 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
-                              9     .db _type
-                             10     .db _x
-                             11     .db _y
-                             12     .db _vx
-                             13     .db _vy
-                             14     .db _color    
-                             15     .dw _last_ptr
-                             16 .endm
-                             17 
-                     0000    18 e_type = 0
-                     0001    19 e_x = 1
-                     0002    20 e_y = 2
-                     0003    21 e_vx = 3
-                     0004    22 e_vy = 4
-                     0005    23 e_color = 5
-                     0006    24 e_last_ptr_1 = 6
-                     0007    25 e_last_ptr_2 = 7
-                     0008    26 sizeof_e = 8
-                     000A    27 max_entities = 10
+                              7 .globl  entityman_set_dead
+                              8 .globl  entityman_update
+                              9 
+                             10 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
+                             11     .db _type
+                             12     .db _x
+                             13     .db _y
+                             14     .db _vx
+                             15     .db _vy
+                             16     .db _color    
+                             17     .dw _last_ptr
+                             18 .endm
+                             19 
+                     0000    20 e_type = 0
+                     0001    21 e_x = 1
+                     0002    22 e_y = 2
+                     0003    23 e_vx = 3
+                     0004    24 e_vy = 4
+                     0005    25 e_color = 5
+                     0006    26 e_last_ptr_1 = 6
+                     0007    27 e_last_ptr_2 = 7
+                     0008    28 sizeof_e = 8
+                     000A    29 max_entities = 10
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 55.
 Hexadecimal [16-Bits]
 
@@ -2765,6 +2767,7 @@ Hexadecimal [16-Bits]
                              23 .include "sys/render_system.h.s"
                               1 .globl  rendersys_init
                               2 .globl  rendersys_update
+                              3 .globl  rendersys_delete_entity
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
 Hexadecimal [16-Bits]
 
@@ -2806,29 +2809,30 @@ Hexadecimal [16-Bits]
                              50 ;;
    4000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   4000 CD 48 41      [17]   53    call cpct_disableFirmware_asm
+   4000 CD C0 41      [17]   53    call cpct_disableFirmware_asm
                              54    
-   4003 0E 00         [ 7]   55    ld    c, #0
-   4005 CD 33 41      [17]   56    call  cpct_setVideoMode_asm    
+                             55    ;ld    c, #0
+                             56    ;call  cpct_setVideoMode_asm    
                              57 
-   0008                      58    cpctm_setBorder_asm HW_WHITE
+   0003                      58    cpctm_setBorder_asm HW_WHITE
                               1    .radix h
-   0008                       2    cpctm_setBorder_raw_asm \HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
+   0003                       2    cpctm_setBorder_raw_asm \HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
-   4008 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   400B CD 29 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   4003 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
+   4006 CD A1 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
                              59 
                              60    ;call  entityman_init
-   400E CD 41 40      [17]   61    call  rendersys_init
+   4009 CD 51 40      [17]   61    call  rendersys_init
                              62 
                              63 ;; Loop forever
-   4011                      64 loop:
-   4011 CD 1F 40      [17]   65    call  physicssys_update
-   4014 CD 60 40      [17]   66    call  rendersys_update
-                             67 
-   4017 CD 40 41      [17]   68    call  cpct_waitVSYNC_asm
-   401A 76            [ 4]   69    halt
-   401B 76            [ 4]   70    halt
-                             71 
-   401C 18 F3         [12]   72    jr    loop
+   400C                      64 loop:
+   400C CD 1D 40      [17]   65    call  physicssys_update
+   400F CD 35 41      [17]   66    call  entityman_update
+   4012 CD 76 40      [17]   67    call  rendersys_update
+                             68 
+   4015 CD B8 41      [17]   69    call  cpct_waitVSYNC_asm
+   4018 76            [ 4]   70    halt
+   4019 76            [ 4]   71    halt
+                             72 
+   401A 18 F0         [12]   73    jr    loop

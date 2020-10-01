@@ -4,13 +4,15 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     CPCT_VME=  C000     |     cpct_dis   **** GX
-    cpct_get   **** GX  |     cpct_set   **** GX  |     cpct_set   **** GX
-    cpct_wai   **** GX  |     e_color =  0005     |     e_last_p=  0006 
-    e_last_p=  0007     |     e_type  =  0000     |     e_vx    =  0003 
-    e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
-    entityma   **** GX  |     get_enti   **** GX  |     max_enti=  000A 
-  0 physicss   0000 GR  |   0 physicss   0004 R   |   0 physicss   0001 GR
+    .__.H$L.=  0000 L   |     CPCT_VME=  C000     |   0 continue   0011 R
+  0 continue   001E R   |     cpct_dis   **** GX  |     cpct_get   **** GX
+    cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
+    e_color =  0005     |     e_last_p=  0006     |     e_last_p=  0007 
+    e_type  =  0000     |     e_vx    =  0003     |     e_vy    =  0004 
+    e_x     =  0001     |     e_y     =  0002     |     entityma   **** GX
+    entityma   **** GX  |     entityma   **** GX  |     get_enti   **** GX
+  0 invalid_   002B R   |   0 invalid_   0030 R   |     max_enti=  000A 
+  0 physicss   0000 GR  |   0 physicss   0006 R   |   0 physicss   0001 GR
     sizeof_e=  0008 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
@@ -18,5 +20,5 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   23   flags    0
+   0 _CODE      size   35   flags    0
 

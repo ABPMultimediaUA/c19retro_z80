@@ -52,8 +52,8 @@ _main::
    ;; Disable firmware to prevent it from interfering with string drawing
    call cpct_disableFirmware_asm
    
-   ld    c, #0
-   call  cpct_setVideoMode_asm    
+   ;ld    c, #0
+   ;call  cpct_setVideoMode_asm    
 
    cpctm_setBorder_asm HW_WHITE
 
@@ -63,6 +63,7 @@ _main::
 ;; Loop forever
 loop:
    call  physicssys_update
+   call  entityman_update
    call  rendersys_update
 
    call  cpct_waitVSYNC_asm

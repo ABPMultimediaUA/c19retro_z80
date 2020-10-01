@@ -5,3 +5,4 @@ Hexadecimal [16-Bits]
 
                               1 .globl  rendersys_init
                               2 .globl  rendersys_update
+                              3 .globl  rendersys_delete_entity

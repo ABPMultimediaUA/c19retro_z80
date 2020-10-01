@@ -65,10 +65,11 @@ Symbol Table
 
     e_last_p=  0006     |     e_last_p=  0007     |     e_type  =  0000 
     e_vx    =  0003     |     e_vy    =  0004     |     e_x     =  0001 
-    e_y     =  0002     |     entityma   **** GX  |     get_enti   **** GX
-  0 loop       0011 R   |     max_enti=  000A     |     opc_DI  =  00F3 
-    opc_EI  =  00FB     |     opc_JR  =  0018     |     opc_LD_D=  0016 
-    physicss   **** GX  |     physicss   **** GX  |     rendersy   **** GX
+    e_y     =  0002     |     entityma   **** GX  |     entityma   **** GX
+    entityma   **** GX  |     get_enti   **** GX  |   0 loop       000C R
+    max_enti=  000A     |     opc_DI  =  00F3     |     opc_EI  =  00FB 
+    opc_JR  =  0018     |     opc_LD_D=  0016     |     physicss   **** GX
+    physicss   **** GX  |     rendersy   **** GX  |     rendersy   **** GX
     rendersy   **** GX  |     sizeof_e=  0008 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
@@ -76,6 +77,6 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   1E   flags    0
+   0 _CODE      size   1C   flags    0
    1 _DATA      size    0   flags    0
 

@@ -4,6 +4,8 @@
 
 .globl  entityman_init
 .globl  get_entity_array
+.globl  entityman_set_dead
+.globl  entityman_update
 
 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
     .db _type

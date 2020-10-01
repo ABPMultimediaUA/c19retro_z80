@@ -9,39 +9,41 @@ Area                                    Addr        Size        Decimal Bytes (A
       -----  --------------------------------   ------------------------
      00000000  .__.ABS.                           cpct_video
      00000000  l__DATA                         
-     00000175  l__CODE                         
+     000001ED  l__CODE                         
      00004000  s__CODE                         
-     00004175  s__DATA                         
+     000041ED  s__DATA                         
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    00000175 =         373. bytes (REL,CON)
+_CODE                               00004000    000001ED =         493. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00004000  _main                              cpct_keyboard
-     0000401E  physicssys_init                    
-     0000401F  physicssys_update                  
-     00004041  rendersys_init                     
-     00004060  rendersys_update                   
-     000040E3  entityman_create                   
-     000040FA  entityman_init                     
-     0000410D  entityman_update                   
-     0000410E  get_entity_array                   
-     00004116  cpct_setPalette_asm                cpct_video
-     00004129  cpct_setPALColour_asm              cpct_video
-     00004133  cpct_setVideoMode_asm              cpct_video
-     00004140  _cpct_waitVSYNC                    cpct_video
-     00004140  cpct_waitVSYNC_asm                 cpct_video
-     00004148  _cpct_disableFirmware              cpct_firmware
-     00004148  _cpct_removeInterruptHandler       cpct_firmware
-     00004148  cpct_disableFirmware_asm           cpct_firmware
-     00004148  cpct_removeInterruptHandler_asm    cpct_firmware
-     00004158  _cpct_mode_rom_status              cpct_firmware
-     00004159  cpct_getScreenPtr_asm              cpct_video
+     0000401C  physicssys_init                    
+     0000401D  physicssys_update                  
+     00004051  rendersys_init                     
+     00004076  rendersys_update                   
+     000040A5  rendersys_delete_entity            
+     0000410B  entityman_create                   
+     00004122  entityman_init                     
+     00004135  entityman_update                   
+     00004180  get_entity_array                   
+     00004188  entityman_set_dead                 
+     0000418E  cpct_setPalette_asm                cpct_video
+     000041A1  cpct_setPALColour_asm              cpct_video
+     000041AB  cpct_setVideoMode_asm              cpct_video
+     000041B8  _cpct_waitVSYNC                    cpct_video
+     000041B8  cpct_waitVSYNC_asm                 cpct_video
+     000041C0  _cpct_disableFirmware              cpct_firmware
+     000041C0  _cpct_removeInterruptHandler       cpct_firmware
+     000041C0  cpct_disableFirmware_asm           cpct_firmware
+     000041C0  cpct_removeInterruptHandler_asm    cpct_firmware
+     000041D0  _cpct_mode_rom_status              cpct_firmware
+     000041D1  cpct_getScreenPtr_asm              cpct_video
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 
