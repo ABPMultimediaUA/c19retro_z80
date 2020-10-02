@@ -13,7 +13,7 @@ Symbol Table
     e_x     =  0001     |     e_y     =  0002     |     empty_ty=  0000 
     entityma   **** GX  |     entityma   **** GX  |     entityma   **** GX
     entityma   **** GX  |     get_enti   **** GX  |     invalid_=  00FF 
-    max_enti=  000A     |   0 rendersy   003C GR  |   0 rendersy   0000 GR
+    max_enti=  001E     |   0 rendersy   003C GR  |   0 rendersy   0000 GR
   0 rendersy   0012 R   |   0 rendersy   000D GR  |     sizeof_e=  0008 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.

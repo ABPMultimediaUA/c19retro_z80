@@ -68,7 +68,7 @@ Symbol Table
     e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
     empty_ty=  0000     |     entityma   **** GX  |     entityma   **** GX
     entityma   **** GX  |     entityma   **** GX  |     get_enti   **** GX
-    invalid_=  00FF     |   0 loop       000C R   |     max_enti=  000A 
+    invalid_=  00FF     |   0 loop       000C R   |     max_enti=  001E 
     opc_DI  =  00F3     |     opc_EI  =  00FB     |     opc_JR  =  0018 
     opc_LD_D=  0016     |     physicss   **** GX  |     physicss   **** GX
     rendersy   **** GX  |     rendersy   **** GX  |     rendersy   **** GX

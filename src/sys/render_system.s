@@ -2,24 +2,6 @@
 .include "../cpct_functions.h.s"
 .include "render_system.h.s"
 
-;pallete: 
-;  .db   HW_BLACK
-;  .db   HW_BLACK
-;  .db   HW_BLACK
-;  .db   HW_BLACK
-;  .db   HW_WHITE
-;  .db   HW_WHITE
-;  .db   HW_WHITE
-;  .db   HW_WHITE
-;  .db   HW_BLUE
-;  .db   HW_BLUE
-;  .db   HW_BLUE
-;  .db   HW_BLUE
-;  .db   HW_RED
-;  .db   HW_RED
-;  .db   HW_RED
-;  .db   HW_RED
-
 rendersys_init::  
   ld    c, #0
   call  cpct_setVideoMode_asm    

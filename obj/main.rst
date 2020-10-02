@@ -2760,55 +2760,50 @@ Hexadecimal [16-Bits]
                              24 
                              25 .macro DefineStarDefault
                              26     .db alive_type
-                             27     .db 0x40
-                             28     .db 0x01
-                             29     .db 0xFE
-                             30     .db 0xFE
-                             31     .db 0xFF    
+                             27     .db 0xDE
+                             28     .db 0xAD
+                             29     .db 0xDE
+                             30     .db 0xAD
+                             31     .db 0x80    
                              32     .dw 0xCCCC
                              33 .endm
                              34 
-                             35 .macro DefineStarEmpty    
-                             36     .db empty_type
-                             37     .ds sizeof_e-1
-                             38 .endm
-                             39 
-                             40 .macro DefineStarArray _Tname,_N,_DefineStar
-                             41     _Tname'_num:    .db 0    
-                             42     _Tname'_last:   .dw _Tname'_array
-                             43     _Tname'_array: 
-                             44     .rept _N    
-                             45         _DefineStar
-                             46     .endm
-                             47     .db invalid_type
-                             48 .endm
-                             49 
-                             50 ;;########################################################
-                             51 ;;                       CONSTANTS                       #             
-                             52 ;;########################################################
-                     0000    53 e_type = 0
-                     0001    54 e_x = 1
+                             35 .macro DefineStarArray _Tname,_N,_DefineStar
+                             36     _Tname'_num:    .db 0    
+                             37     _Tname'_last:   .dw _Tname'_array
+                             38     _Tname'_array: 
+                             39     .rept _N    
+                             40         _DefineStar
+                             41     .endm
+                             42     .db invalid_type
+                             43 .endm
+                             44 
+                             45 ;;########################################################
+                             46 ;;                       CONSTANTS                       #             
+                             47 ;;########################################################
+                     0000    48 e_type = 0
+                     0001    49 e_x = 1
+                     0002    50 e_y = 2
+                     0003    51 e_vx = 3
+                     0004    52 e_vy = 4
+                     0005    53 e_color = 5
+                     0006    54 e_last_ptr_1 = 6
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 55.
 Hexadecimal [16-Bits]
 
 
 
-                     0002    55 e_y = 2
-                     0003    56 e_vx = 3
-                     0004    57 e_vy = 4
-                     0005    58 e_color = 5
-                     0006    59 e_last_ptr_1 = 6
-                     0007    60 e_last_ptr_2 = 7
-                     0008    61 sizeof_e = 8
-                     000A    62 max_entities = 10
-                             63 
-                             64 ;;########################################################
-                             65 ;;                      ENTITY TYPES                     #             
-                             66 ;;########################################################
-                     0000    67 empty_type = 0x00
-                     0001    68 alive_type = 0x01
-                     00FE    69 dead_type = 0xFE
-                     00FF    70 invalid_type = 0xFF
+                     0007    55 e_last_ptr_2 = 7
+                     0008    56 sizeof_e = 8
+                     001E    57 max_entities = 30
+                             58 
+                             59 ;;########################################################
+                             60 ;;                      ENTITY TYPES                     #             
+                             61 ;;########################################################
+                     0000    62 empty_type = 0x00
+                     0001    63 alive_type = 0x01
+                     00FE    64 dead_type = 0xFE
+                     00FF    65 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
 Hexadecimal [16-Bits]
 
@@ -2859,7 +2854,7 @@ Hexadecimal [16-Bits]
                              50 ;;
    4000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   4000 CD B7 41      [17]   53    call cpct_disableFirmware_asm     
+   4000 CD 56 42      [17]   53    call cpct_disableFirmware_asm     
                              54 
                              55    ;;call  entityman_init
    4003 CD 52 40      [17]   56    call  rendersys_init
@@ -2868,17 +2863,17 @@ Hexadecimal [16-Bits]
    0006                       2    cpctm_setBorder_raw_asm \#HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
    4006 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   4009 CD 98 41      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   4009 CD 37 42      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
                              58 
                              59 ;; Loop forever
    400C                      60 loop:
-   400C CD 1F 41      [17]   61    call  entityman_create_one
+   400C CD BE 41      [17]   61    call  entityman_create_one
    400F CD 1E 40      [17]   62    call  physicssys_update
-   4012 CD 3F 41      [17]   63    call  entityman_update
+   4012 CD DE 41      [17]   63    call  entityman_update
    4015 CD 5F 40      [17]   64    call  rendersys_update
                              65 
-   4018 CD AF 41      [17]   66    call  cpct_waitVSYNC_asm
+   4018 CD 4E 42      [17]   66    call  cpct_waitVSYNC_asm
                              67    ;call  entityman_create_one
                              68 
    401B 18 EF         [12]   69    jr    loop

@@ -24,17 +24,12 @@
 
 .macro DefineStarDefault
     .db alive_type
-    .db 0x40
-    .db 0x01
-    .db 0xFE
-    .db 0xFE
-    .db 0xFF    
+    .db 0xDE
+    .db 0xAD
+    .db 0xDE
+    .db 0xAD
+    .db 0x80    
     .dw 0xCCCC
-.endm
-
-.macro DefineStarEmpty    
-    .db empty_type
-    .ds sizeof_e-1
 .endm
 
 .macro DefineStarArray _Tname,_N,_DefineStar
@@ -59,7 +54,7 @@ e_color = 5
 e_last_ptr_1 = 6
 e_last_ptr_2 = 7
 sizeof_e = 8
-max_entities = 10
+max_entities = 30
 
 ;;########################################################
 ;;                      ENTITY TYPES                     #             

@@ -6,17 +6,17 @@ Symbol Table
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
     .__.H$L.=  0000 L   |     CPCT_VME   **** GX  |     HW_BLACK   **** GX
     HW_WHITE   **** GX  |   0 _entity_   0003 R   |   0 _entity_   0001 R
-  0 _entity_   0000 R   |     alive_ty=  0001     |   0 continue   00EC R
+  0 _entity_   0000 R   |     alive_ty=  0001     |   0 continue   018B R
     cpct_dis   **** GX  |     cpct_get   **** GX  |     cpct_get   **** GX
     cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
     dead_typ=  00FE     |     e_color =  0005     |     e_last_p=  0006 
     e_last_p=  0007     |     e_type  =  0000     |     e_vx    =  0003 
     e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
-    empty_ty=  0000     |   0 entityma   0087 GR  |   0 entityma   0095 GR
-  0 entityma   006A GR  |   0 entityma   00B0 R   |   0 entityma   0054 GR
-  0 entityma   00FA GR  |   0 entityma   00A7 GR  |   0 get_enti   00F2 GR
-  0 inc_inde   00E7 R   |   0 init_loo   009B R   |     invalid_=  00FF 
-    max_enti=  000A     |   0 no_overf   00D0 R   |   0 overflow   00C9 R
+    empty_ty=  0000     |   0 entityma   0126 GR  |   0 entityma   0134 GR
+  0 entityma   010A GR  |   0 entityma   014F R   |   0 entityma   00F4 GR
+  0 entityma   0199 GR  |   0 entityma   0146 GR  |   0 get_enti   0191 GR
+  0 inc_inde   0186 R   |   0 init_loo   013A R   |     invalid_=  00FF 
+    max_enti=  001E     |   0 no_overf   016F R   |   0 overflow   0168 R
     rendersy   **** GX  |     rendersy   **** GX  |     rendersy   **** GX
     sizeof_e=  0008 
 
@@ -25,5 +25,5 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size  100   flags    0
+   0 _CODE      size  19F   flags    0
 

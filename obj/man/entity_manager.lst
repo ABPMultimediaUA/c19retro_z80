@@ -39,55 +39,50 @@ Hexadecimal [16-Bits]
                              24 
                              25 .macro DefineStarDefault
                              26     .db alive_type
-                             27     .db 0x40
-                             28     .db 0x01
-                             29     .db 0xFE
-                             30     .db 0xFE
-                             31     .db 0xFF    
+                             27     .db 0xDE
+                             28     .db 0xAD
+                             29     .db 0xDE
+                             30     .db 0xAD
+                             31     .db 0x80    
                              32     .dw 0xCCCC
                              33 .endm
                              34 
-                             35 .macro DefineStarEmpty    
-                             36     .db empty_type
-                             37     .ds sizeof_e-1
-                             38 .endm
-                             39 
-                             40 .macro DefineStarArray _Tname,_N,_DefineStar
-                             41     _Tname'_num:    .db 0    
-                             42     _Tname'_last:   .dw _Tname'_array
-                             43     _Tname'_array: 
-                             44     .rept _N    
-                             45         _DefineStar
-                             46     .endm
-                             47     .db invalid_type
-                             48 .endm
-                             49 
-                             50 ;;########################################################
-                             51 ;;                       CONSTANTS                       #             
-                             52 ;;########################################################
-                     0000    53 e_type = 0
-                     0001    54 e_x = 1
+                             35 .macro DefineStarArray _Tname,_N,_DefineStar
+                             36     _Tname'_num:    .db 0    
+                             37     _Tname'_last:   .dw _Tname'_array
+                             38     _Tname'_array: 
+                             39     .rept _N    
+                             40         _DefineStar
+                             41     .endm
+                             42     .db invalid_type
+                             43 .endm
+                             44 
+                             45 ;;########################################################
+                             46 ;;                       CONSTANTS                       #             
+                             47 ;;########################################################
+                     0000    48 e_type = 0
+                     0001    49 e_x = 1
+                     0002    50 e_y = 2
+                     0003    51 e_vx = 3
+                     0004    52 e_vy = 4
+                     0005    53 e_color = 5
+                     0006    54 e_last_ptr_1 = 6
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 
 
-                     0002    55 e_y = 2
-                     0003    56 e_vx = 3
-                     0004    57 e_vy = 4
-                     0005    58 e_color = 5
-                     0006    59 e_last_ptr_1 = 6
-                     0007    60 e_last_ptr_2 = 7
-                     0008    61 sizeof_e = 8
-                     000A    62 max_entities = 10
-                             63 
-                             64 ;;########################################################
-                             65 ;;                      ENTITY TYPES                     #             
-                             66 ;;########################################################
-                     0000    67 empty_type = 0x00
-                     0001    68 alive_type = 0x01
-                     00FE    69 dead_type = 0xFE
-                     00FF    70 invalid_type = 0xFF
+                     0007    55 e_last_ptr_2 = 7
+                     0008    56 sizeof_e = 8
+                     001E    57 max_entities = 30
+                             58 
+                             59 ;;########################################################
+                             60 ;;                      ENTITY TYPES                     #             
+                             61 ;;########################################################
+                     0000    62 empty_type = 0x00
+                     0001    63 alive_type = 0x01
+                     00FE    64 dead_type = 0xFE
+                     00FF    65 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
 Hexadecimal [16-Bits]
 
@@ -134,90 +129,265 @@ Hexadecimal [16-Bits]
                               6     .endm
    0003                       1         DefineStarDefault
    0003 01                    1     .db alive_type
-   0004 40                    2     .db 0x40
-   0005 01                    3     .db 0x01
-   0006 FE                    4     .db 0xFE
-   0007 FE                    5     .db 0xFE
-   0008 FF                    6     .db 0xFF    
+   0004 DE                    2     .db 0xDE
+   0005 AD                    3     .db 0xAD
+   0006 DE                    4     .db 0xDE
+   0007 AD                    5     .db 0xAD
+   0008 80                    6     .db 0x80    
    0009 CC CC                 7     .dw 0xCCCC
    000B                       1         DefineStarDefault
    000B 01                    1     .db alive_type
-   000C 40                    2     .db 0x40
-   000D 01                    3     .db 0x01
-   000E FE                    4     .db 0xFE
-   000F FE                    5     .db 0xFE
-   0010 FF                    6     .db 0xFF    
+   000C DE                    2     .db 0xDE
+   000D AD                    3     .db 0xAD
+   000E DE                    4     .db 0xDE
+   000F AD                    5     .db 0xAD
+   0010 80                    6     .db 0x80    
    0011 CC CC                 7     .dw 0xCCCC
    0013                       1         DefineStarDefault
    0013 01                    1     .db alive_type
-   0014 40                    2     .db 0x40
-   0015 01                    3     .db 0x01
-   0016 FE                    4     .db 0xFE
-   0017 FE                    5     .db 0xFE
-   0018 FF                    6     .db 0xFF    
+   0014 DE                    2     .db 0xDE
+   0015 AD                    3     .db 0xAD
+   0016 DE                    4     .db 0xDE
+   0017 AD                    5     .db 0xAD
+   0018 80                    6     .db 0x80    
    0019 CC CC                 7     .dw 0xCCCC
    001B                       1         DefineStarDefault
    001B 01                    1     .db alive_type
-   001C 40                    2     .db 0x40
-   001D 01                    3     .db 0x01
-   001E FE                    4     .db 0xFE
-   001F FE                    5     .db 0xFE
-   0020 FF                    6     .db 0xFF    
+   001C DE                    2     .db 0xDE
+   001D AD                    3     .db 0xAD
+   001E DE                    4     .db 0xDE
+   001F AD                    5     .db 0xAD
+   0020 80                    6     .db 0x80    
    0021 CC CC                 7     .dw 0xCCCC
    0023                       1         DefineStarDefault
    0023 01                    1     .db alive_type
-   0024 40                    2     .db 0x40
-   0025 01                    3     .db 0x01
-   0026 FE                    4     .db 0xFE
-   0027 FE                    5     .db 0xFE
-   0028 FF                    6     .db 0xFF    
+   0024 DE                    2     .db 0xDE
+   0025 AD                    3     .db 0xAD
+   0026 DE                    4     .db 0xDE
+   0027 AD                    5     .db 0xAD
+   0028 80                    6     .db 0x80    
    0029 CC CC                 7     .dw 0xCCCC
    002B                       1         DefineStarDefault
    002B 01                    1     .db alive_type
-   002C 40                    2     .db 0x40
+   002C DE                    2     .db 0xDE
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-   002D 01                    3     .db 0x01
-   002E FE                    4     .db 0xFE
-   002F FE                    5     .db 0xFE
-   0030 FF                    6     .db 0xFF    
+   002D AD                    3     .db 0xAD
+   002E DE                    4     .db 0xDE
+   002F AD                    5     .db 0xAD
+   0030 80                    6     .db 0x80    
    0031 CC CC                 7     .dw 0xCCCC
    0033                       1         DefineStarDefault
    0033 01                    1     .db alive_type
-   0034 40                    2     .db 0x40
-   0035 01                    3     .db 0x01
-   0036 FE                    4     .db 0xFE
-   0037 FE                    5     .db 0xFE
-   0038 FF                    6     .db 0xFF    
+   0034 DE                    2     .db 0xDE
+   0035 AD                    3     .db 0xAD
+   0036 DE                    4     .db 0xDE
+   0037 AD                    5     .db 0xAD
+   0038 80                    6     .db 0x80    
    0039 CC CC                 7     .dw 0xCCCC
    003B                       1         DefineStarDefault
    003B 01                    1     .db alive_type
-   003C 40                    2     .db 0x40
-   003D 01                    3     .db 0x01
-   003E FE                    4     .db 0xFE
-   003F FE                    5     .db 0xFE
-   0040 FF                    6     .db 0xFF    
+   003C DE                    2     .db 0xDE
+   003D AD                    3     .db 0xAD
+   003E DE                    4     .db 0xDE
+   003F AD                    5     .db 0xAD
+   0040 80                    6     .db 0x80    
    0041 CC CC                 7     .dw 0xCCCC
    0043                       1         DefineStarDefault
    0043 01                    1     .db alive_type
-   0044 40                    2     .db 0x40
-   0045 01                    3     .db 0x01
-   0046 FE                    4     .db 0xFE
-   0047 FE                    5     .db 0xFE
-   0048 FF                    6     .db 0xFF    
+   0044 DE                    2     .db 0xDE
+   0045 AD                    3     .db 0xAD
+   0046 DE                    4     .db 0xDE
+   0047 AD                    5     .db 0xAD
+   0048 80                    6     .db 0x80    
    0049 CC CC                 7     .dw 0xCCCC
    004B                       1         DefineStarDefault
    004B 01                    1     .db alive_type
-   004C 40                    2     .db 0x40
-   004D 01                    3     .db 0x01
-   004E FE                    4     .db 0xFE
-   004F FE                    5     .db 0xFE
-   0050 FF                    6     .db 0xFF    
+   004C DE                    2     .db 0xDE
+   004D AD                    3     .db 0xAD
+   004E DE                    4     .db 0xDE
+   004F AD                    5     .db 0xAD
+   0050 80                    6     .db 0x80    
    0051 CC CC                 7     .dw 0xCCCC
-   0053 FF                    7     .db invalid_type
+   0053                       1         DefineStarDefault
+   0053 01                    1     .db alive_type
+   0054 DE                    2     .db 0xDE
+   0055 AD                    3     .db 0xAD
+   0056 DE                    4     .db 0xDE
+   0057 AD                    5     .db 0xAD
+   0058 80                    6     .db 0x80    
+   0059 CC CC                 7     .dw 0xCCCC
+   005B                       1         DefineStarDefault
+   005B 01                    1     .db alive_type
+   005C DE                    2     .db 0xDE
+   005D AD                    3     .db 0xAD
+   005E DE                    4     .db 0xDE
+   005F AD                    5     .db 0xAD
+   0060 80                    6     .db 0x80    
+   0061 CC CC                 7     .dw 0xCCCC
+   0063                       1         DefineStarDefault
+   0063 01                    1     .db alive_type
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+Hexadecimal [16-Bits]
+
+
+
+   0064 DE                    2     .db 0xDE
+   0065 AD                    3     .db 0xAD
+   0066 DE                    4     .db 0xDE
+   0067 AD                    5     .db 0xAD
+   0068 80                    6     .db 0x80    
+   0069 CC CC                 7     .dw 0xCCCC
+   006B                       1         DefineStarDefault
+   006B 01                    1     .db alive_type
+   006C DE                    2     .db 0xDE
+   006D AD                    3     .db 0xAD
+   006E DE                    4     .db 0xDE
+   006F AD                    5     .db 0xAD
+   0070 80                    6     .db 0x80    
+   0071 CC CC                 7     .dw 0xCCCC
+   0073                       1         DefineStarDefault
+   0073 01                    1     .db alive_type
+   0074 DE                    2     .db 0xDE
+   0075 AD                    3     .db 0xAD
+   0076 DE                    4     .db 0xDE
+   0077 AD                    5     .db 0xAD
+   0078 80                    6     .db 0x80    
+   0079 CC CC                 7     .dw 0xCCCC
+   007B                       1         DefineStarDefault
+   007B 01                    1     .db alive_type
+   007C DE                    2     .db 0xDE
+   007D AD                    3     .db 0xAD
+   007E DE                    4     .db 0xDE
+   007F AD                    5     .db 0xAD
+   0080 80                    6     .db 0x80    
+   0081 CC CC                 7     .dw 0xCCCC
+   0083                       1         DefineStarDefault
+   0083 01                    1     .db alive_type
+   0084 DE                    2     .db 0xDE
+   0085 AD                    3     .db 0xAD
+   0086 DE                    4     .db 0xDE
+   0087 AD                    5     .db 0xAD
+   0088 80                    6     .db 0x80    
+   0089 CC CC                 7     .dw 0xCCCC
+   008B                       1         DefineStarDefault
+   008B 01                    1     .db alive_type
+   008C DE                    2     .db 0xDE
+   008D AD                    3     .db 0xAD
+   008E DE                    4     .db 0xDE
+   008F AD                    5     .db 0xAD
+   0090 80                    6     .db 0x80    
+   0091 CC CC                 7     .dw 0xCCCC
+   0093                       1         DefineStarDefault
+   0093 01                    1     .db alive_type
+   0094 DE                    2     .db 0xDE
+   0095 AD                    3     .db 0xAD
+   0096 DE                    4     .db 0xDE
+   0097 AD                    5     .db 0xAD
+   0098 80                    6     .db 0x80    
+   0099 CC CC                 7     .dw 0xCCCC
+   009B                       1         DefineStarDefault
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
+Hexadecimal [16-Bits]
+
+
+
+   009B 01                    1     .db alive_type
+   009C DE                    2     .db 0xDE
+   009D AD                    3     .db 0xAD
+   009E DE                    4     .db 0xDE
+   009F AD                    5     .db 0xAD
+   00A0 80                    6     .db 0x80    
+   00A1 CC CC                 7     .dw 0xCCCC
+   00A3                       1         DefineStarDefault
+   00A3 01                    1     .db alive_type
+   00A4 DE                    2     .db 0xDE
+   00A5 AD                    3     .db 0xAD
+   00A6 DE                    4     .db 0xDE
+   00A7 AD                    5     .db 0xAD
+   00A8 80                    6     .db 0x80    
+   00A9 CC CC                 7     .dw 0xCCCC
+   00AB                       1         DefineStarDefault
+   00AB 01                    1     .db alive_type
+   00AC DE                    2     .db 0xDE
+   00AD AD                    3     .db 0xAD
+   00AE DE                    4     .db 0xDE
+   00AF AD                    5     .db 0xAD
+   00B0 80                    6     .db 0x80    
+   00B1 CC CC                 7     .dw 0xCCCC
+   00B3                       1         DefineStarDefault
+   00B3 01                    1     .db alive_type
+   00B4 DE                    2     .db 0xDE
+   00B5 AD                    3     .db 0xAD
+   00B6 DE                    4     .db 0xDE
+   00B7 AD                    5     .db 0xAD
+   00B8 80                    6     .db 0x80    
+   00B9 CC CC                 7     .dw 0xCCCC
+   00BB                       1         DefineStarDefault
+   00BB 01                    1     .db alive_type
+   00BC DE                    2     .db 0xDE
+   00BD AD                    3     .db 0xAD
+   00BE DE                    4     .db 0xDE
+   00BF AD                    5     .db 0xAD
+   00C0 80                    6     .db 0x80    
+   00C1 CC CC                 7     .dw 0xCCCC
+   00C3                       1         DefineStarDefault
+   00C3 01                    1     .db alive_type
+   00C4 DE                    2     .db 0xDE
+   00C5 AD                    3     .db 0xAD
+   00C6 DE                    4     .db 0xDE
+   00C7 AD                    5     .db 0xAD
+   00C8 80                    6     .db 0x80    
+   00C9 CC CC                 7     .dw 0xCCCC
+   00CB                       1         DefineStarDefault
+   00CB 01                    1     .db alive_type
+   00CC DE                    2     .db 0xDE
+   00CD AD                    3     .db 0xAD
+   00CE DE                    4     .db 0xDE
+   00CF AD                    5     .db 0xAD
+   00D0 80                    6     .db 0x80    
+   00D1 CC CC                 7     .dw 0xCCCC
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
+Hexadecimal [16-Bits]
+
+
+
+   00D3                       1         DefineStarDefault
+   00D3 01                    1     .db alive_type
+   00D4 DE                    2     .db 0xDE
+   00D5 AD                    3     .db 0xAD
+   00D6 DE                    4     .db 0xDE
+   00D7 AD                    5     .db 0xAD
+   00D8 80                    6     .db 0x80    
+   00D9 CC CC                 7     .dw 0xCCCC
+   00DB                       1         DefineStarDefault
+   00DB 01                    1     .db alive_type
+   00DC DE                    2     .db 0xDE
+   00DD AD                    3     .db 0xAD
+   00DE DE                    4     .db 0xDE
+   00DF AD                    5     .db 0xAD
+   00E0 80                    6     .db 0x80    
+   00E1 CC CC                 7     .dw 0xCCCC
+   00E3                       1         DefineStarDefault
+   00E3 01                    1     .db alive_type
+   00E4 DE                    2     .db 0xDE
+   00E5 AD                    3     .db 0xAD
+   00E6 DE                    4     .db 0xDE
+   00E7 AD                    5     .db 0xAD
+   00E8 80                    6     .db 0x80    
+   00E9 CC CC                 7     .dw 0xCCCC
+   00EB                       1         DefineStarDefault
+   00EB 01                    1     .db alive_type
+   00EC DE                    2     .db 0xDE
+   00ED AD                    3     .db 0xAD
+   00EE DE                    4     .db 0xDE
+   00EF AD                    5     .db 0xAD
+   00F0 80                    6     .db 0x80    
+   00F1 CC CC                 7     .dw 0xCCCC
+   00F3 FF                    7     .db invalid_type
                              14 
                              15 ;;########################################################
                              16 ;;                   PRIVATE FUNCTIONS                   #             
@@ -228,154 +398,154 @@ Hexadecimal [16-Bits]
                              21 ;;    hl with memory address of free space for new entity
                              22 ;;    ix with memory address of last created entity
                              23 ;;
-   0054                      24 entityman_new_entity::
-   0054 3A 00 00      [13]   25   ld    a, (_entity_num)
-   0057 3C            [ 4]   26   inc   a
-   0058 32 00 00      [13]   27   ld    (_entity_num), a
+   00F4                      24 entityman_new_entity::
+   00F4 3A 00 00      [13]   25   ld    a, (_entity_num)
+   00F7 3C            [ 4]   26   inc   a
+   00F8 32 00 00      [13]   27   ld    (_entity_num), a
                              28 
-   005B DD 2A 01 00   [20]   29   ld    ix, (_entity_last)    
-   005F 2A 01 00      [16]   30   ld    hl, (_entity_last)    
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+   00FB DD 2A 01 00   [20]   29   ld    ix, (_entity_last)    
+   00FF 2A 01 00      [16]   30   ld    hl, (_entity_last)    
+   0102 01 08 00      [10]   31   ld    bc, #sizeof_e
+   0105 09            [11]   32   add   hl, bc
+   0106 22 01 00      [16]   33   ld    (_entity_last), hl
+   0109 C9            [10]   34   ret
+                             35 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 11.
 Hexadecimal [16-Bits]
 
 
 
-   0062 01 08 00      [10]   31   ld    bc, #sizeof_e
-   0065 09            [11]   32   add   hl, bc
-   0066 22 01 00      [16]   33   ld    (_entity_last), hl
-   0069 C9            [10]   34   ret
-                             35 
                              36 ;;
                              37 ;;  INPUT: 
                              38 ;;    ix with memory address of entity that must be initialized
                              39 ;;
-   006A                      40 entityman_initialize_rand::  
-   006A DD 36 00 01   [19]   41   ld    e_type(ix), #alive_type    ;; set Y velocity  
+   010A                      40 entityman_initialize_rand::  
+   010A DD 36 00 01   [19]   41   ld    e_type(ix), #alive_type    ;; set Y velocity  
                              42 
-   006E 3E 00         [ 7]   43   ld    a, #0
-   0070 DD 77 04      [19]   44   ld    e_vy(ix), a               ;; set Y velocity  
+   010E 3E 00         [ 7]   43   ld    a, #0
+   0110 DD 77 04      [19]   44   ld    e_vy(ix), a               ;; set Y velocity  
                              45 
-   0073 CD 00 00      [17]   46   call cpct_getRandom_mxor_u8_asm
-   0076 7D            [ 4]   47   ld    a, l
-   0077 1F            [ 4]   48   rra   
-   0078 DD 77 02      [19]   49   ld    e_y(ix), a                ;; set Y coordiante
-                             50 
-   007B ED 44         [ 8]   51   neg 
-   007D DD 36 03 FF   [19]   52   ld    e_vx(ix), #0xFF               ;; set X velocity  
+   0113 CD 00 00      [17]   46   call cpct_getRandom_mxor_u8_asm
+   0116 7D            [ 4]   47   ld    a, l
+   0117 17            [ 4]   48   rla
+   0118 17            [ 4]   49   rla  
+   0119 DD 77 02      [19]   50   ld    e_y(ix), a                ;; set Y coordiante
+                             51 
+   011C DD 36 03 FF   [19]   52   ld    e_vx(ix), #0xFF               ;; set X velocity  
                              53 
-   0081 3E 50         [ 7]   54   ld    a, #0x50                   
-   0083 DD 77 01      [19]   55   ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
-   0086 C9            [10]   56   ret
+   0120 3E 50         [ 7]   54   ld    a, #0x50                   
+   0122 DD 77 01      [19]   55   ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
+   0125 C9            [10]   56   ret
                              57 
                              58 ;;########################################################
                              59 ;;                   PUBLIC FUNCTIONS                    #             
                              60 ;;########################################################
                              61 
-   0087                      62 entityman_create_one::  
-   0087 3E FF         [ 7]   63   ld    a, #invalid_type
-   0089 2A 01 00      [16]   64   ld    hl, (_entity_last)
-   008C BE            [ 7]   65   cp   (hl)                  ;; last entity type - invalid_type 
-   008D C8            [11]   66   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
+   0126                      62 entityman_create_one::  
+   0126 3E FF         [ 7]   63   ld    a, #invalid_type
+   0128 2A 01 00      [16]   64   ld    hl, (_entity_last)
+   012B BE            [ 7]   65   cp   (hl)                  ;; last entity type - invalid_type 
+   012C C8            [11]   66   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
                              67 
-   008E CD 54 00      [17]   68   call  entityman_new_entity
-   0091 CD 6A 00      [17]   69   call  entityman_initialize_rand
-   0094 C9            [10]   70   ret
+   012D CD F4 00      [17]   68   call  entityman_new_entity
+   0130 CD 0A 01      [17]   69   call  entityman_initialize_rand
+   0133 C9            [10]   70   ret
                              71 
                              72 
-   0095                      73 entityman_init::
-   0095 3E 0A         [ 7]   74   ld    a, #max_entities
-   0097 ED 5B 01 00   [20]   75   ld    de, (_entity_last)
-   009B                      76 init_loop:
-   009B F5            [11]   77   push  af
+   0134                      73 entityman_init::
+   0134 3E 1E         [ 7]   74   ld    a, #max_entities
+   0136 ED 5B 01 00   [20]   75   ld    de, (_entity_last)
+   013A                      76 init_loop:
+   013A F5            [11]   77   push  af
                              78   
-   009C CD 54 00      [17]   79   call  entityman_new_entity
-   009F CD 6A 00      [17]   80   call  entityman_initialize_rand
+   013B CD F4 00      [17]   79   call  entityman_new_entity
+   013E CD 0A 01      [17]   80   call  entityman_initialize_rand
                              81   
-   00A2 F1            [10]   82   pop   af
-   00A3 3D            [ 4]   83   dec   a
-   00A4 C8            [11]   84   ret   z
-   00A5 18 F4         [12]   85   jr    init_loop
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
+   0141 F1            [10]   82   pop   af
+   0142 3D            [ 4]   83   dec   a
+   0143 C8            [11]   84   ret   z
+   0144 18 F4         [12]   85   jr    init_loop
+                             86 
+                             87 
+   0146                      88 entityman_update::
+   0146 DD 21 03 00   [14]   89   ld    ix, #_entity_array
+   014A 3A 00 00      [13]   90   ld     a, (_entity_num)
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 12.
 Hexadecimal [16-Bits]
 
 
 
-                             86 
-                             87 
-   00A7                      88 entityman_update::
-   00A7 DD 21 03 00   [14]   89   ld    ix, #_entity_array
-   00AB 3A 00 00      [13]   90   ld     a, (_entity_num)
-   00AE B7            [ 4]   91   or     a
-   00AF C8            [11]   92   ret    z
+   014D B7            [ 4]   91   or     a
+   014E C8            [11]   92   ret    z
                              93 
-   00B0                      94 entityman_loop:
-   00B0 F5            [11]   95   push  af
+   014F                      94 entityman_loop:
+   014F F5            [11]   95   push  af
                              96   
-   00B1 DD 7E 00      [19]   97   ld    a, e_type(ix)         ;; load type of entity
-   00B4 E6 FE         [ 7]   98   and   #dead_type            ;; entity_type AND dead_type
+   0150 DD 7E 00      [19]   97   ld    a, e_type(ix)         ;; load type of entity
+   0153 E6 FE         [ 7]   98   and   #dead_type            ;; entity_type AND dead_type
                              99 
-   00B6 28 2F         [12]  100   jr    z, inc_index
-   00B8 CD 00 00      [17]  101   call  rendersys_delete_entity
+   0155 28 2F         [12]  100   jr    z, inc_index
+   0157 CD 00 00      [17]  101   call  rendersys_delete_entity
                             102 
                             103   ;; _last_element_ptr now points to the last entity in the array
                             104   ;; si A 02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-   00BB 3A 01 00      [13]  105   ld    a, (_entity_last)
-   00BE D6 08         [ 7]  106   sub   #sizeof_e
-   00C0 32 01 00      [13]  107   ld    (_entity_last), a
-   00C3 DA C9 00      [10]  108   jp    c, overflow
-   00C6 C3 D0 00      [10]  109   jp    no_overflow    
+   015A 3A 01 00      [13]  105   ld    a, (_entity_last)
+   015D D6 08         [ 7]  106   sub   #sizeof_e
+   015F 32 01 00      [13]  107   ld    (_entity_last), a
+   0162 DA 68 01      [10]  108   jp    c, overflow
+   0165 C3 6F 01      [10]  109   jp    no_overflow    
                             110   
-   00C9                     111 overflow:
-   00C9 3A 02 00      [13]  112   ld    a, (_entity_last+1)
-   00CC 3D            [ 4]  113   dec   a
-   00CD 32 02 00      [13]  114   ld    (_entity_last+1), a
+   0168                     111 overflow:
+   0168 3A 02 00      [13]  112   ld    a, (_entity_last+1)
+   016B 3D            [ 4]  113   dec   a
+   016C 32 02 00      [13]  114   ld    (_entity_last+1), a
                             115 
-   00D0                     116 no_overflow:
+   016F                     116 no_overflow:
                             117   ;; move the last element to the hole left by the dead entity
-   00D0 DD E5         [15]  118   push  ix  
-   00D2 E1            [10]  119   pop   hl
-   00D3 01 08 00      [10]  120   ld    bc, #sizeof_e       
-   00D6 ED 5B 01 00   [20]  121   ld    de, (_entity_last)
-   00DA EB            [ 4]  122   ex    de, hl
-   00DB ED B0         [21]  123   ldir                        
+   016F DD E5         [15]  118   push  ix  
+   0171 E1            [10]  119   pop   hl
+   0172 01 08 00      [10]  120   ld    bc, #sizeof_e       
+   0175 ED 5B 01 00   [20]  121   ld    de, (_entity_last)
+   0179 EB            [ 4]  122   ex    de, hl
+   017A ED B0         [21]  123   ldir                        
                             124   
-   00DD 3A 00 00      [13]  125   ld    a, (_entity_num)
-   00E0 3D            [ 4]  126   dec   a
-   00E1 32 00 00      [13]  127   ld    (_entity_num), a  
+   017C 3A 00 00      [13]  125   ld    a, (_entity_num)
+   017F 3D            [ 4]  126   dec   a
+   0180 32 00 00      [13]  127   ld    (_entity_num), a  
                             128 
-   00E4 C3 EC 00      [10]  129   jp    continue_update
+   0183 C3 8B 01      [10]  129   jp    continue_update
                             130 
-   00E7                     131 inc_index:
-   00E7 01 08 00      [10]  132   ld    bc, #sizeof_e
-   00EA DD 09         [15]  133   add   ix, bc
-   00EC                     134 continue_update:
-   00EC F1            [10]  135   pop   af
-   00ED 3D            [ 4]  136   dec   a
-   00EE C8            [11]  137   ret   z
-   00EF C3 B0 00      [10]  138   jp    entityman_loop
+   0186                     131 inc_index:
+   0186 01 08 00      [10]  132   ld    bc, #sizeof_e
+   0189 DD 09         [15]  133   add   ix, bc
+   018B                     134 continue_update:
+   018B F1            [10]  135   pop   af
+   018C 3D            [ 4]  136   dec   a
+   018D C8            [11]  137   ret   z
+   018E C3 4F 01      [10]  138   jp    entityman_loop
                             139 ;
                             140 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
-Hexadecimal [16-Bits]
-
-
-
                             141 ;;
                             142 ;; RETURN: 
                             143 ;;  ix  begin of entity array memory address
                             144 ;;  a   number of valid and alive entities
                             145 ;;
-   00F2                     146 get_entity_array::
-   00F2 DD 21 03 00   [14]  147   ld ix, #_entity_array
-   00F6 3A 00 00      [13]  148   ld  a, (_entity_num)
-   00F9 C9            [10]  149   ret
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 13.
+Hexadecimal [16-Bits]
+
+
+
+   0191                     146 get_entity_array::
+   0191 DD 21 03 00   [14]  147   ld ix, #_entity_array
+   0195 3A 00 00      [13]  148   ld  a, (_entity_num)
+   0198 C9            [10]  149   ret
                             150 
                             151 
                             152 ;;
                             153 ;;  INPUT: 
                             154 ;;    ix with memory address of entity that must me marked as dead
                             155 ;;
-   00FA                     156 entityman_set_dead::
-   00FA 3E FE         [ 7]  157   ld  a, #dead_type
-   00FC DD 77 00      [19]  158   ld  e_type(ix), a
-   00FF C9            [10]  159   ret
+   0199                     156 entityman_set_dead::
+   0199 3E FE         [ 7]  157   ld  a, #dead_type
+   019B DD 77 00      [19]  158   ld  e_type(ix), a
+   019E C9            [10]  159   ret
