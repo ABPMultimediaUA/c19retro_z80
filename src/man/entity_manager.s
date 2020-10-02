@@ -38,6 +38,8 @@ entityman_new_entity::
 ;;    ix with memory address of entity that must be initialized
 ;;
 entityman_initialize_rand::  
+  ld    e_type(ix), #alive_type    ;; set Y velocity  
+
   ld    a, #0
   ld    e_vy(ix), a               ;; set Y velocity  
 
@@ -49,7 +51,7 @@ entityman_initialize_rand::
   neg 
   ld    e_vx(ix), #0xFF               ;; set X velocity  
 
-  ld    a, #80                    
+  ld    a, #0x50                   
   ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
   ret
 
@@ -57,7 +59,12 @@ entityman_initialize_rand::
 ;;                   PUBLIC FUNCTIONS                    #             
 ;;########################################################
 
-entityman_create_one::
+entityman_create_one::  
+  ld    a, #invalid_type
+  ld    hl, (_entity_last)
+  cp   (hl)                  ;; last entity type - invalid_type 
+  ret   z                    ;; IF Z=1 THEN array is full ELSE create more
+
   call  entityman_new_entity
   call  entityman_initialize_rand
   ret

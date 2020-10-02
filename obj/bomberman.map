@@ -26,14 +26,14 @@ _CODE                               00004000    00000230 =         560. bytes (R
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00004000  _main                              cpct_keyboard
-     00004029  physicssys_init                    
-     0000402A  physicssys_update                  
-     0000405E  rendersys_init                     
-     0000406B  rendersys_update                   
-     0000409A  rendersys_delete_entity            
-     000040F7  entityman_new_entity               
-     0000410D  entityman_initialize_rand          
-     00004126  entityman_create_one               
+     0000401D  physicssys_init                    
+     0000401E  physicssys_update                  
+     00004052  rendersys_init                     
+     0000405F  rendersys_update                   
+     0000408E  rendersys_delete_entity            
+     000040EC  entityman_new_entity               
+     00004102  entityman_initialize_rand          
+     0000411F  entityman_create_one               
      0000412D  entityman_init                     
      0000413F  entityman_update                   
      0000418A  get_entity_array                   

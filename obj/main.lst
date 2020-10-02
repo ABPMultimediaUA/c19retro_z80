@@ -2780,34 +2780,35 @@ Hexadecimal [16-Bits]
                              44     .rept _N    
                              45         _DefineStar
                              46     .endm
-                             47 .endm
-                             48 
-                             49 ;;########################################################
-                             50 ;;                       CONSTANTS                       #             
-                             51 ;;########################################################
-                     0000    52 e_type = 0
-                     0001    53 e_x = 1
-                     0002    54 e_y = 2
+                             47     .db invalid_type
+                             48 .endm
+                             49 
+                             50 ;;########################################################
+                             51 ;;                       CONSTANTS                       #             
+                             52 ;;########################################################
+                     0000    53 e_type = 0
+                     0001    54 e_x = 1
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 55.
 Hexadecimal [16-Bits]
 
 
 
-                     0003    55 e_vx = 3
-                     0004    56 e_vy = 4
-                     0005    57 e_color = 5
-                     0006    58 e_last_ptr_1 = 6
-                     0007    59 e_last_ptr_2 = 7
-                     0008    60 sizeof_e = 8
-                     000A    61 max_entities = 10
-                             62 
-                             63 ;;########################################################
-                             64 ;;                      ENTITY TYPES                     #             
-                             65 ;;########################################################
-                     0000    66 empty_type = 0x00
-                     0001    67 alive_type = 0x01
-                     00FE    68 dead_type = 0xFE
-                     00FF    69 invalid_type = 0xFF
+                     0002    55 e_y = 2
+                     0003    56 e_vx = 3
+                     0004    57 e_vy = 4
+                     0005    58 e_color = 5
+                     0006    59 e_last_ptr_1 = 6
+                     0007    60 e_last_ptr_2 = 7
+                     0008    61 sizeof_e = 8
+                     000A    62 max_entities = 10
+                             63 
+                             64 ;;########################################################
+                             65 ;;                      ENTITY TYPES                     #             
+                             66 ;;########################################################
+                     0000    67 empty_type = 0x00
+                     0001    68 alive_type = 0x01
+                     00FE    69 dead_type = 0xFE
+                     00FF    70 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
 Hexadecimal [16-Bits]
 
@@ -2858,38 +2859,26 @@ Hexadecimal [16-Bits]
                              50 ;;
    0000                      51 _main::   
                              52    ;; Disable firmware to prevent it from interfering with string drawing
-   0000 CD 00 00      [17]   53    call cpct_disableFirmware_asm
-                             54    
-   0003 0E 00         [ 7]   55    ld    c, #0
-   0005 CD 00 00      [17]   56    call  cpct_setVideoMode_asm    
-                             57 
-   0008 2E 00         [ 7]   58    ld    l, #0
-   000A 26 14         [ 7]   59    ld    h, #HW_BLACK
-   000C CD 00 00      [17]   60    call  cpct_setPALColour_asm
-                             61 
-   000F                      62    cpctm_setBorder_asm #HW_WHITE
+   0000 CD 00 00      [17]   53    call cpct_disableFirmware_asm     
+                             54 
+                             55    ;;call  entityman_init
+   0003 CD 00 00      [17]   56    call  rendersys_init
+   0006                      57    cpctm_setBorder_asm #HW_WHITE
                               1    .radix h
-   000F                       2    cpctm_setBorder_raw_asm \#HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
+   0006                       2    cpctm_setBorder_raw_asm \#HW_WHITE ;; [28] Macro that does the job, but requires a number value to be passed
                               1    .globl cpct_setPALColour_asm
-   000F 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
-   0012 CD 00 00      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
+   0006 21 10 00      [10]    2    ld   hl, #0x010         ;; [3]  H=Hardware value of desired colour, L=Border INK (16)
+   0009 CD 00 00      [17]    3    call cpct_setPALColour_asm  ;; [25] Set Palette colour of the border
                               3    .radix d
-                             63 
-   0015 CD 00 00      [17]   64    call  entityman_init
-   0018 CD 00 00      [17]   65    call  rendersys_init
-                             66 
-                             67 ;; Loop forever
-   001B                      68 loop:
-   001B CD 00 00      [17]   69    call  physicssys_update
-   001E CD 00 00      [17]   70    call  entityman_update
-   0021 CD 00 00      [17]   71    call  rendersys_update
-                             72 
-   0024 CD 00 00      [17]   73    call  cpct_waitVSYNC_asm
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 59.
-Hexadecimal [16-Bits]
-
-
-
-                             74    ;call  entityman_create_one
-                             75 
-   0027 18 F2         [12]   76    jr    loop
+                             58 
+                             59 ;; Loop forever
+   000C                      60 loop:
+   000C CD 00 00      [17]   61    call  entityman_create_one
+   000F CD 00 00      [17]   62    call  physicssys_update
+   0012 CD 00 00      [17]   63    call  entityman_update
+   0015 CD 00 00      [17]   64    call  rendersys_update
+                             65 
+   0018 CD 00 00      [17]   66    call  cpct_waitVSYNC_asm
+                             67    ;call  entityman_create_one
+                             68 
+   001B 18 EF         [12]   69    jr    loop

@@ -50,34 +50,35 @@ Hexadecimal [16-Bits]
                              44     .rept _N    
                              45         _DefineStar
                              46     .endm
-                             47 .endm
-                             48 
-                             49 ;;########################################################
-                             50 ;;                       CONSTANTS                       #             
-                             51 ;;########################################################
-                     0000    52 e_type = 0
-                     0001    53 e_x = 1
-                     0002    54 e_y = 2
+                             47     .db invalid_type
+                             48 .endm
+                             49 
+                             50 ;;########################################################
+                             51 ;;                       CONSTANTS                       #             
+                             52 ;;########################################################
+                     0000    53 e_type = 0
+                     0001    54 e_x = 1
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 
 
-                     0003    55 e_vx = 3
-                     0004    56 e_vy = 4
-                     0005    57 e_color = 5
-                     0006    58 e_last_ptr_1 = 6
-                     0007    59 e_last_ptr_2 = 7
-                     0008    60 sizeof_e = 8
-                     000A    61 max_entities = 10
-                             62 
-                             63 ;;########################################################
-                             64 ;;                      ENTITY TYPES                     #             
-                             65 ;;########################################################
-                     0000    66 empty_type = 0x00
-                     0001    67 alive_type = 0x01
-                     00FE    68 dead_type = 0xFE
-                     00FF    69 invalid_type = 0xFF
+                     0002    55 e_y = 2
+                     0003    56 e_vx = 3
+                     0004    57 e_vy = 4
+                     0005    58 e_color = 5
+                     0006    59 e_last_ptr_1 = 6
+                     0007    60 e_last_ptr_2 = 7
+                     0008    61 sizeof_e = 8
+                     000A    62 max_entities = 10
+                             63 
+                             64 ;;########################################################
+                             65 ;;                      ENTITY TYPES                     #             
+                             66 ;;########################################################
+                     0000    67 empty_type = 0x00
+                     0001    68 alive_type = 0x01
+                     00FE    69 dead_type = 0xFE
+                     00FF    70 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
@@ -129,49 +130,49 @@ Hexadecimal [16-Bits]
                              20 ;  .db   HW_RED
                              21 ;  .db   HW_RED
                              22 
-   405E                      23 rendersys_init::  
-   405E 0E 00         [ 7]   24   ld    c, #0
-   4060 CD A2 41      [17]   25   call  cpct_setVideoMode_asm    
+   4052                      23 rendersys_init::  
+   4052 0E 00         [ 7]   24   ld    c, #0
+   4054 CD A2 41      [17]   25   call  cpct_setVideoMode_asm    
                              26 
-   4063 2E 00         [ 7]   27   ld    l, #0
-   4065 26 14         [ 7]   28   ld    h, #HW_BLACK
-   4067 CD 98 41      [17]   29   call  cpct_setPALColour_asm
-   406A C9            [10]   30   ret
+   4057 2E 00         [ 7]   27   ld    l, #0
+   4059 26 14         [ 7]   28   ld    h, #HW_BLACK
+   405B CD 98 41      [17]   29   call  cpct_setPALColour_asm
+   405E C9            [10]   30   ret
                              31 
-   406B                      32 rendersys_update::
-   406B CD 8A 41      [17]   33   call get_entity_array
-   406E B7            [ 4]   34   or     a
-   406F C8            [11]   35   ret    z
-   4070                      36 rendersys_loop:
-   4070 F5            [11]   37   push af
+   405F                      32 rendersys_update::
+   405F CD 8A 41      [17]   33   call get_entity_array
+   4062 B7            [ 4]   34   or     a
+   4063 C8            [11]   35   ret    z
+   4064                      36 rendersys_loop:
+   4064 F5            [11]   37   push af
                              38 
-   4071 DD 6E 06      [19]   39   ld    l, e_last_ptr_1(ix)          
-   4074 DD 66 07      [19]   40   ld    h, e_last_ptr_2(ix)          
-   4077 0E 00         [ 7]   41   ld    c, #00
-   4079 71            [ 7]   42   ld   (hl), c
+   4065 DD 6E 06      [19]   39   ld    l, e_last_ptr_1(ix)          
+   4068 DD 66 07      [19]   40   ld    h, e_last_ptr_2(ix)          
+   406B 0E 00         [ 7]   41   ld    c, #00
+   406D 71            [ 7]   42   ld   (hl), c
                              43 
                              44   ;; Calculate a video-memory location for printing a string
-   407A 11 00 C0      [10]   45   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
-   407D DD 4E 01      [19]   46   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4080 DD 46 02      [19]   47   ld    b, e_y(ix)                  ;; B = y coordinate   
-   4083 CD ED 41      [17]   48   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
+   406E 11 00 C0      [10]   45   ld   de, #CPCT_VMEM_START_ASM ;; DE = Pointer to start of the screen
+   4071 DD 4E 01      [19]   46   ld    c, e_x(ix)                  ;; C = x coordinate       
+   4074 DD 46 02      [19]   47   ld    b, e_y(ix)                  ;; B = y coordinate   
+   4077 CD ED 41      [17]   48   call  cpct_getScreenPtr_asm    ;; Calculate video memory location and return it in HL
                              49 
-   4086 DD 75 06      [19]   50   ld  e_last_ptr_1(ix), l
-   4089 DD 74 07      [19]   51   ld  e_last_ptr_2(ix), h
-   408C DD 4E 05      [19]   52   ld    c, e_color(ix)
-   408F 71            [ 7]   53   ld   (hl), c
-   4090 01 08 00      [10]   54   ld   bc, #sizeof_e
-   4093 DD 09         [15]   55   add  ix, bc
+   407A DD 75 06      [19]   50   ld  e_last_ptr_1(ix), l
+   407D DD 74 07      [19]   51   ld  e_last_ptr_2(ix), h
+   4080 DD 4E 05      [19]   52   ld    c, e_color(ix)
+   4083 71            [ 7]   53   ld   (hl), c
+   4084 01 08 00      [10]   54   ld   bc, #sizeof_e
+   4087 DD 09         [15]   55   add  ix, bc
                              56 
-   4095 F1            [10]   57   pop   af
-   4096 3D            [ 4]   58   dec   a
+   4089 F1            [10]   57   pop   af
+   408A 3D            [ 4]   58   dec   a
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
 Hexadecimal [16-Bits]
 
 
 
-   4097 C8            [11]   59   ret   z
-   4098 18 D6         [12]   60   jr rendersys_loop
+   408B C8            [11]   59   ret   z
+   408C 18 D6         [12]   60   jr rendersys_loop
                              61 
                              62 
                              63 ;;
@@ -180,10 +181,10 @@ Hexadecimal [16-Bits]
                              66 ;;  DESTROY
                              67 ;;    hl, c
                              68 ;;
-   409A                      69 rendersys_delete_entity::
+   408E                      69 rendersys_delete_entity::
                              70   ;; Calculate a video-memory location for printing a string  
-   409A DD 6E 06      [19]   71   ld    l, e_last_ptr_1(ix)          
-   409D DD 66 07      [19]   72   ld    h, e_last_ptr_2(ix)          
-   40A0 0E 00         [ 7]   73   ld    c, #00
-   40A2 71            [ 7]   74   ld   (hl), c
-   40A3 C9            [10]   75   ret
+   408E DD 6E 06      [19]   71   ld    l, e_last_ptr_1(ix)          
+   4091 DD 66 07      [19]   72   ld    h, e_last_ptr_2(ix)          
+   4094 0E 00         [ 7]   73   ld    c, #00
+   4096 71            [ 7]   74   ld   (hl), c
+   4097 C9            [10]   75   ret

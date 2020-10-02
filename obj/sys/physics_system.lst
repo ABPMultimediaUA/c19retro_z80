@@ -50,34 +50,35 @@ Hexadecimal [16-Bits]
                              44     .rept _N    
                              45         _DefineStar
                              46     .endm
-                             47 .endm
-                             48 
-                             49 ;;########################################################
-                             50 ;;                       CONSTANTS                       #             
-                             51 ;;########################################################
-                     0000    52 e_type = 0
-                     0001    53 e_x = 1
-                     0002    54 e_y = 2
+                             47     .db invalid_type
+                             48 .endm
+                             49 
+                             50 ;;########################################################
+                             51 ;;                       CONSTANTS                       #             
+                             52 ;;########################################################
+                     0000    53 e_type = 0
+                     0001    54 e_x = 1
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 
 
-                     0003    55 e_vx = 3
-                     0004    56 e_vy = 4
-                     0005    57 e_color = 5
-                     0006    58 e_last_ptr_1 = 6
-                     0007    59 e_last_ptr_2 = 7
-                     0008    60 sizeof_e = 8
-                     000A    61 max_entities = 10
-                             62 
-                             63 ;;########################################################
-                             64 ;;                      ENTITY TYPES                     #             
-                             65 ;;########################################################
-                     0000    66 empty_type = 0x00
-                     0001    67 alive_type = 0x01
-                     00FE    68 dead_type = 0xFE
-                     00FF    69 invalid_type = 0xFF
+                     0002    55 e_y = 2
+                     0003    56 e_vx = 3
+                     0004    57 e_vy = 4
+                     0005    58 e_color = 5
+                     0006    59 e_last_ptr_1 = 6
+                     0007    60 e_last_ptr_2 = 7
+                     0008    61 sizeof_e = 8
+                     000A    62 max_entities = 10
+                             63 
+                             64 ;;########################################################
+                             65 ;;                      ENTITY TYPES                     #             
+                             66 ;;########################################################
+                     0000    67 empty_type = 0x00
+                     0001    68 alive_type = 0x01
+                     00FE    69 dead_type = 0xFE
+                     00FF    70 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 

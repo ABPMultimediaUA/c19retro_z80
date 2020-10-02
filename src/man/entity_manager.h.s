@@ -44,6 +44,7 @@
     .rept _N    
         _DefineStar
     .endm
+    .db invalid_type
 .endm
 
 ;;########################################################

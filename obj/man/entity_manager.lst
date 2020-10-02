@@ -59,34 +59,35 @@ Hexadecimal [16-Bits]
                              44     .rept _N    
                              45         _DefineStar
                              46     .endm
-                             47 .endm
-                             48 
-                             49 ;;########################################################
-                             50 ;;                       CONSTANTS                       #             
-                             51 ;;########################################################
-                     0000    52 e_type = 0
-                     0001    53 e_x = 1
-                     0002    54 e_y = 2
+                             47     .db invalid_type
+                             48 .endm
+                             49 
+                             50 ;;########################################################
+                             51 ;;                       CONSTANTS                       #             
+                             52 ;;########################################################
+                     0000    53 e_type = 0
+                     0001    54 e_x = 1
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 
 
-                     0003    55 e_vx = 3
-                     0004    56 e_vy = 4
-                     0005    57 e_color = 5
-                     0006    58 e_last_ptr_1 = 6
-                     0007    59 e_last_ptr_2 = 7
-                     0008    60 sizeof_e = 8
-                     000A    61 max_entities = 10
-                             62 
-                             63 ;;########################################################
-                             64 ;;                      ENTITY TYPES                     #             
-                             65 ;;########################################################
-                     0000    66 empty_type = 0x00
-                     0001    67 alive_type = 0x01
-                     00FE    68 dead_type = 0xFE
-                     00FF    69 invalid_type = 0xFF
+                     0002    55 e_y = 2
+                     0003    56 e_vx = 3
+                     0004    57 e_vy = 4
+                     0005    58 e_color = 5
+                     0006    59 e_last_ptr_1 = 6
+                     0007    60 e_last_ptr_2 = 7
+                     0008    61 sizeof_e = 8
+                     000A    62 max_entities = 10
+                             63 
+                             64 ;;########################################################
+                             65 ;;                      ENTITY TYPES                     #             
+                             66 ;;########################################################
+                     0000    67 empty_type = 0x00
+                     0001    68 alive_type = 0x01
+                     00FE    69 dead_type = 0xFE
+                     00FF    70 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
 Hexadecimal [16-Bits]
 
@@ -216,6 +217,7 @@ Hexadecimal [16-Bits]
    004F FE                    5     .db 0xFE
    0050 FF                    6     .db 0xFF    
    0051 CC CC                 7     .dw 0xCCCC
+   0053 FF                    7     .db invalid_type
                              14 
                              15 ;;########################################################
                              16 ;;                   PRIVATE FUNCTIONS                   #             
@@ -226,147 +228,154 @@ Hexadecimal [16-Bits]
                              21 ;;    hl with memory address of free space for new entity
                              22 ;;    ix with memory address of last created entity
                              23 ;;
-   0053                      24 entityman_new_entity::
-   0053 3A 00 00      [13]   25   ld    a, (_entity_num)
-   0056 3C            [ 4]   26   inc   a
-   0057 32 00 00      [13]   27   ld    (_entity_num), a
+   0054                      24 entityman_new_entity::
+   0054 3A 00 00      [13]   25   ld    a, (_entity_num)
+   0057 3C            [ 4]   26   inc   a
+   0058 32 00 00      [13]   27   ld    (_entity_num), a
                              28 
-   005A DD 2A 01 00   [20]   29   ld    ix, (_entity_last)    
-   005E 2A 01 00      [16]   30   ld    hl, (_entity_last)    
-   0061 01 08 00      [10]   31   ld    bc, #sizeof_e
+   005B DD 2A 01 00   [20]   29   ld    ix, (_entity_last)    
+   005F 2A 01 00      [16]   30   ld    hl, (_entity_last)    
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
 Hexadecimal [16-Bits]
 
 
 
-   0064 09            [11]   32   add   hl, bc
-   0065 22 01 00      [16]   33   ld    (_entity_last), hl
-   0068 C9            [10]   34   ret
+   0062 01 08 00      [10]   31   ld    bc, #sizeof_e
+   0065 09            [11]   32   add   hl, bc
+   0066 22 01 00      [16]   33   ld    (_entity_last), hl
+   0069 C9            [10]   34   ret
                              35 
                              36 ;;
                              37 ;;  INPUT: 
                              38 ;;    ix with memory address of entity that must be initialized
                              39 ;;
-   0069                      40 entityman_initialize_rand::  
-   0069 3E 00         [ 7]   41   ld    a, #0
-   006B DD 77 04      [19]   42   ld    e_vy(ix), a               ;; set Y velocity  
-                             43 
-   006E CD 00 00      [17]   44   call cpct_getRandom_mxor_u8_asm
-   0071 7D            [ 4]   45   ld    a, l
-   0072 1F            [ 4]   46   rra   
-   0073 DD 77 02      [19]   47   ld    e_y(ix), a                ;; set Y coordiante
-                             48 
-   0076 ED 44         [ 8]   49   neg 
-   0078 DD 36 03 FF   [19]   50   ld    e_vx(ix), #0xFF               ;; set X velocity  
-                             51 
-   007C 3E 50         [ 7]   52   ld    a, #80                    
-   007E DD 77 01      [19]   53   ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
-   0081 C9            [10]   54   ret
-                             55 
-                             56 ;;########################################################
-                             57 ;;                   PUBLIC FUNCTIONS                    #             
+   006A                      40 entityman_initialize_rand::  
+   006A DD 36 00 01   [19]   41   ld    e_type(ix), #alive_type    ;; set Y velocity  
+                             42 
+   006E 3E 00         [ 7]   43   ld    a, #0
+   0070 DD 77 04      [19]   44   ld    e_vy(ix), a               ;; set Y velocity  
+                             45 
+   0073 CD 00 00      [17]   46   call cpct_getRandom_mxor_u8_asm
+   0076 7D            [ 4]   47   ld    a, l
+   0077 1F            [ 4]   48   rra   
+   0078 DD 77 02      [19]   49   ld    e_y(ix), a                ;; set Y coordiante
+                             50 
+   007B ED 44         [ 8]   51   neg 
+   007D DD 36 03 FF   [19]   52   ld    e_vx(ix), #0xFF               ;; set X velocity  
+                             53 
+   0081 3E 50         [ 7]   54   ld    a, #0x50                   
+   0083 DD 77 01      [19]   55   ld    e_x(ix), a               ;; set X coordinate to the most right possible byte
+   0086 C9            [10]   56   ret
+                             57 
                              58 ;;########################################################
-                             59 
-   0082                      60 entityman_create_one::
-   0082 CD 53 00      [17]   61   call  entityman_new_entity
-   0085 CD 69 00      [17]   62   call  entityman_initialize_rand
-   0088 C9            [10]   63   ret
-                             64 
-                             65 
-   0089                      66 entityman_init::
-   0089 3E 0A         [ 7]   67   ld    a, #max_entities
-   008B ED 5B 01 00   [20]   68   ld    de, (_entity_last)
-   008F                      69 init_loop:
-   008F F5            [11]   70   push  af
-                             71   
-   0090 CD 53 00      [17]   72   call  entityman_new_entity
-   0093 CD 69 00      [17]   73   call  entityman_initialize_rand
-                             74   
-   0096 F1            [10]   75   pop   af
-   0097 3D            [ 4]   76   dec   a
-   0098 C8            [11]   77   ret   z
-   0099 18 F4         [12]   78   jr    init_loop
-                             79 
-                             80 
-   009B                      81 entityman_update::
-   009B DD 21 03 00   [14]   82   ld    ix, #_entity_array
-   009F 3A 00 00      [13]   83   ld     a, (_entity_num)
-   00A2 B7            [ 4]   84   or     a
-   00A3 C8            [11]   85   ret    z
-                             86 
+                             59 ;;                   PUBLIC FUNCTIONS                    #             
+                             60 ;;########################################################
+                             61 
+   0087                      62 entityman_create_one::  
+   0087 3E FF         [ 7]   63   ld    a, #invalid_type
+   0089 2A 01 00      [16]   64   ld    hl, (_entity_last)
+   008C BE            [ 7]   65   cp   (hl)                  ;; last entity type - invalid_type 
+   008D C8            [11]   66   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
+                             67 
+   008E CD 54 00      [17]   68   call  entityman_new_entity
+   0091 CD 6A 00      [17]   69   call  entityman_initialize_rand
+   0094 C9            [10]   70   ret
+                             71 
+                             72 
+   0095                      73 entityman_init::
+   0095 3E 0A         [ 7]   74   ld    a, #max_entities
+   0097 ED 5B 01 00   [20]   75   ld    de, (_entity_last)
+   009B                      76 init_loop:
+   009B F5            [11]   77   push  af
+                             78   
+   009C CD 54 00      [17]   79   call  entityman_new_entity
+   009F CD 6A 00      [17]   80   call  entityman_initialize_rand
+                             81   
+   00A2 F1            [10]   82   pop   af
+   00A3 3D            [ 4]   83   dec   a
+   00A4 C8            [11]   84   ret   z
+   00A5 18 F4         [12]   85   jr    init_loop
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
 Hexadecimal [16-Bits]
 
 
 
-   00A4                      87 entityman_loop:
-   00A4 F5            [11]   88   push  af
-                             89   
-   00A5 DD 7E 00      [19]   90   ld    a, e_type(ix)         ;; load type of entity
-   00A8 E6 FE         [ 7]   91   and   #dead_type            ;; entity_type AND dead_type
-                             92 
-   00AA 28 2F         [12]   93   jr    z, inc_index
-   00AC CD 00 00      [17]   94   call  rendersys_delete_entity
-                             95 
-                             96   ;; _last_element_ptr now points to the last entity in the array
-                             97   ;; si A 02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-   00AF 3A 01 00      [13]   98   ld    a, (_entity_last)
-   00B2 D6 08         [ 7]   99   sub   #sizeof_e
-   00B4 32 01 00      [13]  100   ld    (_entity_last), a
-   00B7 DA BD 00      [10]  101   jp    c, overflow
-   00BA C3 C4 00      [10]  102   jp    no_overflow    
-                            103   
-   00BD                     104 overflow:
-   00BD 3A 02 00      [13]  105   ld    a, (_entity_last+1)
-   00C0 3D            [ 4]  106   dec   a
-   00C1 32 02 00      [13]  107   ld    (_entity_last+1), a
-                            108 
-   00C4                     109 no_overflow:
-                            110   ;; move the last element to the hole left by the dead entity
-   00C4 DD E5         [15]  111   push  ix  
-   00C6 E1            [10]  112   pop   hl
-   00C7 01 08 00      [10]  113   ld    bc, #sizeof_e       
-   00CA ED 5B 01 00   [20]  114   ld    de, (_entity_last)
-   00CE EB            [ 4]  115   ex    de, hl
-   00CF ED B0         [21]  116   ldir                        
-                            117   
-   00D1 3A 00 00      [13]  118   ld    a, (_entity_num)
-   00D4 3D            [ 4]  119   dec   a
-   00D5 32 00 00      [13]  120   ld    (_entity_num), a  
-                            121 
-   00D8 C3 E0 00      [10]  122   jp    continue_update
-                            123 
-   00DB                     124 inc_index:
-   00DB 01 08 00      [10]  125   ld    bc, #sizeof_e
-   00DE DD 09         [15]  126   add   ix, bc
-   00E0                     127 continue_update:
-   00E0 F1            [10]  128   pop   af
-   00E1 3D            [ 4]  129   dec   a
-   00E2 C8            [11]  130   ret   z
-   00E3 C3 A4 00      [10]  131   jp    entityman_loop
-                            132 ;
-                            133 
-                            134 ;;
-                            135 ;; RETURN: 
-                            136 ;;  ix  begin of entity array memory address
-                            137 ;;  a   number of valid and alive entities
-                            138 ;;
-   00E6                     139 get_entity_array::
-   00E6 DD 21 03 00   [14]  140   ld ix, #_entity_array
-   00EA 3A 00 00      [13]  141   ld  a, (_entity_num)
+                             86 
+                             87 
+   00A7                      88 entityman_update::
+   00A7 DD 21 03 00   [14]   89   ld    ix, #_entity_array
+   00AB 3A 00 00      [13]   90   ld     a, (_entity_num)
+   00AE B7            [ 4]   91   or     a
+   00AF C8            [11]   92   ret    z
+                             93 
+   00B0                      94 entityman_loop:
+   00B0 F5            [11]   95   push  af
+                             96   
+   00B1 DD 7E 00      [19]   97   ld    a, e_type(ix)         ;; load type of entity
+   00B4 E6 FE         [ 7]   98   and   #dead_type            ;; entity_type AND dead_type
+                             99 
+   00B6 28 2F         [12]  100   jr    z, inc_index
+   00B8 CD 00 00      [17]  101   call  rendersys_delete_entity
+                            102 
+                            103   ;; _last_element_ptr now points to the last entity in the array
+                            104   ;; si A 02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
+   00BB 3A 01 00      [13]  105   ld    a, (_entity_last)
+   00BE D6 08         [ 7]  106   sub   #sizeof_e
+   00C0 32 01 00      [13]  107   ld    (_entity_last), a
+   00C3 DA C9 00      [10]  108   jp    c, overflow
+   00C6 C3 D0 00      [10]  109   jp    no_overflow    
+                            110   
+   00C9                     111 overflow:
+   00C9 3A 02 00      [13]  112   ld    a, (_entity_last+1)
+   00CC 3D            [ 4]  113   dec   a
+   00CD 32 02 00      [13]  114   ld    (_entity_last+1), a
+                            115 
+   00D0                     116 no_overflow:
+                            117   ;; move the last element to the hole left by the dead entity
+   00D0 DD E5         [15]  118   push  ix  
+   00D2 E1            [10]  119   pop   hl
+   00D3 01 08 00      [10]  120   ld    bc, #sizeof_e       
+   00D6 ED 5B 01 00   [20]  121   ld    de, (_entity_last)
+   00DA EB            [ 4]  122   ex    de, hl
+   00DB ED B0         [21]  123   ldir                        
+                            124   
+   00DD 3A 00 00      [13]  125   ld    a, (_entity_num)
+   00E0 3D            [ 4]  126   dec   a
+   00E1 32 00 00      [13]  127   ld    (_entity_num), a  
+                            128 
+   00E4 C3 EC 00      [10]  129   jp    continue_update
+                            130 
+   00E7                     131 inc_index:
+   00E7 01 08 00      [10]  132   ld    bc, #sizeof_e
+   00EA DD 09         [15]  133   add   ix, bc
+   00EC                     134 continue_update:
+   00EC F1            [10]  135   pop   af
+   00ED 3D            [ 4]  136   dec   a
+   00EE C8            [11]  137   ret   z
+   00EF C3 B0 00      [10]  138   jp    entityman_loop
+                            139 ;
+                            140 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
 Hexadecimal [16-Bits]
 
 
 
-   00ED C9            [10]  142   ret
-                            143 
-                            144 
+                            141 ;;
+                            142 ;; RETURN: 
+                            143 ;;  ix  begin of entity array memory address
+                            144 ;;  a   number of valid and alive entities
                             145 ;;
-                            146 ;;  INPUT: 
-                            147 ;;    ix with memory address of entity that must me marked as dead
-                            148 ;;
-   00EE                     149 entityman_set_dead::
-   00EE 3E FE         [ 7]  150   ld  a, #dead_type
-   00F0 DD 77 00      [19]  151   ld  e_type(ix), a
-   00F3 C9            [10]  152   ret
+   00F2                     146 get_entity_array::
+   00F2 DD 21 03 00   [14]  147   ld ix, #_entity_array
+   00F6 3A 00 00      [13]  148   ld  a, (_entity_num)
+   00F9 C9            [10]  149   ret
+                            150 
+                            151 
+                            152 ;;
+                            153 ;;  INPUT: 
+                            154 ;;    ix with memory address of entity that must me marked as dead
+                            155 ;;
+   00FA                     156 entityman_set_dead::
+   00FA 3E FE         [ 7]  157   ld  a, #dead_type
+   00FC DD 77 00      [19]  158   ld  e_type(ix), a
+   00FF C9            [10]  159   ret

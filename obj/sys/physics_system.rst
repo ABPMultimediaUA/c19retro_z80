@@ -50,34 +50,35 @@ Hexadecimal [16-Bits]
                              44     .rept _N    
                              45         _DefineStar
                              46     .endm
-                             47 .endm
-                             48 
-                             49 ;;########################################################
-                             50 ;;                       CONSTANTS                       #             
-                             51 ;;########################################################
-                     0000    52 e_type = 0
-                     0001    53 e_x = 1
-                     0002    54 e_y = 2
+                             47     .db invalid_type
+                             48 .endm
+                             49 
+                             50 ;;########################################################
+                             51 ;;                       CONSTANTS                       #             
+                             52 ;;########################################################
+                     0000    53 e_type = 0
+                     0001    54 e_x = 1
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 
 
-                     0003    55 e_vx = 3
-                     0004    56 e_vy = 4
-                     0005    57 e_color = 5
-                     0006    58 e_last_ptr_1 = 6
-                     0007    59 e_last_ptr_2 = 7
-                     0008    60 sizeof_e = 8
-                     000A    61 max_entities = 10
-                             62 
-                             63 ;;########################################################
-                             64 ;;                      ENTITY TYPES                     #             
-                             65 ;;########################################################
-                     0000    66 empty_type = 0x00
-                     0001    67 alive_type = 0x01
-                     00FE    68 dead_type = 0xFE
-                     00FF    69 invalid_type = 0xFF
+                     0002    55 e_y = 2
+                     0003    56 e_vx = 3
+                     0004    57 e_vy = 4
+                     0005    58 e_color = 5
+                     0006    59 e_last_ptr_1 = 6
+                     0007    60 e_last_ptr_2 = 7
+                     0008    61 sizeof_e = 8
+                     000A    62 max_entities = 10
+                             63 
+                             64 ;;########################################################
+                             65 ;;                      ENTITY TYPES                     #             
+                             66 ;;########################################################
+                     0000    67 empty_type = 0x00
+                     0001    68 alive_type = 0x01
+                     00FE    69 dead_type = 0xFE
+                     00FF    70 invalid_type = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
@@ -110,44 +111,44 @@ Hexadecimal [16-Bits]
 
 
                               4 
-   4029                       5 physicssys_init::
-   4029 C9            [10]    6   ret
+   401D                       5 physicssys_init::
+   401D C9            [10]    6   ret
                               7 
-   402A                       8 physicssys_update::
-   402A CD 8A 41      [17]    9   call  get_entity_array
-   402D B7            [ 4]   10   or     a
-   402E C8            [11]   11   ret    z
+   401E                       8 physicssys_update::
+   401E CD 8A 41      [17]    9   call  get_entity_array
+   4021 B7            [ 4]   10   or     a
+   4022 C8            [11]   11   ret    z
                              12 
-   402F                      13 physicssys_loop:    
-   402F F5            [11]   14   push  af
+   4023                      13 physicssys_loop:    
+   4023 F5            [11]   14   push  af
                              15 
-   4030 DD 4E 01      [19]   16   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4033 DD 7E 03      [19]   17   ld    a, e_vx(ix)                 ;; L = x velocity       
-   4036 81            [ 4]   18   add   a, c
-   4037 FA 54 40      [10]   19   jp    m, invalid_x
+   4024 DD 4E 01      [19]   16   ld    c, e_x(ix)                  ;; C = x coordinate       
+   4027 DD 7E 03      [19]   17   ld    a, e_vx(ix)                 ;; L = x velocity       
+   402A 81            [ 4]   18   add   a, c
+   402B FA 48 40      [10]   19   jp    m, invalid_x
                              20 
-   403A                      21 continue_x:
-   403A DD 77 01      [19]   22   ld    e_x(ix), a  
+   402E                      21 continue_x:
+   402E DD 77 01      [19]   22   ld    e_x(ix), a  
                              23 
-   403D DD 46 02      [19]   24   ld    b, e_y(ix)                  ;; B = y coordinate  
-   4040 DD 7E 04      [19]   25   ld    a, e_vy(ix)                 ;; H = y velocity  
-   4043 80            [ 4]   26   add   a, b
-   4044 FA 59 40      [10]   27   jp    m, invalid_y
-   4047                      28 continue_y:
-   4047 DD 77 02      [19]   29   ld    e_y(ix), a
+   4031 DD 46 02      [19]   24   ld    b, e_y(ix)                  ;; B = y coordinate  
+   4034 DD 7E 04      [19]   25   ld    a, e_vy(ix)                 ;; H = y velocity  
+   4037 80            [ 4]   26   add   a, b
+   4038 FA 4D 40      [10]   27   jp    m, invalid_y
+   403B                      28 continue_y:
+   403B DD 77 02      [19]   29   ld    e_y(ix), a
                              30 
-   404A 01 08 00      [10]   31   ld    bc, #sizeof_e
-   404D DD 09         [15]   32   add   ix, bc
+   403E 01 08 00      [10]   31   ld    bc, #sizeof_e
+   4041 DD 09         [15]   32   add   ix, bc
                              33 
-   404F F1            [10]   34   pop   af
-   4050 3D            [ 4]   35   dec   a  
-   4051 C8            [11]   36   ret   z
-   4052 18 DB         [12]   37   jr    physicssys_loop
+   4043 F1            [10]   34   pop   af
+   4044 3D            [ 4]   35   dec   a  
+   4045 C8            [11]   36   ret   z
+   4046 18 DB         [12]   37   jr    physicssys_loop
                              38 
-   4054                      39 invalid_x:
-   4054 CD 92 41      [17]   40   call  entityman_set_dead
-   4057 18 E1         [12]   41   jr    continue_x
+   4048                      39 invalid_x:
+   4048 CD 92 41      [17]   40   call  entityman_set_dead
+   404B 18 E1         [12]   41   jr    continue_x
                              42 
-   4059                      43 invalid_y:
-   4059 CD 92 41      [17]   44   call  entityman_set_dead
-   405C 18 E9         [12]   45   jr    continue_y
+   404D                      43 invalid_y:
+   404D CD 92 41      [17]   44   call  entityman_set_dead
+   4050 18 E9         [12]   45   jr    continue_y

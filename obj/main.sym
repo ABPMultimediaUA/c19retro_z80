@@ -68,7 +68,7 @@ Symbol Table
     e_vy    =  0004     |     e_x     =  0001     |     e_y     =  0002 
     empty_ty=  0000     |     entityma   **** GX  |     entityma   **** GX
     entityma   **** GX  |     entityma   **** GX  |     get_enti   **** GX
-    invalid_=  00FF     |   0 loop       001B R   |     max_enti=  000A 
+    invalid_=  00FF     |   0 loop       000C R   |     max_enti=  000A 
     opc_DI  =  00F3     |     opc_EI  =  00FB     |     opc_JR  =  0018 
     opc_LD_D=  0016     |     physicss   **** GX  |     physicss   **** GX
     rendersy   **** GX  |     rendersy   **** GX  |     rendersy   **** GX
@@ -79,6 +79,6 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   29   flags    0
+   0 _CODE      size   1D   flags    0
    1 _DATA      size    0   flags    0
 
