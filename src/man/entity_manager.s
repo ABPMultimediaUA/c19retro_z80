@@ -45,8 +45,6 @@ entityman_initialize_rand::
 
   call cpct_getRandom_mxor_u8_asm
   ld    a, l
-  rla
-  rla  
   ld    e_y(ix), a                ;; set Y coordiante
 
   ld    e_vx(ix), #0xFF               ;; set X velocity  

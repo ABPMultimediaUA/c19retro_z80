@@ -28,7 +28,7 @@
 ##
 
 ## 16 colours palette
-#PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
+PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
 
 ## Default values
 #$(eval $(call IMG2SP, SET_MODE        , 0                  ))  { 0, 1, 2 }
@@ -40,6 +40,10 @@
 #$(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE)         ))
 #$(eval $(call IMG2SP, CONVERT_PALETTE , $(PALETTE), g_palette ))
 #$(eval $(call IMG2SP, CONVERT         , img.png , w, h, array, palette, tileset))
+
+$(eval $(call IMG2SP, SET_FOLDER      , src/assets/sprites/ ))
+$(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE) ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/player.png , 8, 8, sp_player))
 
 ##
 ## OLD MACROS (For compatibility)

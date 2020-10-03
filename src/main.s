@@ -22,7 +22,7 @@
 .include "man/entity_manager.h.s"
 .include "sys/render_system.h.s"
 .include "sys/physics_system.h.s"
-
+.include "assets/assets.h.s"
 
 ;;
 ;; Start of _DATA area 
@@ -63,7 +63,7 @@ loop:
    call  entityman_update
    call  rendersys_update
 
-   call  cpct_waitVSYNC_asm
-   ;call  entityman_create_one
-
+   call  cpct_waitVSYNC_asm   
+   halt
+   halt
    jr    loop
