@@ -1,2 +1,6 @@
-.globl  physicssys_init
-.globl  physicssys_update
+;;
+;;  PHYSICS SYSTEM HEADER
+;;
+
+.globl  sys_physics_init
+.globl  sys_physics_update

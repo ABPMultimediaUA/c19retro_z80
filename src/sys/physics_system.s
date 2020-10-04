@@ -1,45 +1,68 @@
+;;
+;;  PHYSICS SYSTEM
+;;
+
 .include "../man/entity_manager.h.s"
 .include "physics_system.h.s"
 .include "../cpct_functions.h.s"
 
-physicssys_init::
+;;########################################################
+;;                   PRIVATE FUNCTIONS                   #             
+;;########################################################
+
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_player_update::
   ret
 
-physicssys_update::
-  call  get_entity_array
-  or     a
-  ret    z
 
-physicssys_loop:    
-  push  af
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_enemies_update::
+  ret
 
-  ld    c, e_x(ix)                  ;; C = x coordinate       
-  ld    a, e_vx(ix)                 ;; L = x velocity       
-  add   a, c
-  jp    m, invalid_x
 
-continue_x:
-  ld    e_x(ix), a  
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_bomb_update::
+  ret
 
-  ld    b, e_y(ix)                  ;; B = y coordinate  
-  ld    a, e_vy(ix)                 ;; H = y velocity  
-  add   a, b
-  jp    m, invalid_y
-continue_y:
-  ld    e_y(ix), a
 
-  ld    bc, #sizeof_e
-  add   ix, bc
 
-  pop   af
-  dec   a  
-  ret   z
-  jr    physicssys_loop
+;;########################################################
+;;                   PUBLIC FUNCTIONS                    #             
+;;########################################################
 
-invalid_x:
-  call  entityman_set_dead
-  jr    continue_x
+;;
+;;  none
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_init::
+  ret
 
-invalid_y:
-  call  entityman_set_dead
-  jr    continue_y
+
+sys_physics_update::
+  call  sys_physics_player_update
+  call  sys_physics_enemies_update
+  call  sys_physics_bomb_update
+  ret
+  
