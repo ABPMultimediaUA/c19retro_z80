@@ -22,7 +22,7 @@
 .include "man/entity_manager.h.s"
 .include "sys/render_system.h.s"
 .include "sys/physics_system.h.s"
-
+.include "assets/assets.h.s"
 
 ;;
 ;; Start of _DATA area 
@@ -52,18 +52,18 @@ _main::
    ;; Disable firmware to prevent it from interfering with string drawing
    call cpct_disableFirmware_asm     
 
-   ;;call  entityman_init
-   call  rendersys_init
+   ;;call  man_entity_init
+   call  man_entity_init
+   call  sys_render_init
    cpctm_setBorder_asm #HW_WHITE
 
 ;; Loop forever
 loop:
-   call  entityman_create_one
-   call  physicssys_update
-   call  entityman_update
-   call  rendersys_update
+   call  sys_physics_update
+   call  man_entity_update
+   call  sys_render_update
 
-   call  cpct_waitVSYNC_asm
-   ;call  entityman_create_one
-
+   call  cpct_waitVSYNC_asm   
+   halt
+   halt
    jr    loop
