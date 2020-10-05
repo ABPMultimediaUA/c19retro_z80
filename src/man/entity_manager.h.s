@@ -21,12 +21,12 @@
 ;;########################################################
 
 ;;-----------------------  ENTITY  -----------------------
-.macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+.macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
     .db _type
     .db _x, _y
     .db _w, _h      ;; both in bytes
     .db _vx, _vy    
-    .dw _sp_ptr_0
+    .dw _sp_ptr
 .endm
 
 .macro DefineEntityDefault
@@ -76,7 +76,7 @@ e_h = 4
 e_vx = 5
 e_vy = 6
 e_sp_ptr_0 = 7
-e_sp_ptr_1 = 7
+e_sp_ptr_1 = 8
 sizeof_e = 9
 max_entities = 1
 

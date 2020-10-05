@@ -11,7 +11,7 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, 0, 0, 4, 16, 0, 0, 0xCCCC
+_player:  DefineEntity alive_type, min_map_x_coord_valid, min_map_y_coord_valid, 4, 16, 0, 0, 0xCCCC
 DefineEntityArray _enemy, max_entities, DefineEntityDefault
 
 DefineBombArray _bomb, max_bombs, DefineBombDefault
@@ -106,6 +106,9 @@ man_entity_initialize_bomb::
   ret
 
 
+man_entity_init_player::
+  ret
+
 ;;
 ;;  Initialize data for all enemies and player.
 ;;  INPUT:
@@ -148,6 +151,7 @@ man_entity_init_bombs::
 
 man_entity_player_update::
   ret
+
 
 man_entity_enemies_update::
   ld    ix, #_enemy_array
@@ -202,9 +206,10 @@ man_entity_enemies_update::
     jp    enemies_update_loop
   ret
 
+
 man_entity_bombs_update::
-  ld    ix, #_enemy_array
-  ld     a, (_enemy_num)
+  ld    ix, #_bomb_array
+  ld     a, (_bomb_num)
   or     a
   ret    z
 
@@ -219,9 +224,9 @@ man_entity_bombs_update::
 
     ;; _last_element_ptr now points to the last entity in the array
     ;; si A=02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-    ld    a, (_enemy_last)
-    sub   #sizeof_e
-    ld    (_enemy_last), a
+    ld    a, (_bomb_last)
+    sub   #sizeof_b
+    ld    (_bomb_last), a
     jp    c, bombs_overflow_update
     jp    bombs_no_overflow_update    
     
@@ -268,6 +273,7 @@ man_entity_bombs_update::
 ;;  DESTROYED:
 ;;    AF,DE,IX,HL,BC
 man_entity_init::
+  call  man_entity_init_player
   call  man_entity_init_entities
   call  man_entity_init_bombs
   ret

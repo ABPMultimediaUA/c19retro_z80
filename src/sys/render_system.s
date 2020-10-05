@@ -22,7 +22,7 @@
 sys_render_player::
   call  man_entity_get_player
 
-  ;call  sys_render_remove_entity
+  call  sys_render_remove_entity
   
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
@@ -37,9 +37,9 @@ sys_render_player::
   ;;  Draw sprite blended
   ex    de, hl                      ;; DE = Destination video memory pointer
   ld    hl, #_sp_player             ;; Source Sprite Pointer (array with pixel data)
-  ld    b, e_w(ix)                  ;; Sprite width
-  ld    c, e_h(ix)                  ;; Sprite height
-  call  cpct_drawSpriteBlended_asm    
+  ld    c, e_w(ix)                  ;; Sprite width
+  ld    b, e_h(ix)                  ;; Sprite height
+  call  cpct_drawSprite_asm 
   ret
 
 
@@ -147,6 +147,7 @@ sys_render_init::
   ld    l, #0
   ld    h, #HW_BLACK
   call  cpct_setPALColour_asm
+    
   ret
 
 
@@ -160,8 +161,8 @@ sys_render_init::
 ;;    A,DE,BC,HL,IX
 sys_render_update::
   call  sys_render_player
-  call  sys_render_enemies
-  call  sys_render_bombs
+  ; call  sys_render_enemies
+  ; call  sys_render_bombs
   ret  
 
 
@@ -174,12 +175,12 @@ sys_render_update::
 ;;  DESTROYED:
 ;;    AF,BC,DE,HL
 sys_render_remove_entity::
-  ;ld    e, e_sp_ptr_0(ix)          
-  ;ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
-  ;ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
-  ;ld    b, e_w(ix)                  ;; Sprite width
-  ;ld    c, e_h(ix)                  ;; Sprite height
-  ;call  cpct_drawSpriteBlended_asm
+  ld    e, e_sp_ptr_0(ix)          
+  ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
+  ld    a, #0x00  ;;0xFF rojo
+  ld    c, e_w(ix)                  ;; Sprite width
+  ld    b, e_h(ix)                  ;; Sprite height
+  call  cpct_drawSolidBox_asm
   ret
 
 

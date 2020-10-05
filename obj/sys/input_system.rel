@@ -1,0 +1,75 @@
+XL2
+H 1 areas 1E global symbols
+S man_entity_get_player Ref0000
+S cpct_isKeyPressed_asm Ref0000
+S cpct_scanKeyboard_f_asm Ref0000
+S cpct_setPALColour_asm Ref0000
+S man_entity_create_entity Ref0000
+S Key_A Ref0000
+S man_entity_create_bomb Ref0000
+S man_entity_init Ref0000
+S man_entity_set_enemy_dead Ref0000
+S cpct_drawSprite_asm Ref0000
+S man_entity_get_enemy_array Ref0000
+S man_entity_get_bomb_array Ref0000
+S Key_O Ref0000
+S Key_P Ref0000
+S Key_Q Ref0000
+S man_entity_update Ref0000
+S HW_BLACK Ref0000
+S .__.ABS. Def0000
+S CPCT_VMEM_START_ASM Ref0000
+S cpct_waitVSYNC_asm Ref0000
+S cpct_setVideoMode_asm Ref0000
+S cpct_disableFirmware_asm Ref0000
+S cpct_drawSolidBox_asm Ref0000
+S cpct_getRandom_mxor_u8_asm Ref0000
+S cpct_drawSpriteBlended_asm Ref0000
+S man_entity_set_player_dead Ref0000
+S HW_WHITE Ref0000
+S cpct_getScreenPtr_asm Ref0000
+A _CODE size 43 flags 0 addr 0
+S sys_input_init Def0000
+S sys_input_update Def0001
+T 00 00
+R 00 00 00 00
+T 00 00 C9
+R 00 00 00 00
+T 01 00
+R 00 00 00 00
+T 01 00 CD 00 00 DD 36 05 00 DD 36 06 00 CD 00 00
+R 00 00 00 00 02 03 00 00 02 0E 02 00
+T 0F 00 21 00 00 CD 00 00 28 05
+R 00 00 00 00 02 03 0C 00 02 06 01 00
+T 17 00
+R 00 00 00 00
+T 17 00 DD 36 05 FC C9
+R 00 00 00 00
+T 1C 00
+R 00 00 00 00
+T 1C 00 21 00 00 CD 00 00 28 05
+R 00 00 00 00 02 03 0D 00 02 06 01 00
+T 24 00
+R 00 00 00 00
+T 24 00 DD 36 05 04 C9
+R 00 00 00 00
+T 29 00
+R 00 00 00 00
+T 29 00 21 00 00 CD 00 00 28 05
+R 00 00 00 00 02 03 0E 00 02 06 01 00
+T 31 00
+R 00 00 00 00
+T 31 00 DD 36 06 F0 C9
+R 00 00 00 00
+T 36 00
+R 00 00 00 00
+T 36 00 21 00 00 CD 00 00 28 04
+R 00 00 00 00 02 03 05 00 02 06 01 00
+T 3E 00
+R 00 00 00 00
+T 3E 00 DD 36 06 10
+R 00 00 00 00
+T 42 00
+R 00 00 00 00
+T 42 00 C9
+R 00 00 00 00
