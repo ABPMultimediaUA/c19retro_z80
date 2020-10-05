@@ -4,13 +4,18 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     alive_ty=  0001     |     dead_typ=  00FE 
-    e_color =  0005     |     e_last_p=  0006     |     e_last_p=  0007 
-    e_type  =  0000     |     e_vx    =  0003     |     e_vy    =  0004 
-    e_x     =  0001     |     e_y     =  0002     |     empty_ty=  0000 
-    entityma   **** GX  |     entityma   **** GX  |     entityma   **** GX
-    entityma   **** GX  |     get_enti   **** GX  |     invalid_=  00FF 
-    max_enti=  001E     |     sizeof_e=  0008 
+    .__.H$L.=  0000 L   |     alive_ty=  0001     |     b_h     =  0004 
+    b_sp_ptr=  0005     |     b_sp_ptr=  0006     |     b_timer =  0000 
+    b_w     =  0003     |     b_x     =  0001     |     b_y     =  0002 
+    dead_typ=  00FE     |     e_h     =  0004     |     e_sp_ptr=  0007 
+    e_sp_ptr=  0007     |     e_type  =  0000     |     e_vx    =  0005 
+    e_vy    =  0006     |     e_w     =  0003     |     e_x     =  0001 
+    e_y     =  0002     |     invalid_=  00FF     |     man_enti   **** GX
+    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
+    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
+    man_enti   **** GX  |     man_enti   **** GX  |     max_bomb=  0001 
+    max_enti=  0001     |     max_time=  00FF     |     sizeof_b=  0007 
+    sizeof_e=  0009     |     zero_tim=  0000 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
