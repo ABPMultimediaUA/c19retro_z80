@@ -9,11 +9,29 @@ Area                                    Addr        Size        Decimal Bytes (A
       -----  --------------------------------   ------------------------
      00000000  .__.ABS.                           cpct_random
      00000000  HW_WHITE                           cpct_keyboard
+     00000000  l__CABS                         
+     00000000  l__DABS                         
      00000000  l__DATA                         
+     00000000  l__GSFINAL                      
+     00000000  l__GSINIT                       
+     00000000  l__HOME                         
+     00000000  l__INITIALIZED                  
+     00000000  l__INITIALIZER                  
+     00000000  s__CABS                         
+     00000000  s__DABS                         
      00000014  HW_BLACK                           cpct_keyboard
-     000002CF  l__CODE                         
+     00000404  Key_O                              cpct_keyboard
+     000004D2  l__CODE                         
+     00000803  Key_P                              cpct_keyboard
+     00000808  Key_Q                              cpct_keyboard
+     00002008  Key_A                              cpct_keyboard
      00004000  s__CODE                         
-     000042CF  s__DATA                         
+     000044D2  s__DATA                         
+     000044D2  s__GSFINAL                      
+     000044D2  s__GSINIT                       
+     000044D2  s__HOME                         
+     000044D2  s__INITIALIZED                  
+     000044D2  s__INITIALIZER                  
      0000C000  CPCT_VMEM_START_ASM                cpct_keyboard
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
@@ -21,50 +39,95 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000002CF =         719. bytes (REL,CON)
+_CODE                               00004000    000004D2 =        1234. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00004000  _main                              cpct_keyboard
-     0000401D  physicssys_init                    
-     0000401E  physicssys_update                  
-     00004052  rendersys_init                     
-     0000405F  rendersys_update                   
-     0000408E  rendersys_delete_entity            
-     0000418C  entityman_new_entity               
-     000041A2  entityman_initialize_rand          
-     000041BE  entityman_create_one               
-     000041CC  entityman_init                     
-     000041DE  entityman_update                   
-     00004229  get_entity_array                   
-     00004231  entityman_set_dead                 
-     00004237  cpct_setPALColour_asm              cpct_video
-     00004241  cpct_setVideoMode_asm              cpct_video
-     0000424E  _cpct_waitVSYNC                    cpct_video
-     0000424E  cpct_waitVSYNC_asm                 cpct_video
-     00004256  _cpct_disableFirmware              cpct_firmware
-     00004256  _cpct_removeInterruptHandler       cpct_firmware
-     00004256  cpct_disableFirmware_asm           cpct_firmware
-     00004256  cpct_removeInterruptHandler_asm    cpct_firmware
-     00004266  _cpct_getRandom_mxor_u8            cpct_random
-     00004266  cpct_getRandom_mxor_u8_asm         cpct_random
-     00004267  cpct_randomIdx_mxor_u8             cpct_random
-     0000428B  _cpct_mode_rom_status              cpct_firmware
-     0000428C  cpct_getScreenPtr_asm              cpct_video
-     000042A8  _cpct_mxor32_seed                  cpct_random
-     000042AC  _cpct_nextRandom_mxor_u32          cpct_random
-     000042AC  cpct_nextRandom_mxor_u32_asm       cpct_random
-
+     00004000  _sp_bomb                           bomb
+     00004040  _sp_enemy                          enemy
+     00004080  _sp_player                         player
+     000040C0  _main                              cpct_keyboard
+     000040E2  sys_physics_update_entity          
+     0000410D  sys_physics_player_update          
+     00004114  sys_physics_enemies_update         
+     00004126  sys_physics_bomb_update            
+     00004127  sys_physics_init                   
+     00004128  sys_physics_update                 
+     00004132  sys_input_init                     
+     00004133  sys_input_update                   
+     00004175  sys_render_player                  
+     00004198  sys_render_enemies                 
+     000041C6  sys_render_bombs                   
+     000041F6  sys_render_init                    
+     00004203  sys_render_update                  
+     0000420D  sys_render_remove_entity           
+     0000420E  sys_render_remove_bomb             
+     0000422E  man_entity_new_entity              
+     00004244  man_entity_initialize_entity       
+     00004261  man_entity_new_bomb                
+     00004277  man_entity_initialize_bomb         
+     0000428A  man_entity_init_entities           
+     0000429C  man_entity_init_bombs              
+     000042A8  man_entity_player_update           
+     000042A9  man_entity_enemies_update          
+     000042F5  man_entity_bombs_update            
+     00004341  man_entity_init                    
+     00004348  man_entity_update                  
+     00004352  man_entity_create_entity           
+     00004360  man_entity_create_bomb             
+     0000436E  man_entity_get_player              
+     00004373  man_entity_get_enemy_array         
+     0000437B  man_entity_get_bomb_array          
+     00004383  man_entity_set_player_dead         
+     0000438D  man_entity_set_enemy_dead          
+     00004393  _cpct_scanKeyboard_f               cpct_keyboard
+     00004393  cpct_scanKeyboard_f_asm            cpct_keyboard
+     000043FD  _cpct_isKeyPressed                 cpct_keyboard
+     000043FD  cpct_isKeyPressed_asm              cpct_keyboard
+     00004409  cpct_setPALColour_asm              cpct_video
+     00004413  _cpct_keyboardStatusBuffer         cpct_keyboard
+     0000441D  cpct_setVideoMode_asm              cpct_video
+     0000442A  _cpct_waitVSYNC                    cpct_video
+     0000442A  cpct_waitVSYNC_asm                 cpct_video
+     00004432  _cpct_disableFirmware              cpct_firmware
+     00004432  _cpct_removeInterruptHandler       cpct_firmware
+     00004432  cpct_disableFirmware_asm           cpct_firmware
+     00004432  cpct_removeInterruptHandler_asm    cpct_firmware
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    000004D2 =        1234. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004442  _cpct_getRandom_mxor_u8            cpct_random
+     00004442  cpct_getRandom_mxor_u8_asm         cpct_random
+     00004443  cpct_randomIdx_mxor_u8             cpct_random
+     00004467  cpct_drawSpriteBlended_asm         cpct_sprites
+     0000446D  _cpct_dsb_blendFunction            cpct_sprites
+     0000448E  _cpct_mode_rom_status              cpct_firmware
+     0000448F  cpct_getScreenPtr_asm              cpct_video
+     000044AB  _cpct_mxor32_seed                  cpct_random
+     000044AF  _cpct_nextRandom_mxor_u32          cpct_random
+     000044AF  cpct_nextRandom_mxor_u32_asm       cpct_random
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 
 Files Linked                              [ module(s) ]
 
+obj/assets/sprites/bomb.rel               [ bomb ]
+obj/assets/sprites/enemy.rel              [ enemy ]
+obj/assets/sprites/player.rel             [ player ]
 obj/main.rel                              [ cpct_keyboard ]
 obj/cpct_functions.h.rel                  [  ]
 obj/sys/physics_system.h.rel              [  ]
 obj/sys/physics_system.rel                [  ]
+obj/sys/input_system.rel                  [  ]
 obj/sys/render_system.rel                 [  ]
+obj/sys/input_system.h.rel                [  ]
 obj/sys/render_system.h.rel               [  ]
+obj/assets/assets.h.rel                   [  ]
 obj/man/entity_manager.rel                [  ]
 obj/man/entity_manager.h.rel              [  ]
 
@@ -72,7 +135,13 @@ obj/man/entity_manager.h.rel              [  ]
 Libraries Linked                          [ object file ]
 
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_scanKeyboard_f.rel ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_isKeyPressed.rel ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_setPALColour_asmbindings.re ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ keyboard.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_setVideoMode_asmbindings.re ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
@@ -82,6 +151,8 @@ Libraries Linked                          [ object file ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_getRandom_mxor_u8.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSpriteBlended_asmbindin ]
+/home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpc_mode_rom_status.rel ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_getScreenPtr_asmbindings.re ]
@@ -90,7 +161,7 @@ Libraries Linked                          [ object file ]
 /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
                                           [ cpct_nextRandom_mxor_u32.rel ]
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
 
 User Base Address Definitions
 

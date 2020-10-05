@@ -10,8 +10,15 @@ Hexadecimal [16-Bits]
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
                               7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 
-                              9 .globl  HW_BLACK
-                             10 .globl  HW_WHITE
+                              8 .globl  cpct_drawSpriteBlended_asm
+                              9 .globl  cpct_scanKeyboard_f_asm
+                             10 .globl  cpct_isKeyPressed_asm
                              11 
-                             12 .globl  CPCT_VMEM_START_ASM
+                             12 .globl  HW_BLACK
+                             13 .globl  HW_WHITE
+                             14 
+                             15 .globl  CPCT_VMEM_START_ASM
+                             16 .globl  Key_O
+                             17 .globl  Key_P
+                             18 .globl  Key_Q
+                             19 .globl  Key_A

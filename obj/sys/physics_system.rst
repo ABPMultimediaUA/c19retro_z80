@@ -3,91 +3,186 @@ Hexadecimal [16-Bits]
 
 
 
-                              1 .include "../man/entity_manager.h.s"
                               1 ;;
-                              2 ;;  ENTITY MANAGER HEADER
+                              2 ;;  PHYSICS SYSTEM
                               3 ;;
                               4 
-                              5 .globl  entityman_init
-                              6 .globl  get_entity_array
-                              7 .globl  entityman_set_dead
-                              8 .globl  entityman_update
-                              9 .globl  entityman_create_one
-                             10 
-                             11 ;;########################################################
-                             12 ;;                        MACROS                         #              
-                             13 ;;########################################################
-                             14 
-                             15 .macro DefineStar _type,_x,_y,_vx,_vy,_color,_last_ptr
-                             16     .db _type
-                             17     .db _x
-                             18     .db _y
-                             19     .db _vx
-                             20     .db _vy
-                             21     .db _color    
-                             22     .dw _last_ptr
-                             23 .endm
-                             24 
-                             25 .macro DefineStarDefault
-                             26     .db alive_type
-                             27     .db 0xDE
-                             28     .db 0xAD
-                             29     .db 0xDE
-                             30     .db 0xAD
-                             31     .db 0x80    
-                             32     .dw 0xCCCC
-                             33 .endm
-                             34 
-                             35 .macro DefineStarArray _Tname,_N,_DefineStar
-                             36     _Tname'_num:    .db 0    
-                             37     _Tname'_last:   .dw _Tname'_array
-                             38     _Tname'_array: 
-                             39     .rept _N    
-                             40         _DefineStar
-                             41     .endm
-                             42     .db invalid_type
-                             43 .endm
-                             44 
-                             45 ;;########################################################
-                             46 ;;                       CONSTANTS                       #             
-                             47 ;;########################################################
-                     0000    48 e_type = 0
-                     0001    49 e_x = 1
-                     0002    50 e_y = 2
-                     0003    51 e_vx = 3
-                     0004    52 e_vy = 4
-                     0005    53 e_color = 5
-                     0006    54 e_last_ptr_1 = 6
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 
 
-                     0007    55 e_last_ptr_2 = 7
-                     0008    56 sizeof_e = 8
-                     001E    57 max_entities = 30
-                             58 
-                             59 ;;########################################################
-                             60 ;;                      ENTITY TYPES                     #             
-                             61 ;;########################################################
-                     0000    62 empty_type = 0x00
-                     0001    63 alive_type = 0x01
-                     00FE    64 dead_type = 0xFE
-                     00FF    65 invalid_type = 0xFF
+                              5 .include "../man/entity_manager.h.s"
+                              1 ;;
+                              2 ;;  ENTITY MANAGER HEADER
+                              3 ;;
+                              4 
+                              5 .globl  man_entity_init
+                              6 
+                              7 .globl  man_entity_update
+                              8 
+                              9 .globl  man_entity_create_entity
+                             10 .globl  man_entity_create_bomb
+                             11 
+                             12 .globl  man_entity_get_player
+                             13 .globl  man_entity_get_enemy_array
+                             14 .globl  man_entity_get_bomb_array
+                             15 
+                             16 .globl  man_entity_set_player_dead
+                             17 .globl  man_entity_set_enemy_dead
+                             18 
+                             19 ;;########################################################
+                             20 ;;                        MACROS                         #              
+                             21 ;;########################################################
+                             22 
+                             23 ;;-----------------------  ENTITY  -----------------------
+                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+                             25     .db _type
+                             26     .db _x, _y
+                             27     .db _w, _h      ;; both in bytes
+                             28     .db _vx, _vy    
+                             29     .dw _sp_ptr_0
+                             30 .endm
+                             31 
+                             32 .macro DefineEntityDefault
+                             33     .db alive_type
+                             34     .db 0xDE, 0xAD
+                             35     .db 4, 16  
+                             36     .dw 0xADDE 
+                             37     .dw 0xCCCC
+                             38 .endm
+                             39 
+                             40 .macro DefineEntityArray _Tname,_N,_DefineEntity
+                             41     _Tname'_num:    .db 0    
+                             42     _Tname'_last:   .dw _Tname'_array
+                             43     _Tname'_array: 
+                             44     .rept _N    
+                             45         _DefineEntity
+                             46     .endm
+                             47 .endm
+                             48 
+                             49 ;;-----------------------  BOMBS  ------------------------
+                             50 .macro DefineBombDefault    
+                             51     .db max_timer   ;; timer    
+                             52     .db 0xDE,0xAD   ;; coordinates (x, y)
+                             53     .db #4, #16     ;; width, height -> both in bytes    
+                             54     .dw 0xCCCC      ;; sprite  pointer (where it's in memory video)
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 
 
-                              2 .include "physics_system.h.s"
-                              1 .globl  physicssys_init
-                              2 .globl  physicssys_update
+                             55 .endm
+                             56 
+                             57 .macro DefineBombArray _Tname,_N,_DefineBomb
+                             58     _Tname'_num:    .db 0    
+                             59     _Tname'_last:   .dw _Tname'_array
+                             60     _Tname'_array: 
+                             61     .rept _N    
+                             62         _DefineBomb
+                             63     .endm
+                             64 .endm
+                             65 
+                             66 ;;########################################################
+                             67 ;;                       CONSTANTS                       #             
+                             68 ;;########################################################
+                             69 
+                             70 ;;-----------------------  ENTITY  -----------------------
+                     0000    71 e_type = 0
+                     0001    72 e_x = 1
+                     0002    73 e_y = 2
+                     0003    74 e_w = 3
+                     0004    75 e_h = 4
+                     0005    76 e_vx = 5
+                     0006    77 e_vy = 6
+                     0007    78 e_sp_ptr_0 = 7
+                     0007    79 e_sp_ptr_1 = 7
+                     0009    80 sizeof_e = 9
+                     0001    81 max_entities = 1
+                             82 
+                             83 ;;-----------------------  BOMBS  ------------------------
+                     0000    84 b_timer = 0
+                     0001    85 b_x = 1
+                     0002    86 b_y = 2
+                     0003    87 b_w = 3
+                     0004    88 b_h = 4
+                     0005    89 b_sp_ptr_0 = 5
+                     0006    90 b_sp_ptr_1 = 6
+                     0007    91 sizeof_b = 7
+                     0001    92 max_bombs = 1
+                             93 
+                             94 ;;########################################################
+                             95 ;;                      ENTITY TYPES                     #             
+                             96 ;;########################################################
+                     0001    97 alive_type = 0x01
+                     00FE    98 dead_type = 0xFE
+                     00FF    99 invalid_type = 0xFF
+                            100 
+                            101 
+                            102 ;;########################################################
+                            103 ;;                       BOMB TIMERS                     #             
+                            104 ;;########################################################
+                     0000   105 zero_timer = 0x00
+                     00FF   106 max_timer = 0xFF
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 4.
 Hexadecimal [16-Bits]
 
 
 
-                              3 .include "../cpct_functions.h.s"
+                              6 .include "physics_system.h.s"
+                              1 ;;
+                              2 ;;  PHYSICS SYSTEM HEADER
+                              3 ;;
+                              4 
+                              5 .globl  sys_physics_init
+                              6 .globl  sys_physics_update
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+Hexadecimal [16-Bits]
+
+
+
+                              7 .include "render_system.h.s"
+                              1 ;;
+                              2 ;;  RENDER SYSTEM HEADER
+                              3 ;;
+                              4 
+                              5 .globl  sys_render_init
+                              6 .globl  sys_render_update
+                              7 .globl  sys_render_remove_entity
+                              8 .globl  sys_render_remove_bomb
+                              9 
+                             10 
+                             11 ;;########################################################
+                             12 ;;                       CONSTANTS                       #             
+                             13 ;;########################################################
+                     0000    14 video_mode = 0
+                             15 
+                             16 ;; in pixels
+                     00A0    17 screen_width = 160
+                     00C8    18 screen_height = 200
+                             19 
+                             20 ;;  1 byte for each +-1 Y coordinate (1px)
+                             21 ;;  200px = 25 char -> 1 bomberman cell = 2height*2width chars
+                             22 ;;  25chars*1cell/2char = 12 cells, rest 1 char
+                             23 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
+                     0004    24 min_map_y_coord_valid = 4      ;;  [0-3] border, >=4 map
+                     00B3    25 max_map_y_coord_valid = 195-16    ;;  [196-199] border, <=195 map -16px
+                             26 
+                             27 ;;  1 byte for each +-2 X coordinate (2px)
+                             28 ;;  160px = 20 char -> 1 bomberman cell = 2height*2width chars
+                             29 ;;  20chars*1cell/2char = 10 cells -> 4 cells left border, 5 cells map
+                             30 ;;  rest 1 cell=2 char, 1 char left border, 1 char right border
+                             31 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
+                             32 ;;  9 char left map, 10 char map, 1 char right map
+                             33 ;;  9char*8px*1byte/2px = 36, 19char*8px*1byte/2=76
+                     0024    34 min_map_x_coord_valid = 36      ;;  [0-35] border, >=35 map
+                     004F    35 max_map_x_coord_valid = 79    ;;  [78-79] border, <=77 map
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
+Hexadecimal [16-Bits]
+
+
+
+                              8 .include "../cpct_functions.h.s"
                               1 
                               2 .globl  cpct_disableFirmware_asm
                               3 .globl  cpct_setVideoMode_asm
@@ -95,55 +190,161 @@ Hexadecimal [16-Bits]
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
                               7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 
-                              9 .globl  HW_BLACK
-                             10 .globl  HW_WHITE
+                              8 .globl  cpct_drawSpriteBlended_asm
+                              9 .globl  cpct_scanKeyboard_f_asm
+                             10 .globl  cpct_isKeyPressed_asm
                              11 
-                             12 .globl  CPCT_VMEM_START_ASM
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+                             12 .globl  HW_BLACK
+                             13 .globl  HW_WHITE
+                             14 
+                             15 .globl  CPCT_VMEM_START_ASM
+                             16 .globl  Key_O
+                             17 .globl  Key_P
+                             18 .globl  Key_Q
+                             19 .globl  Key_A
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-                              4 
-   401D                       5 physicssys_init::
-   401D C9            [10]    6   ret
-                              7 
-   401E                       8 physicssys_update::
-   401E CD 29 42      [17]    9   call  get_entity_array
-   4021 B7            [ 4]   10   or     a
-   4022 C8            [11]   11   ret    z
-                             12 
-   4023                      13 physicssys_loop:    
-   4023 F5            [11]   14   push  af
-                             15 
-   4024 DD 4E 01      [19]   16   ld    c, e_x(ix)                  ;; C = x coordinate       
-   4027 DD 7E 03      [19]   17   ld    a, e_vx(ix)                 ;; L = x velocity       
-   402A 81            [ 4]   18   add   a, c
-   402B FA 48 40      [10]   19   jp    m, invalid_x
-                             20 
-   402E                      21 continue_x:
-   402E DD 77 01      [19]   22   ld    e_x(ix), a  
-                             23 
-   4031 DD 46 02      [19]   24   ld    b, e_y(ix)                  ;; B = y coordinate  
-   4034 DD 7E 04      [19]   25   ld    a, e_vy(ix)                 ;; H = y velocity  
-   4037 80            [ 4]   26   add   a, b
-   4038 FA 4D 40      [10]   27   jp    m, invalid_y
-   403B                      28 continue_y:
-   403B DD 77 02      [19]   29   ld    e_y(ix), a
-                             30 
-   403E 01 08 00      [10]   31   ld    bc, #sizeof_e
-   4041 DD 09         [15]   32   add   ix, bc
-                             33 
-   4043 F1            [10]   34   pop   af
-   4044 3D            [ 4]   35   dec   a  
-   4045 C8            [11]   36   ret   z
-   4046 18 DB         [12]   37   jr    physicssys_loop
-                             38 
-   4048                      39 invalid_x:
-   4048 CD 31 42      [17]   40   call  entityman_set_dead
-   404B 18 E1         [12]   41   jr    continue_x
-                             42 
-   404D                      43 invalid_y:
-   404D CD 31 42      [17]   44   call  entityman_set_dead
-   4050 18 E9         [12]   45   jr    continue_y
+                              9 
+                             10 ;;########################################################
+                             11 ;;                   PRIVATE FUNCTIONS                   #             
+                             12 ;;########################################################
+                             13 
+                             14 ;;
+                             15 ;;  INPUT:
+                             16 ;;    ix  address memory where entity starts
+                             17 ;;  RETURN: 
+                             18 ;;    none
+                             19 ;;  DESTROYED:
+                             20 ;;    none
+   40E2                      21 sys_physics_update_entity::
+                             22   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
+   40E2 DD 7E 01      [19]   23   ld    a, e_x(ix)
+   40E5 DD 86 05      [19]   24   add   e_vx(ix)
+                             25   ;add   #2
+   40E8 47            [ 4]   26   ld    b, a
+                             27 
+                             28   ;; Check is new X coordinate is greater than min allowed
+                             29   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+   40E9 FE 24         [ 7]   30   cp    #min_map_x_coord_valid
+   40EB 38 0B         [12]   31   jr    c, check_y
+                             32 
+                             33   ;; Calculate max X coordinate where an entity could be
+   40ED 3E 4F         [ 7]   34   ld    a, #max_map_x_coord_valid
+   40EF DD 96 03      [19]   35   sub   e_w(ix)  
+                             36 
+                             37   ;; Check is new X coordinate is smaller than max allowed
+                             38   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+   40F2 B8            [ 4]   39   cp    b
+   40F3 38 03         [12]   40   jr    c, check_y
+                             41 
+   40F5 DD 70 01      [19]   42   ld    e_x(ix), b    ;; Update X coordinate
+                             43 
+   40F8                      44 check_y:
+                             45   ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
+   40F8 DD 7E 02      [19]   46   ld    a, e_y(ix)
+   40FB DD 86 06      [19]   47   add   e_vy(ix)
+   40FE 47            [ 4]   48   ld    b, a
+                             49 
+                             50   ;; Check is new Y coordinate is greater than min allowed
+                             51   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+   40FF FE 04         [ 7]   52   cp    #min_map_y_coord_valid
+   4101 D8            [11]   53   ret   c
+                             54 
+                             55   ;; Calculate max X coordinate where an entity could be
+   4102 3E B3         [ 7]   56   ld    a, #max_map_y_coord_valid
+   4104 DD 96 04      [19]   57   sub   e_h(ix)  
+                             58 
+                             59   ;; Check is new Y coordinate is smaller than max allowed
+                             60   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+   4107 B8            [ 4]   61   cp    b
+   4108 D8            [11]   62   ret   c
+                             63   
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+Hexadecimal [16-Bits]
+
+
+
+   4109 DD 70 02      [19]   64   ld    e_y(ix), b    ;; Update X coordinate
+   410C C9            [10]   65   ret
+                             66 
+                             67 
+                             68 ;;
+                             69 ;;  INPUT:
+                             70 ;;    none
+                             71 ;;  RETURN: 
+                             72 ;;    none
+                             73 ;;  DESTROYED:
+                             74 ;;    A,BC,IX
+   410D                      75 sys_physics_player_update::
+   410D CD 6E 43      [17]   76   call  man_entity_get_player
+   4110 CD E2 40      [17]   77   call  sys_physics_update_entity
+   4113 C9            [10]   78   ret
+                             79 
+                             80 
+                             81 ;;
+                             82 ;;  INPUT:
+                             83 ;;    none
+                             84 ;;  RETURN: 
+                             85 ;;    none
+                             86 ;;  DESTROYED:
+                             87 ;;    A,BC,IX
+   4114                      88 sys_physics_enemies_update::
+   4114 CD 73 43      [17]   89   call  man_entity_get_enemy_array
+                             90 
+   4117                      91 physics_enemies_loop:
+   4117 F5            [11]   92   push  af
+                             93   
+   4118 CD E2 40      [17]   94   call  sys_physics_update_entity
+                             95 
+   411B 01 09 00      [10]   96   ld    bc, #sizeof_e
+   411E DD 09         [15]   97   add   ix, bc
+                             98 
+   4120 F1            [10]   99   pop   af
+   4121 3D            [ 4]  100   dec   a
+   4122 C8            [11]  101   ret   z
+   4123 18 F2         [12]  102   jr    physics_enemies_loop
+   4125 C9            [10]  103   ret
+                            104 
+                            105 
+                            106 ;;
+                            107 ;;  INPUT:
+                            108 ;;    none
+                            109 ;;  RETURN: 
+                            110 ;;    none
+                            111 ;;  DESTROYED:
+                            112 ;;    none
+   4126                     113 sys_physics_bomb_update::
+   4126 C9            [10]  114   ret
+                            115 
+                            116 
+                            117 
+                            118 ;;########################################################
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
+Hexadecimal [16-Bits]
+
+
+
+                            119 ;;                   PUBLIC FUNCTIONS                    #             
+                            120 ;;########################################################
+                            121 
+                            122 ;;
+                            123 ;;  none
+                            124 ;;  INPUT:
+                            125 ;;    none
+                            126 ;;  RETURN: 
+                            127 ;;    none
+                            128 ;;  DESTROYED:
+                            129 ;;    none
+   4127                     130 sys_physics_init::
+   4127 C9            [10]  131   ret
+                            132 
+                            133 
+   4128                     134 sys_physics_update::
+   4128 CD 0D 41      [17]  135   call  sys_physics_player_update
+   412B CD 14 41      [17]  136   call  sys_physics_enemies_update
+   412E CD 26 41      [17]  137   call  sys_physics_bomb_update
+   4131 C9            [10]  138   ret
+                            139   

@@ -22,6 +22,7 @@
 .include "man/entity_manager.h.s"
 .include "sys/render_system.h.s"
 .include "sys/physics_system.h.s"
+.include "sys/input_system.h.s"
 .include "assets/assets.h.s"
 
 ;;
@@ -53,12 +54,14 @@ _main::
    call cpct_disableFirmware_asm     
 
    ;;call  man_entity_init
-   call  man_entity_init
-   call  sys_render_init
-   cpctm_setBorder_asm #HW_WHITE
+   call  man_entity_init   
+   call  sys_input_init
+   call  sys_physics_init
+   call  sys_render_init   
 
 ;; Loop forever
 loop:
+   call  sys_input_update
    call  sys_physics_update
    call  man_entity_update
    call  sys_render_update

@@ -3,5 +3,9 @@ Hexadecimal [16-Bits]
 
 
 
-                              1 .globl  physicssys_init
-                              2 .globl  physicssys_update
+                              1 ;;
+                              2 ;;  PHYSICS SYSTEM HEADER
+                              3 ;;
+                              4 
+                              5 .globl  sys_physics_init
+                              6 .globl  sys_physics_update
