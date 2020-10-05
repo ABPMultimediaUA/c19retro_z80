@@ -1,15 +1,18 @@
 XL2
-H 1 areas 13 global symbols
+H 1 areas 16 global symbols
 S cpct_isKeyPressed_asm Ref0000
 S cpct_scanKeyboard_f_asm Ref0000
 S cpct_setPALColour_asm Ref0000
 S Key_A Ref0000
+S Key_D Ref0000
 S cpct_drawSprite_asm Ref0000
 S Key_O Ref0000
 S Key_P Ref0000
 S Key_Q Ref0000
+S Key_S Ref0000
 S HW_BLACK Ref0000
 S .__.ABS. Def0000
+S Key_W Ref0000
 S CPCT_VMEM_START_ASM Ref0000
 S cpct_waitVSYNC_asm Ref0000
 S cpct_setVideoMode_asm Ref0000

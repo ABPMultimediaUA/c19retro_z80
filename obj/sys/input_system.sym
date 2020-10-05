@@ -6,8 +6,9 @@ Symbol Table
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
     .__.H$L.=  0000 L   |   0 A_NotPre   0042 R   |   0 A_Presse   003E R
     CPCT_VME   **** GX  |     HW_BLACK   **** GX  |     HW_WHITE   **** GX
-    Key_A      **** GX  |     Key_O      **** GX  |     Key_P      **** GX
-    Key_Q      **** GX  |   0 O_NotPre   001C R   |   0 O_Presse   0017 R
+    Key_A      **** GX  |     Key_D      **** GX  |     Key_O      **** GX
+    Key_P      **** GX  |     Key_Q      **** GX  |     Key_S      **** GX
+    Key_W      **** GX  |   0 O_NotPre   001C R   |   0 O_Presse   0017 R
   0 P_NotPre   0029 R   |   0 P_Presse   0024 R   |   0 Q_NotPre   0036 R
   0 Q_Presse   0031 R   |     alive_ty=  0001     |     b_h     =  0004 
     b_sp_ptr=  0005     |     b_sp_ptr=  0006     |     b_timer =  0000 

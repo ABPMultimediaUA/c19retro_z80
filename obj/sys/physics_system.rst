@@ -206,6 +206,11 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
@@ -283,7 +288,7 @@ Hexadecimal [16-Bits]
                              73 ;;  DESTROYED:
                              74 ;;    A,BC,IX
    4128                      75 sys_physics_player_update::
-   4128 CD 97 43      [17]   76   call  man_entity_get_player
+   4128 CD A6 43      [17]   76   call  man_entity_get_player
    412B CD FD 40      [17]   77   call  sys_physics_update_entity
    412E C9            [10]   78   ret
                              79 
@@ -296,7 +301,7 @@ Hexadecimal [16-Bits]
                              86 ;;  DESTROYED:
                              87 ;;    A,BC,IX
    412F                      88 sys_physics_enemies_update::
-   412F CD 9C 43      [17]   89   call  man_entity_get_enemy_array
+   412F CD AB 43      [17]   89   call  man_entity_get_enemy_array
                              90 
    4132                      91 physics_enemies_loop:
    4132 F5            [11]   92   push  af

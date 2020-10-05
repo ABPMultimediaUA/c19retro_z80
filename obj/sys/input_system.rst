@@ -153,6 +153,11 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -210,24 +215,24 @@ Hexadecimal [16-Bits]
                              34 ;;  DESTROYED:
                              35 ;;    none
    414E                      36 sys_input_update::
-   414E CD 97 43      [17]   37   call  man_entity_get_player
+   414E CD A6 43      [17]   37   call  man_entity_get_player
                              38 
                              39   ;; Reset velocities
    4151 DD 36 05 00   [19]   40   ld    e_vx(ix), #0
    4155 DD 36 06 00   [19]   41   ld    e_vy(ix), #0
                              42 
-   4159 CD BC 43      [17]   43   call  cpct_scanKeyboard_f_asm
+   4159 CD CB 43      [17]   43   call  cpct_scanKeyboard_f_asm
                              44 
-   415C 21 04 04      [10]   45   ld    hl, #Key_O
-   415F CD 26 44      [17]   46   call  cpct_isKeyPressed_asm
+   415C 21 08 20      [10]   45   ld    hl, #Key_A;O
+   415F CD 35 44      [17]   46   call  cpct_isKeyPressed_asm
    4162 28 05         [12]   47   jr    z, O_NotPressed
    4164                      48 O_Pressed:
    4164 DD 36 05 FC   [19]   49     ld    e_vx(ix), #move_left
    4168 C9            [10]   50     ret
    4169                      51 O_NotPressed:
                              52 
-   4169 21 03 08      [10]   53     ld    hl, #Key_P
-   416C CD 26 44      [17]   54     call  cpct_isKeyPressed_asm
+   4169 21 07 20      [10]   53     ld    hl, #Key_D;P
+   416C CD 35 44      [17]   54     call  cpct_isKeyPressed_asm
    416F 28 05         [12]   55     jr    z, P_NotPressed
                              56 
    4171                      57 P_Pressed:
@@ -235,21 +240,21 @@ Hexadecimal [16-Bits]
    4175 C9            [10]   59     ret
    4176                      60 P_NotPressed:
                              61 
-   4176 21 08 08      [10]   62     ld    hl, #Key_Q
+   4176 21 07 08      [10]   62     ld    hl, #Key_W;Q
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-   4179 CD 26 44      [17]   63     call  cpct_isKeyPressed_asm
+   4179 CD 35 44      [17]   63     call  cpct_isKeyPressed_asm
    417C 28 05         [12]   64     jr    z, Q_NotPressed
    417E                      65 Q_Pressed:
    417E DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
    4182 C9            [10]   67     ret
    4183                      68 Q_NotPressed:
                              69 
-   4183 21 08 20      [10]   70     ld    hl, #Key_A
-   4186 CD 26 44      [17]   71     call  cpct_isKeyPressed_asm
+   4183 21 07 10      [10]   70     ld    hl, #Key_S;A
+   4186 CD 35 44      [17]   71     call  cpct_isKeyPressed_asm
    4189 28 04         [12]   72     jr    z, A_NotPressed
    418B                      73 A_Pressed:
    418B DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    

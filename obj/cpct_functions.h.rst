@@ -26,3 +26,8 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D

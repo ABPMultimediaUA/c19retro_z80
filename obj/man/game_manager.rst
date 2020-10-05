@@ -3,16 +3,13 @@ Hexadecimal [16-Bits]
 
 
 
-                              1 ;;
-                              2 ;;  PHYSICS SYSTEM
-                              3 ;;
-                              4 
+                              1 .include "man/game_manager.h.s"
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 
 
-                              5 .include "../man/entity_manager.h.s"
+                              2 .include "man/entity_manager.h.s"
                               1 ;;
                               2 ;;  ENTITY MANAGER HEADER
                               3 ;;
@@ -129,19 +126,13 @@ Hexadecimal [16-Bits]
 
 
 
-                              6 .include "physics_system.h.s"
-                              1 ;;
-                              2 ;;  PHYSICS SYSTEM HEADER
-                              3 ;;
-                              4 
-                              5 .globl  sys_physics_init
-                              6 .globl  sys_physics_update
+                              3 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
 
 
-                              7 .include "render_system.h.s"
+                              4 .include "sys/render_system.h.s"
                               1 ;;
                               2 ;;  RENDER SYSTEM HEADER
                               3 ;;
@@ -182,178 +173,133 @@ Hexadecimal [16-Bits]
 
 
 
-                              8 .include "../cpct_functions.h.s"
-                              1 
-                              2 .globl  cpct_disableFirmware_asm
-                              3 .globl  cpct_setVideoMode_asm
-                              4 .globl  cpct_getScreenPtr_asm
-                              5 .globl  cpct_waitVSYNC_asm
-                              6 .globl  cpct_setPALColour_asm
-                              7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 
-                              9 .globl  cpct_drawSpriteBlended_asm
-                             10 .globl  cpct_drawSolidBox_asm
-                             11 .globl  cpct_drawSprite_asm
-                             12 
-                             13 .globl  cpct_scanKeyboard_f_asm
-                             14 .globl  cpct_isKeyPressed_asm
-                             15 
-                             16 .globl  HW_BLACK
-                             17 .globl  HW_WHITE
-                             18 
-                             19 .globl  CPCT_VMEM_START_ASM
-                             20 .globl  Key_O
-                             21 .globl  Key_P
-                             22 .globl  Key_Q
-                             23 .globl  Key_A
-                             24 
-                             25 ;;for normal people
-                             26 .globl  Key_W
-                             27 .globl  Key_S
-                             28 .globl  Key_D
+                              5 .include "sys/physics_system.h.s"
+                              1 ;;
+                              2 ;;  PHYSICS SYSTEM HEADER
+                              3 ;;
+                              4 
+                              5 .globl  sys_physics_init
+                              6 .globl  sys_physics_update
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
+Hexadecimal [16-Bits]
+
+
+
+                              6 .include "sys/input_system.h.s"
+                              1 ;;
+                              2 ;;  INPUT SYSTEM HEADER
+                              3 ;;
+                              4 
+                              5 .globl  sys_input_init
+                              6 .globl  sys_input_update
+                              7 
+                              8 
+                              9 ;;########################################################
+                             10 ;;                       CONSTANTS                       #             
+                             11 ;;########################################################
+                             12 
+                             13 ;; in bytes
+                     0004    14 move_right = 4
+                     FFFFFFFC    15 move_left = -move_right
+                     0010    16 move_down = 16
+                     FFFFFFF0    17 move_up = -move_down
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+Hexadecimal [16-Bits]
+
+
+
+                              7 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
+Hexadecimal [16-Bits]
+
+
+
+                              8 .include "assets/assets.h.s"
+                              1 .globl  _sp_player
+                              2 .globl  _sp_enemy
+                              3 .globl  _sp_bomb
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
 Hexadecimal [16-Bits]
 
 
 
                               9 
                              10 ;;########################################################
-                             11 ;;                   PRIVATE FUNCTIONS                   #             
+                             11 ;;                        VARIABLES                      #             
                              12 ;;########################################################
                              13 
-                             14 ;;
-                             15 ;;  INPUT:
-                             16 ;;    ix  address memory where entity starts
-                             17 ;;  RETURN: 
-                             18 ;;    none
-                             19 ;;  DESTROYED:
-                             20 ;;    none
-   0000                      21 sys_physics_update_entity::
-                             22   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
-   0000 DD 7E 01      [19]   23   ld    a, e_x(ix)
-   0003 DD 86 05      [19]   24   add   e_vx(ix)
-                             25   ;add   #2
-   0006 47            [ 4]   26   ld    b, a
-                             27 
-                             28   ;; Check is new X coordinate is greater than min allowed
-                             29   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   0007 FE 24         [ 7]   30   cp    #min_map_x_coord_valid
-   0009 38 0B         [12]   31   jr    c, check_y
-                             32 
-                             33   ;; Calculate max X coordinate where an entity could be
-   000B 3E 4F         [ 7]   34   ld    a, #max_map_x_coord_valid
-   000D DD 96 03      [19]   35   sub   e_w(ix)  
-                             36 
-                             37   ;; Check is new X coordinate is smaller than max allowed
-                             38   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   0010 B8            [ 4]   39   cp    b
-   0011 38 03         [12]   40   jr    c, check_y
-                             41 
-   0013 DD 70 01      [19]   42   ld    e_x(ix), b    ;; Update X coordinate
-                             43 
-   0016                      44 check_y:
-                             45   ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
-   0016 DD 7E 02      [19]   46   ld    a, e_y(ix)
-   0019 DD 86 06      [19]   47   add   e_vy(ix)
-   001C 47            [ 4]   48   ld    b, a
+                             14 
+                             15 ;;=================================================================================
+                             16 ;; Public functions
+                             17 
+                             18 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             19 ;; Initializes the game manager
+                             20 ;; INPUT:
+                             21 ;; DESTROYS:
+                             22 ;;
+   4238                      23 man_game_init::
+                             24     
+                             25     ;; Init Entities managers:
+                             26     ;; - Player: Entity
+                             27     ;; - Enemies: array<Entity>
+                             28     ;; - Bombs: array<Bomb>
+   4238 CD 79 43      [17]   29     call man_entity_init
+                             30 
+                             31     ;; Init systems
+   423B CD 4D 41      [17]   32     call sys_input_init
+   423E CD 42 41      [17]   33     call sys_physics_init
+   4241 CD 14 42      [17]   34     call sys_render_init
+                             35 
+   4244 C9            [10]   36     ret
+                             37 
+                             38 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             39 ;; Updates 1 Game Cycle
+                             40 ;; INPUT:
+                             41 ;; DESTROYS:
+                             42 ;;
+                             43 ;; TODO
+   4245                      44 man_game_update::
+                             45     ; call man_entity_update      ;; check state of entities to delete them
+                             46 
+                             47     ; ; call man_entity_get_bomb_array
+                             48     ; call sys_physics_bomb_update
                              49 
-                             50   ;; Check is new Y coordinate is greater than min allowed
-                             51   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   001D FE 04         [ 7]   52   cp    #min_map_y_coord_valid
-   001F D8            [11]   53   ret   c
-                             54 
-                             55   ;; Calculate max X coordinate where an entity could be
-   0020 3E B3         [ 7]   56   ld    a, #max_map_y_coord_valid
-   0022 DD 96 04      [19]   57   sub   e_h(ix)  
-                             58 
-                             59   ;; Check is new Y coordinate is smaller than max allowed
-                             60   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   0025 B8            [ 4]   61   cp    b
-   0026 D8            [11]   62   ret   c
-                             63   
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+                             50     ; ; call man_entity_get_enemy_array
+                             51     ; ; call sys_ai_update
+                             52     ; call sys_physics_enemies_update
+                             53     
+                             54     ; ; call man_entity_get_player
+                             55     ; ; call sys_input_update
+                             56     ; call sys_physics_player_update
+                             57 
+   4245 C9            [10]   58     ret
+                             59 
+                             60 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             61 ;; Render 1 Game Cycle
+                             62 ;; INPUT:
+                             63 ;; DESTROYS:
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 11.
 Hexadecimal [16-Bits]
 
 
 
-   0027 DD 70 02      [19]   64   ld    e_y(ix), b    ;; Update X coordinate
-   002A C9            [10]   65   ret
-                             66 
-                             67 
-                             68 ;;
-                             69 ;;  INPUT:
-                             70 ;;    none
-                             71 ;;  RETURN: 
-                             72 ;;    none
-                             73 ;;  DESTROYED:
-                             74 ;;    A,BC,IX
-   002B                      75 sys_physics_player_update::
-   002B CD 00 00      [17]   76   call  man_entity_get_player
-   002E CD 00 00      [17]   77   call  sys_physics_update_entity
-   0031 C9            [10]   78   ret
+                             64 ;;
+   4246                      65 man_game_render::
+                             66     ; call man_entity_getBombs
+                             67     ; call sys_render_update_bombs
+                             68 
+                             69     ; call man_entity_getEnemies
+                             70     ; call sys_render_update_enemies
+                             71     
+                             72     ; call man_entity_getPlayer
+                             73     ; call sys_render_update_player
+                             74 
+   4246 C9            [10]   75     ret
+                             76 
+                             77 
+                             78     
                              79 
                              80 
-                             81 ;;
-                             82 ;;  INPUT:
-                             83 ;;    none
-                             84 ;;  RETURN: 
-                             85 ;;    none
-                             86 ;;  DESTROYED:
-                             87 ;;    A,BC,IX
-   0032                      88 sys_physics_enemies_update::
-   0032 CD 00 00      [17]   89   call  man_entity_get_enemy_array
-                             90 
-   0035                      91 physics_enemies_loop:
-   0035 F5            [11]   92   push  af
-                             93   
-   0036 CD 00 00      [17]   94   call  sys_physics_update_entity
-                             95 
-   0039 01 09 00      [10]   96   ld    bc, #sizeof_e
-   003C DD 09         [15]   97   add   ix, bc
-                             98 
-   003E F1            [10]   99   pop   af
-   003F 3D            [ 4]  100   dec   a
-   0040 C8            [11]  101   ret   z
-   0041 18 F2         [12]  102   jr    physics_enemies_loop
-   0043 C9            [10]  103   ret
-                            104 
-                            105 
-                            106 ;;
-                            107 ;;  INPUT:
-                            108 ;;    none
-                            109 ;;  RETURN: 
-                            110 ;;    none
-                            111 ;;  DESTROYED:
-                            112 ;;    none
-   0044                     113 sys_physics_bomb_update::
-   0044 C9            [10]  114   ret
-                            115 
-                            116 
-                            117 
-                            118 ;;########################################################
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
-Hexadecimal [16-Bits]
-
-
-
-                            119 ;;                   PUBLIC FUNCTIONS                    #             
-                            120 ;;########################################################
-                            121 
-                            122 ;;
-                            123 ;;  none
-                            124 ;;  INPUT:
-                            125 ;;    none
-                            126 ;;  RETURN: 
-                            127 ;;    none
-                            128 ;;  DESTROYED:
-                            129 ;;    none
-   0045                     130 sys_physics_init::
-   0045 C9            [10]  131   ret
-                            132 
-                            133 
-   0046                     134 sys_physics_update::
-   0046 CD 2B 00      [17]  135   call  sys_physics_player_update
-   0049 CD 32 00      [17]  136   call  sys_physics_enemies_update
-   004C CD 44 00      [17]  137   call  sys_physics_bomb_update
-   004F C9            [10]  138   ret
-                            139   
+                             81 
+                             82 
+                             83 

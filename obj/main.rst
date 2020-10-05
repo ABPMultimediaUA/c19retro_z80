@@ -2739,6 +2739,11 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 54.
 Hexadecimal [16-Bits]
 
@@ -2973,10 +2978,10 @@ Hexadecimal [16-Bits]
                              51 ;;
    40C0                      52 _main::   
                              53    ;; Disable firmware to prevent it from interfering with string drawing
-   40C0 CD FB 44      [17]   54    call cpct_disableFirmware_asm     
+   40C0 CD 0A 45      [17]   54    call cpct_disableFirmware_asm     
                              55 
                              56    ;;call  man_entity_init
-   40C3 CD 6A 43      [17]   57    call  man_entity_init   
+   40C3 CD 79 43      [17]   57    call  man_entity_init   
    40C6 CD 4D 41      [17]   58    call  sys_input_init
    40C9 CD 42 41      [17]   59    call  sys_physics_init
    40CC CD 14 42      [17]   60    call  sys_render_init   
@@ -2985,19 +2990,19 @@ Hexadecimal [16-Bits]
    40CF                      63 loop:
    40CF CD 4E 41      [17]   64    call  sys_input_update
    40D2 CD 43 41      [17]   65    call  sys_physics_update
-   40D5 CD 71 43      [17]   66    call  man_entity_update
+   40D5 CD 80 43      [17]   66    call  man_entity_update
    40D8 CD 21 42      [17]   67    call  sys_render_update
                              68 
    40DB CD E0 40      [17]   69    call wait_n_times
    40DE 18 EF         [12]   70    jr    loop
                              71 
    40E0                      72 wait_n_times:
-   40E0 CD F3 44      [17]   73    call  cpct_waitVSYNC_asm   
+   40E0 CD 02 45      [17]   73    call  cpct_waitVSYNC_asm   
    40E3 76            [ 4]   74    halt
    40E4 76            [ 4]   75    halt
    40E5 76            [ 4]   76    halt
    40E6 76            [ 4]   77    halt
-   40E7 CD F3 44      [17]   78    call  cpct_waitVSYNC_asm   
+   40E7 CD 02 45      [17]   78    call  cpct_waitVSYNC_asm   
    40EA 76            [ 4]   79    halt
    40EB 76            [ 4]   80    halt
    40EC 76            [ 4]   81    halt
@@ -3007,12 +3012,12 @@ Hexadecimal [16-Bits]
 
 
    40ED 76            [ 4]   82    halt
-   40EE CD F3 44      [17]   83     call  cpct_waitVSYNC_asm   
+   40EE CD 02 45      [17]   83     call  cpct_waitVSYNC_asm   
    40F1 76            [ 4]   84    halt
    40F2 76            [ 4]   85    halt
    40F3 76            [ 4]   86    halt
    40F4 76            [ 4]   87    halt
-   40F5 CD F3 44      [17]   88    call  cpct_waitVSYNC_asm   
+   40F5 CD 02 45      [17]   88    call  cpct_waitVSYNC_asm   
    40F8 76            [ 4]   89    halt
    40F9 76            [ 4]   90    halt
    40FA 76            [ 4]   91    halt

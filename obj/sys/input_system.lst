@@ -153,6 +153,11 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -218,7 +223,7 @@ Hexadecimal [16-Bits]
                              42 
    000C CD 00 00      [17]   43   call  cpct_scanKeyboard_f_asm
                              44 
-   000F 21 00 00      [10]   45   ld    hl, #Key_O
+   000F 21 00 00      [10]   45   ld    hl, #Key_A;O
    0012 CD 00 00      [17]   46   call  cpct_isKeyPressed_asm
    0015 28 05         [12]   47   jr    z, O_NotPressed
    0017                      48 O_Pressed:
@@ -226,7 +231,7 @@ Hexadecimal [16-Bits]
    001B C9            [10]   50     ret
    001C                      51 O_NotPressed:
                              52 
-   001C 21 00 00      [10]   53     ld    hl, #Key_P
+   001C 21 00 00      [10]   53     ld    hl, #Key_D;P
    001F CD 00 00      [17]   54     call  cpct_isKeyPressed_asm
    0022 28 05         [12]   55     jr    z, P_NotPressed
                              56 
@@ -235,7 +240,7 @@ Hexadecimal [16-Bits]
    0028 C9            [10]   59     ret
    0029                      60 P_NotPressed:
                              61 
-   0029 21 00 00      [10]   62     ld    hl, #Key_Q
+   0029 21 00 00      [10]   62     ld    hl, #Key_W;Q
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
@@ -248,7 +253,7 @@ Hexadecimal [16-Bits]
    0035 C9            [10]   67     ret
    0036                      68 Q_NotPressed:
                              69 
-   0036 21 00 00      [10]   70     ld    hl, #Key_A
+   0036 21 00 00      [10]   70     ld    hl, #Key_S;A
    0039 CD 00 00      [17]   71     call  cpct_isKeyPressed_asm
    003C 28 04         [12]   72     jr    z, A_NotPressed
    003E                      73 A_Pressed:

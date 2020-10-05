@@ -37,7 +37,7 @@ Symbol Table
     Key_Care=  0103     |     Key_Clos=  0802     |     Key_Clr =  0102 
     Key_Colo=  2003     |     Key_Comm=  8004     |     Key_Cont=  8002 
     Key_Copy=  0201     |     Key_Curs=  0400     |     Key_Curs=  0101 
-    Key_Curs=  0200     |     Key_Curs=  0100     |     Key_D   =  2007 
+    Key_Curs=  0200     |     Key_Curs=  0100     |     Key_D   =  2007 G
     Key_Del =  8009     |     Key_Dot =  8003     |     Key_E   =  0407 
     Key_Ente=  4000     |     Key_Esc =  0408     |     Key_F   =  2006 
     Key_F0  =  8001     |     Key_F1  =  2001     |     Key_F2  =  4001 
@@ -48,10 +48,10 @@ Symbol Table
     Key_J   =  2005     |     Key_K   =  2004     |     Key_L   =  1004 
     Key_M   =  4004     |     Key_N   =  4005     |     Key_O   =  0404 G
     Key_Open=  0202     |     Key_P   =  0803 G   |     Key_Q   =  0808 G
-    Key_R   =  0406     |     Key_Retu=  0402     |     Key_S   =  1007 
+    Key_R   =  0406     |     Key_Retu=  0402     |     Key_S   =  1007 G
     Key_Semi=  1003     |     Key_Shif=  2002     |     Key_Slas=  4003 
     Key_Spac=  8005     |     Key_T   =  0806     |     Key_Tab =  1008 
-    Key_U   =  0405     |     Key_V   =  8006     |     Key_W   =  0807 
+    Key_U   =  0405     |     Key_V   =  8006     |     Key_W   =  0807 G
     Key_X   =  8007     |     Key_Y   =  0805     |     Key_Z   =  8008 
     PAL_INKR=  0040     |     PAL_PENR=  0000     |     PPI_PORT=  00F5 
   0 _main      0000 GR  |     _sp_bomb   **** GX  |     _sp_enem   **** GX

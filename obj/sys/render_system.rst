@@ -153,6 +153,11 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 
+                             25 ;;for normal people
+                             26 .globl  Key_W
+                             27 .globl  Key_S
+                             28 .globl  Key_D
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -222,7 +227,7 @@ Hexadecimal [16-Bits]
                              20 ;;  DESTROYED:
                              21 ;;    DE,BC,HL,IX
    4190                      22 sys_render_player::
-   4190 CD 97 43      [17]   23   call  man_entity_get_player
+   4190 CD A6 43      [17]   23   call  man_entity_get_player
                              24 
    4193 CD 25 42      [17]   25   call  sys_render_remove_entity
                              26   
@@ -230,7 +235,7 @@ Hexadecimal [16-Bits]
    4196 11 00 C0      [10]   28   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
    4199 DD 4E 01      [19]   29   ld    c, e_x(ix)                  ;; C = x coordinate       
    419C DD 46 02      [19]   30   ld    b, e_y(ix)                  ;; B = y coordinate   
-   419F CD FC 45      [17]   31   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+   419F CD 0B 46      [17]   31   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
                              32   
                              33   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
    41A2 DD 75 07      [19]   34   ld  e_sp_ptr_0(ix), l
@@ -241,7 +246,7 @@ Hexadecimal [16-Bits]
    41A9 21 80 40      [10]   39   ld    hl, #_sp_player             ;; Source Sprite Pointer (array with pixel data)
    41AC DD 4E 03      [19]   40   ld    c, e_w(ix)                  ;; Sprite width
    41AF DD 46 04      [19]   41   ld    b, e_h(ix)                  ;; Sprite height
-   41B2 CD 3C 44      [17]   42   call  cpct_drawSprite_asm 
+   41B2 CD 4B 44      [17]   42   call  cpct_drawSprite_asm 
    41B5 C9            [10]   43   ret
                              44 
                              45 
@@ -254,7 +259,7 @@ Hexadecimal [16-Bits]
                              52 ;;  DESTROYED:
                              53 ;;    A,DE,BC,HL,IX
    41B6                      54 sys_render_enemies::
-   41B6 CD 9C 43      [17]   55   call   man_entity_get_enemy_array
+   41B6 CD AB 43      [17]   55   call   man_entity_get_enemy_array
    41B9                      56   render_enemies_loop:
    41B9 F5            [11]   57     push  af
                              58 
@@ -269,7 +274,7 @@ Hexadecimal [16-Bits]
 
 
    41C0 DD 46 02      [19]   64     ld    b, e_y(ix)                  ;; B = y coordinate   
-   41C3 CD FC 45      [17]   65     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+   41C3 CD 0B 46      [17]   65     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
                              66     
                              67     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
    41C6 DD 75 07      [19]   68     ld  e_sp_ptr_0(ix), l
@@ -280,7 +285,7 @@ Hexadecimal [16-Bits]
    41CD 21 40 40      [10]   73     ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
    41D0 DD 46 03      [19]   74     ld    b, e_w(ix)                  ;; Sprite width
    41D3 DD 4E 04      [19]   75     ld    c, e_h(ix)                  ;; Sprite height
-   41D6 CD D4 45      [17]   76     call  cpct_drawSpriteBlended_asm    
+   41D6 CD E3 45      [17]   76     call  cpct_drawSpriteBlended_asm    
                              77   
    41D9 01 09 00      [10]   78     ld   bc, #sizeof_e
    41DC DD 09         [15]   79     add  ix, bc
@@ -301,7 +306,7 @@ Hexadecimal [16-Bits]
                              94 ;;  DESTROYED:
                              95 ;;    A,DE,BC,HL,IX
    41E4                      96 sys_render_bombs::
-   41E4 CD A4 43      [17]   97   call   man_entity_get_bomb_array
+   41E4 CD B3 43      [17]   97   call   man_entity_get_bomb_array
    41E7 B7            [ 4]   98   or     a   ;; _bomb_num OR _bomb_num: if Z=1, they're equal, 0 bombs in _bomb_array
    41E8 C8            [11]   99   ret    z
    41E9                     100   render_bombs_loop:
@@ -313,7 +318,7 @@ Hexadecimal [16-Bits]
    41EA 11 00 C0      [10]  106     ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
    41ED DD 4E 01      [19]  107     ld    c, b_x(ix)                  ;; C = x coordinate       
    41F0 DD 46 02      [19]  108     ld    b, b_y(ix)                  ;; B = y coordinate   
-   41F3 CD FC 45      [17]  109     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+   41F3 CD 0B 46      [17]  109     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
                             110     
                             111     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
    41F6 DD 75 05      [19]  112     ld  b_sp_ptr_0(ix), l
@@ -329,7 +334,7 @@ Hexadecimal [16-Bits]
 
 
    4203 DD 4E 04      [19]  119     ld    c, b_h(ix)                  ;; Sprite height
-   4206 CD D4 45      [17]  120     call  cpct_drawSpriteBlended_asm    
+   4206 CD E3 45      [17]  120     call  cpct_drawSpriteBlended_asm    
                             121   
    4209 01 07 00      [10]  122     ld   bc, #sizeof_b
    420C DD 09         [15]  123     add  ix, bc
@@ -354,11 +359,11 @@ Hexadecimal [16-Bits]
                             142 ;;    AF,BC,DE,HL
    4214                     143 sys_render_init::  
    4214 0E 00         [ 7]  144   ld    c, #0
-   4216 CD E6 44      [17]  145   call  cpct_setVideoMode_asm    
+   4216 CD F5 44      [17]  145   call  cpct_setVideoMode_asm    
                             146 
    4219 2E 00         [ 7]  147   ld    l, #0
    421B 26 14         [ 7]  148   ld    h, #HW_BLACK
-   421D CD 32 44      [17]  149   call  cpct_setPALColour_asm
+   421D CD 41 44      [17]  149   call  cpct_setPALColour_asm
                             150     
    4220 C9            [10]  151   ret
                             152 
@@ -397,7 +402,7 @@ Hexadecimal [16-Bits]
    422B 3E 00         [ 7]  180   ld    a, #0x00  ;;0xFF rojo
    422D DD 4E 03      [19]  181   ld    c, e_w(ix)                  ;; Sprite width
    4230 DD 46 04      [19]  182   ld    b, e_h(ix)                  ;; Sprite height
-   4233 CD 30 45      [17]  183   call  cpct_drawSolidBox_asm
+   4233 CD 3F 45      [17]  183   call  cpct_drawSolidBox_asm
    4236 C9            [10]  184   ret
                             185 
                             186 

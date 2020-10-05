@@ -21,3 +21,8 @@
 .globl  Key_P
 .globl  Key_Q
 .globl  Key_A
+
+;;for normal people
+.globl  Key_W
+.globl  Key_S
+.globl  Key_D

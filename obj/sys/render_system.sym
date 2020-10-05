@@ -5,8 +5,9 @@ Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
     .__.H$L.=  0000 L   |     CPCT_VME   **** GX  |     HW_BLACK   **** GX
-    HW_WHITE   **** GX  |     Key_A      **** GX  |     Key_O      **** GX
-    Key_P      **** GX  |     Key_Q      **** GX  |     _sp_bomb   **** GX
+    HW_WHITE   **** GX  |     Key_A      **** GX  |     Key_D      **** GX
+    Key_O      **** GX  |     Key_P      **** GX  |     Key_Q      **** GX
+    Key_S      **** GX  |     Key_W      **** GX  |     _sp_bomb   **** GX
     _sp_enem   **** GX  |     _sp_play   **** GX  |     alive_ty=  0001 
     b_h     =  0004     |     b_sp_ptr=  0005     |     b_sp_ptr=  0006 
     b_timer =  0000     |     b_w     =  0003     |     b_x     =  0001 
