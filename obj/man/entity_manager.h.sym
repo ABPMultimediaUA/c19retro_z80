@@ -8,7 +8,7 @@ Symbol Table
     b_sp_ptr=  0005     |     b_sp_ptr=  0006     |     b_timer =  0000 
     b_w     =  0003     |     b_x     =  0001     |     b_y     =  0002 
     dead_typ=  00FE     |     e_h     =  0004     |     e_sp_ptr=  0007 
-    e_sp_ptr=  0007     |     e_type  =  0000     |     e_vx    =  0005 
+    e_sp_ptr=  0008     |     e_type  =  0000     |     e_vx    =  0005 
     e_vy    =  0006     |     e_w     =  0003     |     e_x     =  0001 
     e_y     =  0002     |     invalid_=  00FF     |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX

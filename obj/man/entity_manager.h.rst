@@ -86,7 +86,7 @@ Hexadecimal [16-Bits]
                      0005    76 e_vx = 5
                      0006    77 e_vy = 6
                      0007    78 e_sp_ptr_0 = 7
-                     0007    79 e_sp_ptr_1 = 7
+                     0008    79 e_sp_ptr_1 = 8
                      0009    80 sizeof_e = 9
                      0001    81 max_entities = 1
                              82 

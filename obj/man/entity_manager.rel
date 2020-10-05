@@ -1,9 +1,10 @@
 XL2
-H 1 areas 27 global symbols
+H 1 areas 29 global symbols
 S cpct_isKeyPressed_asm Ref0000
 S cpct_scanKeyboard_f_asm Ref0000
 S cpct_setPALColour_asm Ref0000
 S Key_A Ref0000
+S cpct_drawSprite_asm Ref0000
 S sys_render_init Ref0000
 S Key_O Ref0000
 S Key_P Ref0000
@@ -17,6 +18,7 @@ S CPCT_VMEM_START_ASM Ref0000
 S cpct_waitVSYNC_asm Ref0000
 S cpct_setVideoMode_asm Ref0000
 S cpct_disableFirmware_asm Ref0000
+S cpct_drawSolidBox_asm Ref0000
 S cpct_getRandom_mxor_u8_asm Ref0000
 S cpct_drawSpriteBlended_asm Ref0000
 S HW_WHITE Ref0000
@@ -99,7 +101,7 @@ R 00 00 00 00 00 04 00 00 00 07 00 00
 T A3 00
 R 00 00 00 00
 T A3 00 F5 DD 7E 00 E6 FE 28 2F CD 00 00 3A 0A 00
-R 00 00 00 00 02 0B 0B 00 00 0E 00 00
+R 00 00 00 00 02 0B 0C 00 00 0E 00 00
 T B1 00 D6 09 32 0A 00 DA BC 00 C3 C3 00
 R 00 00 00 00 00 05 00 00 00 08 00 00 00 0B 00 00
 T BC 00
@@ -127,7 +129,7 @@ R 00 00 00 00 00 04 00 00 00 07 00 00
 T EF 00
 R 00 00 00 00
 T EF 00 F5 DD 7E 00 E6 00 28 2F CD 00 00 3A 0A 00
-R 00 00 00 00 02 0B 0C 00 00 0E 00 00
+R 00 00 00 00 02 0B 0D 00 00 0E 00 00
 T FD 00 D6 09 32 0A 00 DA 08 01 C3 0F 01
 R 00 00 00 00 00 05 00 00 00 08 00 00 00 0B 00 00
 T 08 01

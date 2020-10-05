@@ -2723,18 +2723,22 @@ Hexadecimal [16-Bits]
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
                               7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 .globl  cpct_drawSpriteBlended_asm
-                              9 .globl  cpct_scanKeyboard_f_asm
-                             10 .globl  cpct_isKeyPressed_asm
-                             11 
-                             12 .globl  HW_BLACK
-                             13 .globl  HW_WHITE
-                             14 
-                             15 .globl  CPCT_VMEM_START_ASM
-                             16 .globl  Key_O
-                             17 .globl  Key_P
-                             18 .globl  Key_Q
-                             19 .globl  Key_A
+                              8 
+                              9 .globl  cpct_drawSpriteBlended_asm
+                             10 .globl  cpct_drawSolidBox_asm
+                             11 .globl  cpct_drawSprite_asm
+                             12 
+                             13 .globl  cpct_scanKeyboard_f_asm
+                             14 .globl  cpct_isKeyPressed_asm
+                             15 
+                             16 .globl  HW_BLACK
+                             17 .globl  HW_WHITE
+                             18 
+                             19 .globl  CPCT_VMEM_START_ASM
+                             20 .globl  Key_O
+                             21 .globl  Key_P
+                             22 .globl  Key_Q
+                             23 .globl  Key_A
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 54.
 Hexadecimal [16-Bits]
 
@@ -2824,7 +2828,7 @@ Hexadecimal [16-Bits]
                      0005    76 e_vx = 5
                      0006    77 e_vy = 6
                      0007    78 e_sp_ptr_0 = 7
-                     0007    79 e_sp_ptr_1 = 7
+                     0008    79 e_sp_ptr_1 = 8
                      0009    80 sizeof_e = 9
                      0001    81 max_entities = 1
                              82 
@@ -2924,8 +2928,8 @@ Hexadecimal [16-Bits]
                              11 ;;########################################################
                              12 
                              13 ;; in bytes
-                     0002    14 move_right = 2
-                     FFFFFFFE    15 move_left = -move_right
+                     0004    14 move_right = 4
+                     FFFFFFFC    15 move_left = -move_right
                      0010    16 move_down = 16
                      FFFFFFF0    17 move_up = -move_down
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 59.
@@ -2969,22 +2973,48 @@ Hexadecimal [16-Bits]
                              51 ;;
    40C0                      52 _main::   
                              53    ;; Disable firmware to prevent it from interfering with string drawing
-   40C0 CD 32 44      [17]   54    call cpct_disableFirmware_asm     
+   40C0 CD FB 44      [17]   54    call cpct_disableFirmware_asm     
                              55 
                              56    ;;call  man_entity_init
-   40C3 CD 41 43      [17]   57    call  man_entity_init   
-   40C6 CD 32 41      [17]   58    call  sys_input_init
-   40C9 CD 27 41      [17]   59    call  sys_physics_init
-   40CC CD F6 41      [17]   60    call  sys_render_init   
+   40C3 CD 6A 43      [17]   57    call  man_entity_init   
+   40C6 CD 4D 41      [17]   58    call  sys_input_init
+   40C9 CD 42 41      [17]   59    call  sys_physics_init
+   40CC CD 14 42      [17]   60    call  sys_render_init   
                              61 
                              62 ;; Loop forever
    40CF                      63 loop:
-   40CF CD 33 41      [17]   64    call  sys_input_update
-   40D2 CD 28 41      [17]   65    call  sys_physics_update
-   40D5 CD 48 43      [17]   66    call  man_entity_update
-   40D8 CD 03 42      [17]   67    call  sys_render_update
+   40CF CD 4E 41      [17]   64    call  sys_input_update
+   40D2 CD 43 41      [17]   65    call  sys_physics_update
+   40D5 CD 71 43      [17]   66    call  man_entity_update
+   40D8 CD 21 42      [17]   67    call  sys_render_update
                              68 
-   40DB CD 2A 44      [17]   69    call  cpct_waitVSYNC_asm   
-   40DE 76            [ 4]   70    halt
-   40DF 76            [ 4]   71    halt
-   40E0 18 ED         [12]   72    jr    loop
+   40DB CD E0 40      [17]   69    call wait_n_times
+   40DE 18 EF         [12]   70    jr    loop
+                             71 
+   40E0                      72 wait_n_times:
+   40E0 CD F3 44      [17]   73    call  cpct_waitVSYNC_asm   
+   40E3 76            [ 4]   74    halt
+   40E4 76            [ 4]   75    halt
+   40E5 76            [ 4]   76    halt
+   40E6 76            [ 4]   77    halt
+   40E7 CD F3 44      [17]   78    call  cpct_waitVSYNC_asm   
+   40EA 76            [ 4]   79    halt
+   40EB 76            [ 4]   80    halt
+   40EC 76            [ 4]   81    halt
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 61.
+Hexadecimal [16-Bits]
+
+
+
+   40ED 76            [ 4]   82    halt
+   40EE CD F3 44      [17]   83     call  cpct_waitVSYNC_asm   
+   40F1 76            [ 4]   84    halt
+   40F2 76            [ 4]   85    halt
+   40F3 76            [ 4]   86    halt
+   40F4 76            [ 4]   87    halt
+   40F5 CD F3 44      [17]   88    call  cpct_waitVSYNC_asm   
+   40F8 76            [ 4]   89    halt
+   40F9 76            [ 4]   90    halt
+   40FA 76            [ 4]   91    halt
+   40FB 76            [ 4]   92    halt
+   40FC C9            [10]   93    ret

@@ -11,28 +11,28 @@ Symbol Table
     b_h     =  0004     |     b_sp_ptr=  0005     |     b_sp_ptr=  0006 
     b_timer =  0000     |     b_w     =  0003     |     b_x     =  0001 
     b_y     =  0002     |     cpct_dis   **** GX  |     cpct_dra   **** GX
-    cpct_get   **** GX  |     cpct_get   **** GX  |     cpct_isK   **** GX
-    cpct_sca   **** GX  |     cpct_set   **** GX  |     cpct_set   **** GX
-    cpct_wai   **** GX  |     dead_typ=  00FE     |     e_h     =  0004 
-    e_sp_ptr=  0007     |     e_sp_ptr=  0007     |     e_type  =  0000 
-    e_vx    =  0005     |     e_vy    =  0006     |     e_w     =  0003 
-    e_x     =  0001     |     e_y     =  0002     |     invalid_=  00FF 
+    cpct_dra   **** GX  |     cpct_dra   **** GX  |     cpct_get   **** GX
+    cpct_get   **** GX  |     cpct_isK   **** GX  |     cpct_sca   **** GX
+    cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
+    dead_typ=  00FE     |     e_h     =  0004     |     e_sp_ptr=  0007 
+    e_sp_ptr=  0008     |     e_type  =  0000     |     e_vx    =  0005 
+    e_vy    =  0006     |     e_w     =  0003     |     e_x     =  0001 
+    e_y     =  0002     |     invalid_=  00FF     |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    max_bomb=  0001     |     max_enti=  0001     |     max_map_=  004F 
-    max_map_=  00B3     |     max_time=  00FF     |     min_map_=  0024 
-    min_map_=  0004     |   0 render_b   0056 R   |   0 render_e   0026 R
-    screen_h=  00C8     |     screen_w=  00A0     |     sizeof_b=  0007 
-    sizeof_e=  0009     |   0 sys_rend   0051 GR  |   0 sys_rend   0023 GR
-  0 sys_rend   0081 GR  |   0 sys_rend   0000 GR  |   0 sys_rend   0099 GR
-  0 sys_rend   0098 GR  |   0 sys_rend   008E GR  |     video_mo=  0000 
-    zero_tim=  0000 
+    man_enti   **** GX  |     man_enti   **** GX  |     max_bomb=  0001 
+    max_enti=  0001     |     max_map_=  004F     |     max_map_=  00B3 
+    max_time=  00FF     |     min_map_=  0024     |     min_map_=  0004 
+  0 render_b   0059 R   |   0 render_e   0029 R   |     screen_h=  00C8 
+    screen_w=  00A0     |     sizeof_b=  0007     |     sizeof_e=  0009 
+  0 sys_rend   0054 GR  |   0 sys_rend   0026 GR  |   0 sys_rend   0084 GR
+  0 sys_rend   0000 GR  |   0 sys_rend   00A7 GR  |   0 sys_rend   0095 GR
+  0 sys_rend   0091 GR  |     video_mo=  0000     |     zero_tim=  0000 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   9A   flags    0
+   0 _CODE      size   A8   flags    0
 

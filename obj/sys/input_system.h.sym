@@ -4,8 +4,8 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     move_dow=  0010     |     move_lef=  FFFFFFFE 
-    move_rig=  0002     |     move_up =  FFFFFFF0     |     sys_inpu   **** GX
+    .__.H$L.=  0000 L   |     move_dow=  0010     |     move_lef=  FFFFFFFC 
+    move_rig=  0004     |     move_up =  FFFFFFF0     |     sys_inpu   **** GX
     sys_inpu   **** GX
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.

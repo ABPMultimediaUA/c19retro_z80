@@ -1,5 +1,5 @@
 XL2
-H 1 areas 24 global symbols
+H 1 areas 26 global symbols
 S _sp_bomb Ref0000
 S man_entity_get_player Ref0000
 S cpct_isKeyPressed_asm Ref0000
@@ -10,6 +10,7 @@ S Key_A Ref0000
 S man_entity_create_bomb Ref0000
 S man_entity_init Ref0000
 S man_entity_set_enemy_dead Ref0000
+S cpct_drawSprite_asm Ref0000
 S man_entity_get_enemy_array Ref0000
 S man_entity_get_bomb_array Ref0000
 S Key_O Ref0000
@@ -23,69 +24,72 @@ S _sp_player Ref0000
 S cpct_waitVSYNC_asm Ref0000
 S cpct_setVideoMode_asm Ref0000
 S cpct_disableFirmware_asm Ref0000
+S cpct_drawSolidBox_asm Ref0000
 S cpct_getRandom_mxor_u8_asm Ref0000
 S cpct_drawSpriteBlended_asm Ref0000
 S man_entity_set_player_dead Ref0000
 S _sp_enemy Ref0000
 S HW_WHITE Ref0000
 S cpct_getScreenPtr_asm Ref0000
-A _CODE size 9A flags 0 addr 0
-S sys_render_enemies Def0023
-S sys_render_init Def0081
-S sys_render_update Def008E
-S sys_render_remove_entity Def0098
+A _CODE size A8 flags 0 addr 0
+S sys_render_enemies Def0026
+S sys_render_init Def0084
+S sys_render_update Def0091
+S sys_render_remove_entity Def0095
 S sys_render_player Def0000
-S sys_render_remove_bomb Def0099
-S sys_render_bombs Def0051
+S sys_render_remove_bomb Def00A7
+S sys_render_bombs Def0054
 T 00 00
 R 00 00 00 00
-T 00 00 CD 00 00 11 00 00 DD 4E 01 DD 46 02 CD
-R 00 00 00 00 02 03 01 00 02 06 12 00
-T 0D 00 00 00 DD 75 07 DD 74 07 EB 21 00 00 DD 46
-R 00 00 00 00 02 02 1C 00 02 0C 13 00
-T 1B 00 03 DD 4E 04 CD 00 00 C9
-R 00 00 00 00 02 07 18 00
-T 23 00
-R 00 00 00 00
-T 23 00 CD 00 00
-R 00 00 00 00 02 03 0A 00
+T 00 00 CD 00 00 CD 95 00 11 00 00 DD 4E 01 DD 46
+R 00 00 00 00 02 03 01 00 00 06 00 00 02 09 13 00
+T 0E 00 02 CD 00 00 DD 75 07 DD 74 08 EB 21 00 00
+R 00 00 00 00 02 04 1E 00 02 0E 14 00
+T 1C 00 DD 4E 03 DD 46 04 CD 00 00 C9
+R 00 00 00 00 02 09 0A 00
 T 26 00
 R 00 00 00 00
-T 26 00 F5 11 00 00 DD 4E 01 DD 46 02 CD 00 00 DD
-R 00 00 00 00 02 04 12 00 02 0D 1C 00
-T 34 00 75 07 DD 74 07 EB 21 00 00 DD 46 03 DD 4E
-R 00 00 00 00 02 09 1A 00
-T 42 00 04 CD 00 00 01 09 00 DD 09 F1 3D C8 18 D6
-R 00 00 00 00 02 04 18 00
-T 50 00 C9
-R 00 00 00 00
-T 51 00
-R 00 00 00 00
-T 51 00 CD 00 00 B7 C8
+T 26 00 CD 00 00
 R 00 00 00 00 02 03 0B 00
-T 56 00
+T 29 00
 R 00 00 00 00
-T 56 00 F5 11 00 00 DD 4E 01 DD 46 02 CD 00 00 DD
-R 00 00 00 00 02 04 12 00 02 0D 1C 00
-T 64 00 75 05 DD 74 06 EB 21 00 00 DD 46 03 DD 4E
+T 29 00 F5 11 00 00 DD 4E 01 DD 46 02 CD 00 00 DD
+R 00 00 00 00 02 04 13 00 02 0D 1E 00
+T 37 00 75 07 DD 74 08 EB 21 00 00 DD 46 03 DD 4E
+R 00 00 00 00 02 09 1C 00
+T 45 00 04 CD 00 00 01 09 00 DD 09 F1 3D C8 18 D6
+R 00 00 00 00 02 04 1A 00
+T 53 00 C9
+R 00 00 00 00
+T 54 00
+R 00 00 00 00
+T 54 00 CD 00 00 B7 C8
+R 00 00 00 00 02 03 0C 00
+T 59 00
+R 00 00 00 00
+T 59 00 F5 11 00 00 DD 4E 01 DD 46 02 CD 00 00 DD
+R 00 00 00 00 02 04 13 00 02 0D 1E 00
+T 67 00 75 05 DD 74 06 EB 21 00 00 DD 46 03 DD 4E
 R 00 00 00 00 02 09 00 00
-T 72 00 04 CD 00 00 01 07 00 DD 09 F1 3D C8 18 D6
-R 00 00 00 00 02 04 18 00
-T 80 00 C9
+T 75 00 04 CD 00 00 01 07 00 DD 09 F1 3D C8 18 D6
+R 00 00 00 00 02 04 1A 00
+T 83 00 C9
 R 00 00 00 00
-T 81 00
+T 84 00
 R 00 00 00 00
-T 81 00 0E 00 CD 00 00 2E 00 26 00 00 CD 00 00 C9
-R 00 00 00 00 02 05 15 00 0B 0A 10 00 02 0D 04 00
-T 8E 00
+T 84 00 0E 00 CD 00 00 2E 00 26 00 00 CD 00 00 C9
+R 00 00 00 00 02 05 16 00 0B 0A 11 00 02 0D 04 00
+T 91 00
 R 00 00 00 00
-T 8E 00 CD 00 00 CD 23 00 CD 51 00 C9
-R 00 00 00 00 00 03 00 00 00 06 00 00 00 09 00 00
-T 98 00
+T 91 00 CD 00 00 C9
+R 00 00 00 00 00 03 00 00
+T 95 00
 R 00 00 00 00
-T 98 00 C9
+T 95 00 DD 5E 07 DD 56 08 3E 00 DD 4E 03 DD 46 04
 R 00 00 00 00
-T 99 00
+T A3 00 CD 00 00 C9
+R 00 00 00 00 02 03 18 00
+T A7 00
 R 00 00 00 00
-T 99 00 C9
+T A7 00 C9
 R 00 00 00 00

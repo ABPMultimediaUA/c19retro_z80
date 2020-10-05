@@ -16,7 +16,7 @@ Hexadecimal [16-Bits]
                              11 ;;########################################################
                              12 
                              13 ;; in bytes
-                     0002    14 move_right = 2
-                     FFFFFFFE    15 move_left = -move_right
+                     0004    14 move_right = 4
+                     FFFFFFFC    15 move_left = -move_right
                      0010    16 move_down = 16
                      FFFFFFF0    17 move_up = -move_down

@@ -96,7 +96,7 @@ Hexadecimal [16-Bits]
                      0005    76 e_vx = 5
                      0006    77 e_vy = 6
                      0007    78 e_sp_ptr_0 = 7
-                     0007    79 e_sp_ptr_1 = 7
+                     0008    79 e_sp_ptr_1 = 8
                      0009    80 sizeof_e = 9
                      0001    81 max_entities = 1
                              82 
@@ -137,18 +137,22 @@ Hexadecimal [16-Bits]
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
                               7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 .globl  cpct_drawSpriteBlended_asm
-                              9 .globl  cpct_scanKeyboard_f_asm
-                             10 .globl  cpct_isKeyPressed_asm
-                             11 
-                             12 .globl  HW_BLACK
-                             13 .globl  HW_WHITE
-                             14 
-                             15 .globl  CPCT_VMEM_START_ASM
-                             16 .globl  Key_O
-                             17 .globl  Key_P
-                             18 .globl  Key_Q
-                             19 .globl  Key_A
+                              8 
+                              9 .globl  cpct_drawSpriteBlended_asm
+                             10 .globl  cpct_drawSolidBox_asm
+                             11 .globl  cpct_drawSprite_asm
+                             12 
+                             13 .globl  cpct_scanKeyboard_f_asm
+                             14 .globl  cpct_isKeyPressed_asm
+                             15 
+                             16 .globl  HW_BLACK
+                             17 .globl  HW_WHITE
+                             18 
+                             19 .globl  CPCT_VMEM_START_ASM
+                             20 .globl  Key_O
+                             21 .globl  Key_P
+                             22 .globl  Key_Q
+                             23 .globl  Key_A
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -168,8 +172,8 @@ Hexadecimal [16-Bits]
                              11 ;;########################################################
                              12 
                              13 ;; in bytes
-                     0002    14 move_right = 2
-                     FFFFFFFE    15 move_left = -move_right
+                     0004    14 move_right = 4
+                     FFFFFFFC    15 move_left = -move_right
                      0010    16 move_down = 16
                      FFFFFFF0    17 move_up = -move_down
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
@@ -194,8 +198,8 @@ Hexadecimal [16-Bits]
                              22 ;;    none
                              23 ;;  DESTROYED:
                              24 ;;    none
-   4132                      25 sys_input_init::
-   4132 C9            [10]   26   ret
+   414D                      25 sys_input_init::
+   414D C9            [10]   26   ret
                              27 
                              28 
                              29 ;;
@@ -205,49 +209,49 @@ Hexadecimal [16-Bits]
                              33 ;;    none
                              34 ;;  DESTROYED:
                              35 ;;    none
-   4133                      36 sys_input_update::
-   4133 CD 6E 43      [17]   37   call  man_entity_get_player
+   414E                      36 sys_input_update::
+   414E CD 97 43      [17]   37   call  man_entity_get_player
                              38 
                              39   ;; Reset velocities
-   4136 DD 36 05 00   [19]   40   ld    e_vx(ix), #0
-   413A DD 36 06 00   [19]   41   ld    e_vy(ix), #0
+   4151 DD 36 05 00   [19]   40   ld    e_vx(ix), #0
+   4155 DD 36 06 00   [19]   41   ld    e_vy(ix), #0
                              42 
-   413E CD 93 43      [17]   43   call  cpct_scanKeyboard_f_asm
+   4159 CD BC 43      [17]   43   call  cpct_scanKeyboard_f_asm
                              44 
-   4141 21 04 04      [10]   45   ld    hl, #Key_O
-   4144 CD FD 43      [17]   46   call  cpct_isKeyPressed_asm
-   4147 28 05         [12]   47   jr    z, O_NotPressed
-   4149                      48 O_Pressed:
-   4149 DD 36 05 FE   [19]   49     ld    e_vx(ix), #move_left
-   414D C9            [10]   50     ret
-   414E                      51 O_NotPressed:
+   415C 21 04 04      [10]   45   ld    hl, #Key_O
+   415F CD 26 44      [17]   46   call  cpct_isKeyPressed_asm
+   4162 28 05         [12]   47   jr    z, O_NotPressed
+   4164                      48 O_Pressed:
+   4164 DD 36 05 FC   [19]   49     ld    e_vx(ix), #move_left
+   4168 C9            [10]   50     ret
+   4169                      51 O_NotPressed:
                              52 
-   414E 21 03 08      [10]   53     ld    hl, #Key_P
-   4151 CD FD 43      [17]   54     call  cpct_isKeyPressed_asm
-   4154 28 05         [12]   55     jr    z, P_NotPressed
+   4169 21 03 08      [10]   53     ld    hl, #Key_P
+   416C CD 26 44      [17]   54     call  cpct_isKeyPressed_asm
+   416F 28 05         [12]   55     jr    z, P_NotPressed
                              56 
-   4156                      57 P_Pressed:
-   4156 DD 36 05 02   [19]   58     ld    e_vx(ix), #move_right
-   415A C9            [10]   59     ret
-   415B                      60 P_NotPressed:
+   4171                      57 P_Pressed:
+   4171 DD 36 05 04   [19]   58     ld    e_vx(ix), #move_right
+   4175 C9            [10]   59     ret
+   4176                      60 P_NotPressed:
                              61 
-   415B 21 08 08      [10]   62     ld    hl, #Key_Q
+   4176 21 08 08      [10]   62     ld    hl, #Key_Q
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-   415E CD FD 43      [17]   63     call  cpct_isKeyPressed_asm
-   4161 28 05         [12]   64     jr    z, Q_NotPressed
-   4163                      65 Q_Pressed:
-   4163 DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
-   4167 C9            [10]   67     ret
-   4168                      68 Q_NotPressed:
+   4179 CD 26 44      [17]   63     call  cpct_isKeyPressed_asm
+   417C 28 05         [12]   64     jr    z, Q_NotPressed
+   417E                      65 Q_Pressed:
+   417E DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
+   4182 C9            [10]   67     ret
+   4183                      68 Q_NotPressed:
                              69 
-   4168 21 08 20      [10]   70     ld    hl, #Key_A
-   416B CD FD 43      [17]   71     call  cpct_isKeyPressed_asm
-   416E 28 04         [12]   72     jr    z, A_NotPressed
-   4170                      73 A_Pressed:
-   4170 DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    
-   4174                      75 A_NotPressed:    
-   4174 C9            [10]   76     ret
+   4183 21 08 20      [10]   70     ld    hl, #Key_A
+   4186 CD 26 44      [17]   71     call  cpct_isKeyPressed_asm
+   4189 28 04         [12]   72     jr    z, A_NotPressed
+   418B                      73 A_Pressed:
+   418B DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    
+   418F                      75 A_NotPressed:    
+   418F C9            [10]   76     ret

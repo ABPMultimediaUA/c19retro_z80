@@ -66,7 +66,28 @@ loop:
    call  man_entity_update
    call  sys_render_update
 
+   call wait_n_times
+   jr    loop
+
+wait_n_times:
    call  cpct_waitVSYNC_asm   
    halt
    halt
-   jr    loop
+   halt
+   halt
+   call  cpct_waitVSYNC_asm   
+   halt
+   halt
+   halt
+   halt
+    call  cpct_waitVSYNC_asm   
+   halt
+   halt
+   halt
+   halt
+   call  cpct_waitVSYNC_asm   
+   halt
+   halt
+   halt
+   halt
+   ret

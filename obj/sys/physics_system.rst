@@ -96,7 +96,7 @@ Hexadecimal [16-Bits]
                      0005    76 e_vx = 5
                      0006    77 e_vy = 6
                      0007    78 e_sp_ptr_0 = 7
-                     0007    79 e_sp_ptr_1 = 7
+                     0008    79 e_sp_ptr_1 = 8
                      0009    80 sizeof_e = 9
                      0001    81 max_entities = 1
                              82 
@@ -190,18 +190,22 @@ Hexadecimal [16-Bits]
                               5 .globl  cpct_waitVSYNC_asm
                               6 .globl  cpct_setPALColour_asm
                               7 .globl  cpct_getRandom_mxor_u8_asm
-                              8 .globl  cpct_drawSpriteBlended_asm
-                              9 .globl  cpct_scanKeyboard_f_asm
-                             10 .globl  cpct_isKeyPressed_asm
-                             11 
-                             12 .globl  HW_BLACK
-                             13 .globl  HW_WHITE
-                             14 
-                             15 .globl  CPCT_VMEM_START_ASM
-                             16 .globl  Key_O
-                             17 .globl  Key_P
-                             18 .globl  Key_Q
-                             19 .globl  Key_A
+                              8 
+                              9 .globl  cpct_drawSpriteBlended_asm
+                             10 .globl  cpct_drawSolidBox_asm
+                             11 .globl  cpct_drawSprite_asm
+                             12 
+                             13 .globl  cpct_scanKeyboard_f_asm
+                             14 .globl  cpct_isKeyPressed_asm
+                             15 
+                             16 .globl  HW_BLACK
+                             17 .globl  HW_WHITE
+                             18 
+                             19 .globl  CPCT_VMEM_START_ASM
+                             20 .globl  Key_O
+                             21 .globl  Key_P
+                             22 .globl  Key_Q
+                             23 .globl  Key_A
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
@@ -219,56 +223,56 @@ Hexadecimal [16-Bits]
                              18 ;;    none
                              19 ;;  DESTROYED:
                              20 ;;    none
-   40E2                      21 sys_physics_update_entity::
+   40FD                      21 sys_physics_update_entity::
                              22   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
-   40E2 DD 7E 01      [19]   23   ld    a, e_x(ix)
-   40E5 DD 86 05      [19]   24   add   e_vx(ix)
+   40FD DD 7E 01      [19]   23   ld    a, e_x(ix)
+   4100 DD 86 05      [19]   24   add   e_vx(ix)
                              25   ;add   #2
-   40E8 47            [ 4]   26   ld    b, a
+   4103 47            [ 4]   26   ld    b, a
                              27 
                              28   ;; Check is new X coordinate is greater than min allowed
                              29   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   40E9 FE 24         [ 7]   30   cp    #min_map_x_coord_valid
-   40EB 38 0B         [12]   31   jr    c, check_y
+   4104 FE 24         [ 7]   30   cp    #min_map_x_coord_valid
+   4106 38 0B         [12]   31   jr    c, check_y
                              32 
                              33   ;; Calculate max X coordinate where an entity could be
-   40ED 3E 4F         [ 7]   34   ld    a, #max_map_x_coord_valid
-   40EF DD 96 03      [19]   35   sub   e_w(ix)  
+   4108 3E 4F         [ 7]   34   ld    a, #max_map_x_coord_valid
+   410A DD 96 03      [19]   35   sub   e_w(ix)  
                              36 
                              37   ;; Check is new X coordinate is smaller than max allowed
                              38   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   40F2 B8            [ 4]   39   cp    b
-   40F3 38 03         [12]   40   jr    c, check_y
+   410D B8            [ 4]   39   cp    b
+   410E 38 03         [12]   40   jr    c, check_y
                              41 
-   40F5 DD 70 01      [19]   42   ld    e_x(ix), b    ;; Update X coordinate
+   4110 DD 70 01      [19]   42   ld    e_x(ix), b    ;; Update X coordinate
                              43 
-   40F8                      44 check_y:
+   4113                      44 check_y:
                              45   ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
-   40F8 DD 7E 02      [19]   46   ld    a, e_y(ix)
-   40FB DD 86 06      [19]   47   add   e_vy(ix)
-   40FE 47            [ 4]   48   ld    b, a
+   4113 DD 7E 02      [19]   46   ld    a, e_y(ix)
+   4116 DD 86 06      [19]   47   add   e_vy(ix)
+   4119 47            [ 4]   48   ld    b, a
                              49 
                              50   ;; Check is new Y coordinate is greater than min allowed
                              51   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   40FF FE 04         [ 7]   52   cp    #min_map_y_coord_valid
-   4101 D8            [11]   53   ret   c
+   411A FE 04         [ 7]   52   cp    #min_map_y_coord_valid
+   411C D8            [11]   53   ret   c
                              54 
                              55   ;; Calculate max X coordinate where an entity could be
-   4102 3E B3         [ 7]   56   ld    a, #max_map_y_coord_valid
-   4104 DD 96 04      [19]   57   sub   e_h(ix)  
+   411D 3E B3         [ 7]   56   ld    a, #max_map_y_coord_valid
+   411F DD 96 04      [19]   57   sub   e_h(ix)  
                              58 
                              59   ;; Check is new Y coordinate is smaller than max allowed
                              60   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   4107 B8            [ 4]   61   cp    b
-   4108 D8            [11]   62   ret   c
+   4122 B8            [ 4]   61   cp    b
+   4123 D8            [11]   62   ret   c
                              63   
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
 Hexadecimal [16-Bits]
 
 
 
-   4109 DD 70 02      [19]   64   ld    e_y(ix), b    ;; Update X coordinate
-   410C C9            [10]   65   ret
+   4124 DD 70 02      [19]   64   ld    e_y(ix), b    ;; Update X coordinate
+   4127 C9            [10]   65   ret
                              66 
                              67 
                              68 ;;
@@ -278,10 +282,10 @@ Hexadecimal [16-Bits]
                              72 ;;    none
                              73 ;;  DESTROYED:
                              74 ;;    A,BC,IX
-   410D                      75 sys_physics_player_update::
-   410D CD 6E 43      [17]   76   call  man_entity_get_player
-   4110 CD E2 40      [17]   77   call  sys_physics_update_entity
-   4113 C9            [10]   78   ret
+   4128                      75 sys_physics_player_update::
+   4128 CD 97 43      [17]   76   call  man_entity_get_player
+   412B CD FD 40      [17]   77   call  sys_physics_update_entity
+   412E C9            [10]   78   ret
                              79 
                              80 
                              81 ;;
@@ -291,22 +295,22 @@ Hexadecimal [16-Bits]
                              85 ;;    none
                              86 ;;  DESTROYED:
                              87 ;;    A,BC,IX
-   4114                      88 sys_physics_enemies_update::
-   4114 CD 73 43      [17]   89   call  man_entity_get_enemy_array
+   412F                      88 sys_physics_enemies_update::
+   412F CD 9C 43      [17]   89   call  man_entity_get_enemy_array
                              90 
-   4117                      91 physics_enemies_loop:
-   4117 F5            [11]   92   push  af
+   4132                      91 physics_enemies_loop:
+   4132 F5            [11]   92   push  af
                              93   
-   4118 CD E2 40      [17]   94   call  sys_physics_update_entity
+   4133 CD FD 40      [17]   94   call  sys_physics_update_entity
                              95 
-   411B 01 09 00      [10]   96   ld    bc, #sizeof_e
-   411E DD 09         [15]   97   add   ix, bc
+   4136 01 09 00      [10]   96   ld    bc, #sizeof_e
+   4139 DD 09         [15]   97   add   ix, bc
                              98 
-   4120 F1            [10]   99   pop   af
-   4121 3D            [ 4]  100   dec   a
-   4122 C8            [11]  101   ret   z
-   4123 18 F2         [12]  102   jr    physics_enemies_loop
-   4125 C9            [10]  103   ret
+   413B F1            [10]   99   pop   af
+   413C 3D            [ 4]  100   dec   a
+   413D C8            [11]  101   ret   z
+   413E 18 F2         [12]  102   jr    physics_enemies_loop
+   4140 C9            [10]  103   ret
                             104 
                             105 
                             106 ;;
@@ -316,8 +320,8 @@ Hexadecimal [16-Bits]
                             110 ;;    none
                             111 ;;  DESTROYED:
                             112 ;;    none
-   4126                     113 sys_physics_bomb_update::
-   4126 C9            [10]  114   ret
+   4141                     113 sys_physics_bomb_update::
+   4141 C9            [10]  114   ret
                             115 
                             116 
                             117 
@@ -338,13 +342,13 @@ Hexadecimal [16-Bits]
                             127 ;;    none
                             128 ;;  DESTROYED:
                             129 ;;    none
-   4127                     130 sys_physics_init::
-   4127 C9            [10]  131   ret
+   4142                     130 sys_physics_init::
+   4142 C9            [10]  131   ret
                             132 
                             133 
-   4128                     134 sys_physics_update::
-   4128 CD 0D 41      [17]  135   call  sys_physics_player_update
-   412B CD 14 41      [17]  136   call  sys_physics_enemies_update
-   412E CD 26 41      [17]  137   call  sys_physics_bomb_update
-   4131 C9            [10]  138   ret
+   4143                     134 sys_physics_update::
+   4143 CD 28 41      [17]  135   call  sys_physics_player_update
+   4146 CD 2F 41      [17]  136   call  sys_physics_enemies_update
+   4149 CD 41 41      [17]  137   call  sys_physics_bomb_update
+   414C C9            [10]  138   ret
                             139   

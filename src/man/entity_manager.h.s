@@ -76,7 +76,7 @@ e_h = 4
 e_vx = 5
 e_vy = 6
 e_sp_ptr_0 = 7
-e_sp_ptr_1 = 7
+e_sp_ptr_1 = 8
 sizeof_e = 9
 max_entities = 1
 

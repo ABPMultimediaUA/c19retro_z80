@@ -12,20 +12,21 @@ Symbol Table
   0 Q_Presse   0031 R   |     alive_ty=  0001     |     b_h     =  0004 
     b_sp_ptr=  0005     |     b_sp_ptr=  0006     |     b_timer =  0000 
     b_w     =  0003     |     b_x     =  0001     |     b_y     =  0002 
-    cpct_dis   **** GX  |     cpct_dra   **** GX  |     cpct_get   **** GX
-    cpct_get   **** GX  |     cpct_isK   **** GX  |     cpct_sca   **** GX
-    cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
-    dead_typ=  00FE     |     e_h     =  0004     |     e_sp_ptr=  0007 
-    e_sp_ptr=  0007     |     e_type  =  0000     |     e_vx    =  0005 
-    e_vy    =  0006     |     e_w     =  0003     |     e_x     =  0001 
-    e_y     =  0002     |     invalid_=  00FF     |     man_enti   **** GX
+    cpct_dis   **** GX  |     cpct_dra   **** GX  |     cpct_dra   **** GX
+    cpct_dra   **** GX  |     cpct_get   **** GX  |     cpct_get   **** GX
+    cpct_isK   **** GX  |     cpct_sca   **** GX  |     cpct_set   **** GX
+    cpct_set   **** GX  |     cpct_wai   **** GX  |     dead_typ=  00FE 
+    e_h     =  0004     |     e_sp_ptr=  0007     |     e_sp_ptr=  0008 
+    e_type  =  0000     |     e_vx    =  0005     |     e_vy    =  0006 
+    e_w     =  0003     |     e_x     =  0001     |     e_y     =  0002 
+    invalid_=  00FF     |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    man_enti   **** GX  |     man_enti   **** GX  |     max_bomb=  0001 
-    max_enti=  0001     |     max_time=  00FF     |     move_dow=  0010 
-    move_lef=  FFFFFFFE     |     move_rig=  0002     |     move_up =  FFFFFFF0 
-    sizeof_b=  0007     |     sizeof_e=  0009     |   0 sys_inpu   0000 GR
-  0 sys_inpu   0001 GR  |     zero_tim=  0000 
+    man_enti   **** GX  |     max_bomb=  0001     |     max_enti=  0001 
+    max_time=  00FF     |     move_dow=  0010     |     move_lef=  FFFFFFFC 
+    move_rig=  0004     |     move_up =  FFFFFFF0     |     sizeof_b=  0007 
+    sizeof_e=  0009     |   0 sys_inpu   0000 GR  |   0 sys_inpu   0001 GR
+    zero_tim=  0000 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
