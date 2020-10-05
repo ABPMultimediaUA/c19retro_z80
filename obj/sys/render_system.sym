@@ -21,8 +21,8 @@ Symbol Table
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     max_bomb=  0001 
-    max_enti=  0001     |     max_map_=  004F     |     max_map_=  00B3 
-    max_time=  00FF     |     min_map_=  0024     |     min_map_=  0004 
+    max_enti=  0001     |     max_map_=  004E     |     max_map_=  00C4 
+    max_time=  00FF     |     min_map_=  001E     |     min_map_=  0004 
   0 render_b   0059 R   |   0 render_e   0029 R   |     screen_h=  00C8 
     screen_w=  00A0     |     sizeof_b=  0007     |     sizeof_e=  0009 
   0 sys_rend   0054 GR  |   0 sys_rend   0026 GR  |   0 sys_rend   0084 GR

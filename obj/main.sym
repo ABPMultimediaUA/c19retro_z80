@@ -75,8 +75,8 @@ Symbol Table
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
     man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    max_bomb=  0001     |     max_enti=  0001     |     max_map_=  004F 
-    max_map_=  00B3     |     max_time=  00FF     |     min_map_=  0024 
+    max_bomb=  0001     |     max_enti=  0001     |     max_map_=  004E 
+    max_map_=  00C4     |     max_time=  00FF     |     min_map_=  001E 
     min_map_=  0004     |     move_dow=  0010     |     move_lef=  FFFFFFFC 
     move_rig=  0004     |     move_up =  FFFFFFF0     |     opc_DI  =  00F3 
     opc_EI  =  00FB     |     opc_JR  =  0018     |     opc_LD_D=  0016 
@@ -91,6 +91,6 @@ Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   3D   flags    0
+   0 _CODE      size   36   flags    0
    1 _DATA      size    0   flags    0
 

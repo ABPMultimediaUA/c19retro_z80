@@ -36,12 +36,12 @@ Hexadecimal [16-Bits]
                              21 ;;########################################################
                              22 
                              23 ;;-----------------------  ENTITY  -----------------------
-                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
                              25     .db _type
                              26     .db _x, _y
                              27     .db _w, _h      ;; both in bytes
                              28     .db _vx, _vy    
-                             29     .dw _sp_ptr_0
+                             29     .dw _sp_ptr
                              30 .endm
                              31 
                              32 .macro DefineEntityDefault
@@ -198,8 +198,8 @@ Hexadecimal [16-Bits]
                              22 ;;    none
                              23 ;;  DESTROYED:
                              24 ;;    none
-   414D                      25 sys_input_init::
-   414D C9            [10]   26   ret
+   4146                      25 sys_input_init::
+   4146 C9            [10]   26   ret
                              27 
                              28 
                              29 ;;
@@ -209,49 +209,49 @@ Hexadecimal [16-Bits]
                              33 ;;    none
                              34 ;;  DESTROYED:
                              35 ;;    none
-   414E                      36 sys_input_update::
-   414E CD 97 43      [17]   37   call  man_entity_get_player
+   4147                      36 sys_input_update::
+   4147 CD 94 43      [17]   37   call  man_entity_get_player
                              38 
                              39   ;; Reset velocities
-   4151 DD 36 05 00   [19]   40   ld    e_vx(ix), #0
-   4155 DD 36 06 00   [19]   41   ld    e_vy(ix), #0
+   414A DD 36 05 00   [19]   40   ld    e_vx(ix), #0
+   414E DD 36 06 00   [19]   41   ld    e_vy(ix), #0
                              42 
-   4159 CD BC 43      [17]   43   call  cpct_scanKeyboard_f_asm
+   4152 CD B9 43      [17]   43   call  cpct_scanKeyboard_f_asm
                              44 
-   415C 21 04 04      [10]   45   ld    hl, #Key_O
-   415F CD 26 44      [17]   46   call  cpct_isKeyPressed_asm
-   4162 28 05         [12]   47   jr    z, O_NotPressed
-   4164                      48 O_Pressed:
-   4164 DD 36 05 FC   [19]   49     ld    e_vx(ix), #move_left
-   4168 C9            [10]   50     ret
-   4169                      51 O_NotPressed:
+   4155 21 04 04      [10]   45   ld    hl, #Key_O
+   4158 CD 23 44      [17]   46   call  cpct_isKeyPressed_asm
+   415B 28 05         [12]   47   jr    z, O_NotPressed
+   415D                      48 O_Pressed:
+   415D DD 36 05 FC   [19]   49     ld    e_vx(ix), #move_left
+   4161 C9            [10]   50     ret
+   4162                      51 O_NotPressed:
                              52 
-   4169 21 03 08      [10]   53     ld    hl, #Key_P
-   416C CD 26 44      [17]   54     call  cpct_isKeyPressed_asm
-   416F 28 05         [12]   55     jr    z, P_NotPressed
+   4162 21 03 08      [10]   53     ld    hl, #Key_P
+   4165 CD 23 44      [17]   54     call  cpct_isKeyPressed_asm
+   4168 28 05         [12]   55     jr    z, P_NotPressed
                              56 
-   4171                      57 P_Pressed:
-   4171 DD 36 05 04   [19]   58     ld    e_vx(ix), #move_right
-   4175 C9            [10]   59     ret
-   4176                      60 P_NotPressed:
+   416A                      57 P_Pressed:
+   416A DD 36 05 04   [19]   58     ld    e_vx(ix), #move_right
+   416E C9            [10]   59     ret
+   416F                      60 P_NotPressed:
                              61 
-   4176 21 08 08      [10]   62     ld    hl, #Key_Q
+   416F 21 08 08      [10]   62     ld    hl, #Key_Q
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-   4179 CD 26 44      [17]   63     call  cpct_isKeyPressed_asm
-   417C 28 05         [12]   64     jr    z, Q_NotPressed
-   417E                      65 Q_Pressed:
-   417E DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
-   4182 C9            [10]   67     ret
-   4183                      68 Q_NotPressed:
+   4172 CD 23 44      [17]   63     call  cpct_isKeyPressed_asm
+   4175 28 05         [12]   64     jr    z, Q_NotPressed
+   4177                      65 Q_Pressed:
+   4177 DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
+   417B C9            [10]   67     ret
+   417C                      68 Q_NotPressed:
                              69 
-   4183 21 08 20      [10]   70     ld    hl, #Key_A
-   4186 CD 26 44      [17]   71     call  cpct_isKeyPressed_asm
-   4189 28 04         [12]   72     jr    z, A_NotPressed
-   418B                      73 A_Pressed:
-   418B DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    
-   418F                      75 A_NotPressed:    
-   418F C9            [10]   76     ret
+   417C 21 08 20      [10]   70     ld    hl, #Key_A
+   417F CD 23 44      [17]   71     call  cpct_isKeyPressed_asm
+   4182 28 04         [12]   72     jr    z, A_NotPressed
+   4184                      73 A_Pressed:
+   4184 DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    
+   4188                      75 A_NotPressed:    
+   4188 C9            [10]   76     ret

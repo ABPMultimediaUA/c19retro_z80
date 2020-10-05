@@ -26,12 +26,12 @@ Hexadecimal [16-Bits]
                              21 ;;########################################################
                              22 
                              23 ;;-----------------------  ENTITY  -----------------------
-                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
                              25     .db _type
                              26     .db _x, _y
                              27     .db _w, _h      ;; both in bytes
                              28     .db _vx, _vy    
-                             29     .dw _sp_ptr_0
+                             29     .dw _sp_ptr
                              30 .endm
                              31 
                              32 .macro DefineEntityDefault

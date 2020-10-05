@@ -2768,12 +2768,12 @@ Hexadecimal [16-Bits]
                              21 ;;########################################################
                              22 
                              23 ;;-----------------------  ENTITY  -----------------------
-                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
                              25     .db _type
                              26     .db _x, _y
                              27     .db _w, _h      ;; both in bytes
                              28     .db _vx, _vy    
-                             29     .dw _sp_ptr_0
+                             29     .dw _sp_ptr
                              30 .endm
                              31 
                              32 .macro DefineEntityDefault
@@ -2877,26 +2877,23 @@ Hexadecimal [16-Bits]
                              13 ;;########################################################
                      0000    14 video_mode = 0
                              15 
-                             16 ;; in pixels
+                             16 ;;  In pixels
                      00A0    17 screen_width = 160
                      00C8    18 screen_height = 200
                              19 
-                             20 ;;  1 byte for each +-1 Y coordinate (1px)
-                             21 ;;  200px = 25 char -> 1 bomberman cell = 2height*2width chars
-                             22 ;;  25chars*1cell/2char = 12 cells, rest 1 char
-                             23 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
-                     0004    24 min_map_y_coord_valid = 4      ;;  [0-3] border, >=4 map
-                     00B3    25 max_map_y_coord_valid = 195-16    ;;  [196-199] border, <=195 map -16px
-                             26 
-                             27 ;;  1 byte for each +-2 X coordinate (2px)
-                             28 ;;  160px = 20 char -> 1 bomberman cell = 2height*2width chars
-                             29 ;;  20chars*1cell/2char = 10 cells -> 4 cells left border, 5 cells map
-                             30 ;;  rest 1 cell=2 char, 1 char left border, 1 char right border
-                             31 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
-                             32 ;;  9 char left map, 10 char map, 1 char right map
-                             33 ;;  9char*8px*1byte/2px = 36, 19char*8px*1byte/2=76
-                     0024    34 min_map_x_coord_valid = 36      ;;  [0-35] border, >=35 map
-                     004F    35 max_map_x_coord_valid = 79    ;;  [78-79] border, <=77 map
+                             20 ;;  In bytes
+                             21 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
+                             22 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
+                     0004    23 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
+                     00C4    24 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+                             25 
+                             26 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
+                             27 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+                             28 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
+                             29 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
+                             30 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
+                     001E    31 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+                     004E    32 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 57.
 Hexadecimal [16-Bits]
 
@@ -2973,31 +2970,31 @@ Hexadecimal [16-Bits]
                              51 ;;
    40C0                      52 _main::   
                              53    ;; Disable firmware to prevent it from interfering with string drawing
-   40C0 CD FB 44      [17]   54    call cpct_disableFirmware_asm     
+   40C0 CD F8 44      [17]   54    call cpct_disableFirmware_asm     
                              55 
                              56    ;;call  man_entity_init
-   40C3 CD 6A 43      [17]   57    call  man_entity_init   
-   40C6 CD 4D 41      [17]   58    call  sys_input_init
-   40C9 CD 42 41      [17]   59    call  sys_physics_init
-   40CC CD 14 42      [17]   60    call  sys_render_init   
+   40C3 CD 64 43      [17]   57    call  man_entity_init   
+   40C6 CD 46 41      [17]   58    call  sys_input_init
+   40C9 CD 3B 41      [17]   59    call  sys_physics_init
+   40CC CD 0D 42      [17]   60    call  sys_render_init   
                              61 
                              62 ;; Loop forever
    40CF                      63 loop:
-   40CF CD 4E 41      [17]   64    call  sys_input_update
-   40D2 CD 43 41      [17]   65    call  sys_physics_update
-   40D5 CD 71 43      [17]   66    call  man_entity_update
-   40D8 CD 21 42      [17]   67    call  sys_render_update
+   40CF CD 47 41      [17]   64    call  sys_input_update
+   40D2 CD 3C 41      [17]   65    call  sys_physics_update
+   40D5 CD 6E 43      [17]   66    call  man_entity_update
+   40D8 CD 1A 42      [17]   67    call  sys_render_update
                              68 
    40DB CD E0 40      [17]   69    call wait_n_times
    40DE 18 EF         [12]   70    jr    loop
                              71 
    40E0                      72 wait_n_times:
-   40E0 CD F3 44      [17]   73    call  cpct_waitVSYNC_asm   
+   40E0 CD F0 44      [17]   73    call  cpct_waitVSYNC_asm   
    40E3 76            [ 4]   74    halt
    40E4 76            [ 4]   75    halt
    40E5 76            [ 4]   76    halt
    40E6 76            [ 4]   77    halt
-   40E7 CD F3 44      [17]   78    call  cpct_waitVSYNC_asm   
+   40E7 CD F0 44      [17]   78    call  cpct_waitVSYNC_asm   
    40EA 76            [ 4]   79    halt
    40EB 76            [ 4]   80    halt
    40EC 76            [ 4]   81    halt
@@ -3007,14 +3004,9 @@ Hexadecimal [16-Bits]
 
 
    40ED 76            [ 4]   82    halt
-   40EE CD F3 44      [17]   83     call  cpct_waitVSYNC_asm   
+   40EE CD F0 44      [17]   83    call  cpct_waitVSYNC_asm   
    40F1 76            [ 4]   84    halt
    40F2 76            [ 4]   85    halt
    40F3 76            [ 4]   86    halt
    40F4 76            [ 4]   87    halt
-   40F5 CD F3 44      [17]   88    call  cpct_waitVSYNC_asm   
-   40F8 76            [ 4]   89    halt
-   40F9 76            [ 4]   90    halt
-   40FA 76            [ 4]   91    halt
-   40FB 76            [ 4]   92    halt
-   40FC C9            [10]   93    ret
+   40F5 C9            [10]   88    ret

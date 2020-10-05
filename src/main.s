@@ -80,11 +80,6 @@ wait_n_times:
    halt
    halt
    halt
-    call  cpct_waitVSYNC_asm   
-   halt
-   halt
-   halt
-   halt
    call  cpct_waitVSYNC_asm   
    halt
    halt

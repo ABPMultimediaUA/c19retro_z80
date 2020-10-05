@@ -40,7 +40,7 @@ S cpct_drawSpriteBlended_asm Ref0000
 S _sp_enemy Ref0000
 S cpct_getScreenPtr_asm Ref0000
 S HW_WHITE Def0000
-A _CODE size 3D flags 0 addr 0
+A _CODE size 36 flags 0 addr 0
 S _main Def0000
 A _DATA size 0 flags 0 addr 0
 T 00 00
@@ -59,7 +59,5 @@ T 20 00
 R 00 00 00 00
 T 20 00 CD 00 00 76 76 76 76 CD 00 00 76 76 76 76
 R 00 00 00 00 02 03 1D 00 02 0A 1D 00
-T 2E 00 CD 00 00 76 76 76 76 CD 00 00 76 76 76 76
-R 00 00 00 00 02 03 1D 00 02 0A 1D 00
-T 3C 00 C9
-R 00 00 00 00
+T 2E 00 CD 00 00 76 76 76 76 C9
+R 00 00 00 00 02 03 1D 00

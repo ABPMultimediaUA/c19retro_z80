@@ -36,12 +36,12 @@ Hexadecimal [16-Bits]
                              21 ;;########################################################
                              22 
                              23 ;;-----------------------  ENTITY  -----------------------
-                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr_0
+                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
                              25     .db _type
                              26     .db _x, _y
                              27     .db _w, _h      ;; both in bytes
                              28     .db _vx, _vy    
-                             29     .dw _sp_ptr_0
+                             29     .dw _sp_ptr
                              30 .endm
                              31 
                              32 .macro DefineEntityDefault
@@ -145,26 +145,23 @@ Hexadecimal [16-Bits]
                              13 ;;########################################################
                      0000    14 video_mode = 0
                              15 
-                             16 ;; in pixels
+                             16 ;;  In pixels
                      00A0    17 screen_width = 160
                      00C8    18 screen_height = 200
                              19 
-                             20 ;;  1 byte for each +-1 Y coordinate (1px)
-                             21 ;;  200px = 25 char -> 1 bomberman cell = 2height*2width chars
-                             22 ;;  25chars*1cell/2char = 12 cells, rest 1 char
-                             23 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
-                     0004    24 min_map_y_coord_valid = 4      ;;  [0-3] border, >=4 map
-                     00B3    25 max_map_y_coord_valid = 195-16    ;;  [196-199] border, <=195 map -16px
-                             26 
-                             27 ;;  1 byte for each +-2 X coordinate (2px)
-                             28 ;;  160px = 20 char -> 1 bomberman cell = 2height*2width chars
-                             29 ;;  20chars*1cell/2char = 10 cells -> 4 cells left border, 5 cells map
-                             30 ;;  rest 1 cell=2 char, 1 char left border, 1 char right border
-                             31 ;;  1 char = 8px -> so the map is centered, 4px up, 4px down
-                             32 ;;  9 char left map, 10 char map, 1 char right map
-                             33 ;;  9char*8px*1byte/2px = 36, 19char*8px*1byte/2=76
-                     0024    34 min_map_x_coord_valid = 36      ;;  [0-35] border, >=35 map
-                     004F    35 max_map_x_coord_valid = 79    ;;  [78-79] border, <=77 map
+                             20 ;;  In bytes
+                             21 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
+                             22 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
+                     0004    23 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
+                     00C4    24 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+                             25 
+                             26 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
+                             27 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+                             28 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
+                             29 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
+                             30 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
+                     001E    31 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+                     004E    32 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -205,9 +202,9 @@ Hexadecimal [16-Bits]
                              11 ;;                        VARIABLES                      #             
                              12 ;;########################################################
                              13 
-   0000                      14 _player:  DefineEntity alive_type, min_map_x_coord_valid, max_map_y_coord_valid, 4, 16, 0, 0, 0xCCCC
+   0000                      14 _player:  DefineEntity alive_type, min_map_x_coord_valid, min_map_y_coord_valid, 4, 16, 0, 0, 0xCCCC
    0000 01                    1     .db alive_type
-   0001 24 B3                 2     .db min_map_x_coord_valid, max_map_y_coord_valid
+   0001 1E 04                 2     .db min_map_x_coord_valid, min_map_y_coord_valid
    0003 04 10                 3     .db 4, 16      ;; both in bytes
    0005 00 00                 4     .db 0, 0    
    0007 CC CC                 5     .dw 0xCCCC
@@ -338,312 +335,318 @@ Hexadecimal [16-Bits]
    007A C9            [10]  106   ret
                             107 
                             108 
-                            109 ;;
-                            110 ;;  Initialize data for all enemies and player.
-                            111 ;;  INPUT:
-                            112 ;;    none
-                            113 ;;  RETURN: 
-                            114 ;;    hl with memory address of free space for new entity
-                            115 ;;    ix with memory address of last created entity
-                            116 ;;  DESTROYED:
-                            117 ;;    AF,DE,IX,HL,BC
-   007B                     118 man_entity_init_entities::
-   007B 3E 01         [ 7]  119   ld    a, #max_entities
-   007D ED 5B 0A 00   [20]  120   ld    de, (_enemy_last)
-   0081                     121 init_loop:
-   0081 F5            [11]  122   push  af
-                            123   
-   0082 CD 1F 00      [17]  124   call  man_entity_new_entity
-   0085 CD 35 00      [17]  125   call  man_entity_initialize_entity
+   007B                     109 man_entity_init_player::
+   007B C9            [10]  110   ret
+                            111 
+                            112 ;;
+                            113 ;;  Initialize data for all enemies and player.
+                            114 ;;  INPUT:
+                            115 ;;    none
+                            116 ;;  RETURN: 
+                            117 ;;    hl with memory address of free space for new entity
+                            118 ;;    ix with memory address of last created entity
+                            119 ;;  DESTROYED:
+                            120 ;;    AF,DE,IX,HL,BC
+   007C                     121 man_entity_init_entities::
+   007C 3E 01         [ 7]  122   ld    a, #max_entities
+   007E ED 5B 0A 00   [20]  123   ld    de, (_enemy_last)
+   0082                     124 init_loop:
+   0082 F5            [11]  125   push  af
                             126   
-   0088 F1            [10]  127   pop   af
-   0089 3D            [ 4]  128   dec   a
-   008A C8            [11]  129   ret   z
-   008B 18 F4         [12]  130   jr    init_loop
-                            131 
-                            132 ;;
-                            133 ;;  Reset bombs data
-                            134 ;;  INPUT:
-                            135 ;;    none
-                            136 ;;  RETURN: 
-                            137 ;;    none
-                            138 ;;  DESTROYED:
-                            139 ;;    A,HL
-   008D                     140 man_entity_init_bombs::
-   008D 3E 00         [ 7]  141   ld    a, #0
-   008F 32 15 00      [13]  142   ld    (_bomb_num), a
-                            143 
-   0092 21 18 00      [10]  144   ld    hl, #_bomb_array
+   0083 CD 1F 00      [17]  127   call  man_entity_new_entity
+   0086 CD 35 00      [17]  128   call  man_entity_initialize_entity
+                            129   
+   0089 F1            [10]  130   pop   af
+   008A 3D            [ 4]  131   dec   a
+   008B C8            [11]  132   ret   z
+   008C 18 F4         [12]  133   jr    init_loop
+                            134 
+                            135 ;;
+                            136 ;;  Reset bombs data
+                            137 ;;  INPUT:
+                            138 ;;    none
+                            139 ;;  RETURN: 
+                            140 ;;    none
+                            141 ;;  DESTROYED:
+                            142 ;;    A,HL
+   008E                     143 man_entity_init_bombs::
+   008E 3E 00         [ 7]  144   ld    a, #0
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
 Hexadecimal [16-Bits]
 
 
 
-   0095 22 16 00      [16]  145   ld    (_bomb_last), hl
-   0098 C9            [10]  146   ret
-                            147 
-                            148 
-   0099                     149 man_entity_player_update::
-   0099 C9            [10]  150   ret
+   0090 32 15 00      [13]  145   ld    (_bomb_num), a
+                            146 
+   0093 21 18 00      [10]  147   ld    hl, #_bomb_array
+   0096 22 16 00      [16]  148   ld    (_bomb_last), hl
+   0099 C9            [10]  149   ret
+                            150 
                             151 
-   009A                     152 man_entity_enemies_update::
-   009A DD 21 0C 00   [14]  153   ld    ix, #_enemy_array
-   009E 3A 09 00      [13]  154   ld     a, (_enemy_num)
-   00A1 B7            [ 4]  155   or     a
-   00A2 C8            [11]  156   ret    z
-                            157 
-   00A3                     158   enemies_update_loop:
-   00A3 F5            [11]  159     push  af
-                            160     
-   00A4 DD 7E 00      [19]  161     ld    a, e_type(ix)         ;; load type of entity
-   00A7 E6 FE         [ 7]  162     and    #dead_type            ;; entity_type AND dead_type
-                            163 
-   00A9 28 2F         [12]  164     jr    z, enemies_increase_index
-   00AB CD 00 00      [17]  165     call  sys_render_remove_entity
-                            166 
-                            167     ;; _last_element_ptr now points to the last entity in the array
-                            168     ;; si A=02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-   00AE 3A 0A 00      [13]  169     ld    a, (_enemy_last)
-   00B1 D6 09         [ 7]  170     sub   #sizeof_e
-   00B3 32 0A 00      [13]  171     ld    (_enemy_last), a
-   00B6 DA BC 00      [10]  172     jp    c, enemies_overflow_update
-   00B9 C3 C3 00      [10]  173     jp    enemies_no_overflow_update    
-                            174     
-   00BC                     175   enemies_overflow_update:
-   00BC 3A 0B 00      [13]  176     ld    a, (_enemy_last+1)
-   00BF 3D            [ 4]  177     dec   a
-   00C0 32 0B 00      [13]  178     ld    (_enemy_last+1), a
-                            179 
-   00C3                     180   enemies_no_overflow_update:
-                            181     ;; move the last element to the hole left by the dead entity
-   00C3 DD E5         [15]  182     push  ix  
-   00C5 E1            [10]  183     pop   hl
-   00C6 01 09 00      [10]  184     ld    bc, #sizeof_e       
-   00C9 ED 5B 0A 00   [20]  185     ld    de, (_enemy_last)
-   00CD EB            [ 4]  186     ex    de, hl
-   00CE ED B0         [21]  187     ldir                        
-                            188     
-   00D0 3A 09 00      [13]  189     ld    a, (_enemy_num)
-   00D3 3D            [ 4]  190     dec   a
-   00D4 32 09 00      [13]  191     ld    (_enemy_num), a  
-                            192 
-   00D7 C3 DF 00      [10]  193     jp    enemies_continue_update
-                            194 
-   00DA                     195   enemies_increase_index:
-   00DA 01 09 00      [10]  196     ld    bc, #sizeof_e
-   00DD DD 09         [15]  197     add   ix, bc
-   00DF                     198   enemies_continue_update:
-   00DF F1            [10]  199     pop   af
+   009A                     152 man_entity_player_update::
+   009A C9            [10]  153   ret
+                            154 
+                            155 
+   009B                     156 man_entity_enemies_update::
+   009B DD 21 0C 00   [14]  157   ld    ix, #_enemy_array
+   009F 3A 09 00      [13]  158   ld     a, (_enemy_num)
+   00A2 B7            [ 4]  159   or     a
+   00A3 C8            [11]  160   ret    z
+                            161 
+   00A4                     162   enemies_update_loop:
+   00A4 F5            [11]  163     push  af
+                            164     
+   00A5 DD 7E 00      [19]  165     ld    a, e_type(ix)         ;; load type of entity
+   00A8 E6 FE         [ 7]  166     and    #dead_type            ;; entity_type AND dead_type
+                            167 
+   00AA 28 2F         [12]  168     jr    z, enemies_increase_index
+   00AC CD 00 00      [17]  169     call  sys_render_remove_entity
+                            170 
+                            171     ;; _last_element_ptr now points to the last entity in the array
+                            172     ;; si A=02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
+   00AF 3A 0A 00      [13]  173     ld    a, (_enemy_last)
+   00B2 D6 09         [ 7]  174     sub   #sizeof_e
+   00B4 32 0A 00      [13]  175     ld    (_enemy_last), a
+   00B7 DA BD 00      [10]  176     jp    c, enemies_overflow_update
+   00BA C3 C4 00      [10]  177     jp    enemies_no_overflow_update    
+                            178     
+   00BD                     179   enemies_overflow_update:
+   00BD 3A 0B 00      [13]  180     ld    a, (_enemy_last+1)
+   00C0 3D            [ 4]  181     dec   a
+   00C1 32 0B 00      [13]  182     ld    (_enemy_last+1), a
+                            183 
+   00C4                     184   enemies_no_overflow_update:
+                            185     ;; move the last element to the hole left by the dead entity
+   00C4 DD E5         [15]  186     push  ix  
+   00C6 E1            [10]  187     pop   hl
+   00C7 01 09 00      [10]  188     ld    bc, #sizeof_e       
+   00CA ED 5B 0A 00   [20]  189     ld    de, (_enemy_last)
+   00CE EB            [ 4]  190     ex    de, hl
+   00CF ED B0         [21]  191     ldir                        
+                            192     
+   00D1 3A 09 00      [13]  193     ld    a, (_enemy_num)
+   00D4 3D            [ 4]  194     dec   a
+   00D5 32 09 00      [13]  195     ld    (_enemy_num), a  
+                            196 
+   00D8 C3 E0 00      [10]  197     jp    enemies_continue_update
+                            198 
+   00DB                     199   enemies_increase_index:
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
 Hexadecimal [16-Bits]
 
 
 
-   00E0 3D            [ 4]  200     dec   a
-   00E1 C8            [11]  201     ret   z
-   00E2 C3 A3 00      [10]  202     jp    enemies_update_loop
-   00E5 C9            [10]  203   ret
-                            204 
-   00E6                     205 man_entity_bombs_update::
-   00E6 DD 21 0C 00   [14]  206   ld    ix, #_enemy_array
-   00EA 3A 09 00      [13]  207   ld     a, (_enemy_num)
-   00ED B7            [ 4]  208   or     a
-   00EE C8            [11]  209   ret    z
-                            210 
-   00EF                     211   bombs_update_loop:
-   00EF F5            [11]  212     push  af
-                            213     
-   00F0 DD 7E 00      [19]  214     ld    a, b_timer(ix)         ;; load timer of bomb
-   00F3 E6 00         [ 7]  215     and   #zero_timer            ;; _bomb_timer AND zero_timer
-                            216 
-   00F5 28 2F         [12]  217     jr    z, bombs_increase_index
-   00F7 CD 00 00      [17]  218     call  sys_render_remove_bomb
-                            219 
-                            220     ;; _last_element_ptr now points to the last entity in the array
-                            221     ;; si A=02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
-   00FA 3A 0A 00      [13]  222     ld    a, (_enemy_last)
-   00FD D6 09         [ 7]  223     sub   #sizeof_e
-   00FF 32 0A 00      [13]  224     ld    (_enemy_last), a
-   0102 DA 08 01      [10]  225     jp    c, bombs_overflow_update
-   0105 C3 0F 01      [10]  226     jp    bombs_no_overflow_update    
-                            227     
-   0108                     228   bombs_overflow_update:
-   0108 3A 17 00      [13]  229     ld    a, (_bomb_last+1)
-   010B 3D            [ 4]  230     dec   a
-   010C 32 17 00      [13]  231     ld    (_bomb_last+1), a
-                            232 
-   010F                     233   bombs_no_overflow_update:
-                            234     ;; move the last element to the hole left by the dead entity
-   010F DD E5         [15]  235     push  ix  
-   0111 E1            [10]  236     pop   hl
-   0112 01 07 00      [10]  237     ld    bc, #sizeof_b       
-   0115 ED 5B 16 00   [20]  238     ld    de, (_bomb_last)
-   0119 EB            [ 4]  239     ex    de, hl
-   011A ED B0         [21]  240     ldir                        
-                            241     
-   011C 3A 15 00      [13]  242     ld    a, (_bomb_num)
-   011F 3D            [ 4]  243     dec   a
-   0120 32 15 00      [13]  244     ld    (_bomb_num), a  
-                            245 
-   0123 C3 2B 01      [10]  246     jp    bombs_continue_update
-                            247 
-   0126                     248   bombs_increase_index:
-   0126 01 07 00      [10]  249     ld    bc, #sizeof_b
-   0129 DD 09         [15]  250     add   ix, bc
-   012B                     251   bombs_continue_update:
-   012B F1            [10]  252     pop   af
-   012C 3D            [ 4]  253     dec   a
-   012D C8            [11]  254     ret   z
+   00DB 01 09 00      [10]  200     ld    bc, #sizeof_e
+   00DE DD 09         [15]  201     add   ix, bc
+   00E0                     202   enemies_continue_update:
+   00E0 F1            [10]  203     pop   af
+   00E1 3D            [ 4]  204     dec   a
+   00E2 C8            [11]  205     ret   z
+   00E3 C3 A4 00      [10]  206     jp    enemies_update_loop
+   00E6 C9            [10]  207   ret
+                            208 
+                            209 
+   00E7                     210 man_entity_bombs_update::
+   00E7 DD 21 18 00   [14]  211   ld    ix, #_bomb_array
+   00EB 3A 15 00      [13]  212   ld     a, (_bomb_num)
+   00EE B7            [ 4]  213   or     a
+   00EF C8            [11]  214   ret    z
+                            215 
+   00F0                     216   bombs_update_loop:
+   00F0 F5            [11]  217     push  af
+                            218     
+   00F1 DD 7E 00      [19]  219     ld    a, b_timer(ix)         ;; load timer of bomb
+   00F4 E6 00         [ 7]  220     and   #zero_timer            ;; _bomb_timer AND zero_timer
+                            221 
+   00F6 28 2F         [12]  222     jr    z, bombs_increase_index
+   00F8 CD 00 00      [17]  223     call  sys_render_remove_bomb
+                            224 
+                            225     ;; _last_element_ptr now points to the last entity in the array
+                            226     ;; si A=02, al hacer A-sizeOf, puede pasar por debajo de 0 -> FE por ejemplo, lo cual debería restar
+   00FB 3A 16 00      [13]  227     ld    a, (_bomb_last)
+   00FE D6 07         [ 7]  228     sub   #sizeof_b
+   0100 32 16 00      [13]  229     ld    (_bomb_last), a
+   0103 DA 09 01      [10]  230     jp    c, bombs_overflow_update
+   0106 C3 10 01      [10]  231     jp    bombs_no_overflow_update    
+                            232     
+   0109                     233   bombs_overflow_update:
+   0109 3A 17 00      [13]  234     ld    a, (_bomb_last+1)
+   010C 3D            [ 4]  235     dec   a
+   010D 32 17 00      [13]  236     ld    (_bomb_last+1), a
+                            237 
+   0110                     238   bombs_no_overflow_update:
+                            239     ;; move the last element to the hole left by the dead entity
+   0110 DD E5         [15]  240     push  ix  
+   0112 E1            [10]  241     pop   hl
+   0113 01 07 00      [10]  242     ld    bc, #sizeof_b       
+   0116 ED 5B 16 00   [20]  243     ld    de, (_bomb_last)
+   011A EB            [ 4]  244     ex    de, hl
+   011B ED B0         [21]  245     ldir                        
+                            246     
+   011D 3A 15 00      [13]  247     ld    a, (_bomb_num)
+   0120 3D            [ 4]  248     dec   a
+   0121 32 15 00      [13]  249     ld    (_bomb_num), a  
+                            250 
+   0124 C3 2C 01      [10]  251     jp    bombs_continue_update
+                            252 
+   0127                     253   bombs_increase_index:
+   0127 01 07 00      [10]  254     ld    bc, #sizeof_b
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 11.
 Hexadecimal [16-Bits]
 
 
 
-   012E C3 EF 00      [10]  255     jp    bombs_update_loop  
-   0131 C9            [10]  256   ret
-                            257 
-                            258 ;;########################################################
-                            259 ;;                   PUBLIC FUNCTIONS                    #             
-                            260 ;;########################################################
-                            261 
-                            262 ;;
-                            263 ;;  Initialize data for all enemies, player and reset bombs data.
-                            264 ;;  INPUT:
-                            265 ;;    none
-                            266 ;;  RETURN: 
-                            267 ;;    none
-                            268 ;;  DESTROYED:
-                            269 ;;    AF,DE,IX,HL,BC
-   0132                     270 man_entity_init::
-   0132 CD 7B 00      [17]  271   call  man_entity_init_entities
-   0135 CD 8D 00      [17]  272   call  man_entity_init_bombs
-   0138 C9            [10]  273   ret
-                            274 
-                            275 
-                            276 ;;
-                            277 ;;  INPUT:
-                            278 ;;    none
-                            279 ;;  RETURN: 
-                            280 ;;    none
-                            281 ;;  DESTROYED:
-                            282 ;;    AF,DE,IX,HL,BC
-   0139                     283 man_entity_update::
-   0139 CD 99 00      [17]  284   call  man_entity_player_update
-   013C CD 9A 00      [17]  285   call  man_entity_enemies_update
-   013F CD E6 00      [17]  286   call  man_entity_bombs_update
-   0142 C9            [10]  287   ret
-                            288 
-                            289 
-                            290 ;;
-                            291 ;;  INPUT:
-                            292 ;;    none
-                            293 ;;  RETURN: 
-                            294 ;;    hl with memory address of free space for new entity
-                            295 ;;    ix with memory address of last created entity
-                            296 ;;  DESTROYED:
-                            297 ;;    A,HL,BC
-   0143                     298 man_entity_create_entity::  
-   0143 3E 01         [ 7]  299   ld    a, #max_entities
-   0145 21 09 00      [10]  300   ld    hl, #_enemy_num
-   0148 BE            [ 7]  301   cp   (hl)                  ;; max_entities - _enemy_num
-   0149 C8            [11]  302   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
-                            303 
-   014A CD 1F 00      [17]  304   call  man_entity_new_entity
-   014D CD 35 00      [17]  305   call  man_entity_initialize_entity
-   0150 C9            [10]  306   ret
-                            307 
-                            308 
-                            309 ;;
+   012A DD 09         [15]  255     add   ix, bc
+   012C                     256   bombs_continue_update:
+   012C F1            [10]  257     pop   af
+   012D 3D            [ 4]  258     dec   a
+   012E C8            [11]  259     ret   z
+   012F C3 F0 00      [10]  260     jp    bombs_update_loop  
+   0132 C9            [10]  261   ret
+                            262 
+                            263 ;;########################################################
+                            264 ;;                   PUBLIC FUNCTIONS                    #             
+                            265 ;;########################################################
+                            266 
+                            267 ;;
+                            268 ;;  Initialize data for all enemies, player and reset bombs data.
+                            269 ;;  INPUT:
+                            270 ;;    none
+                            271 ;;  RETURN: 
+                            272 ;;    none
+                            273 ;;  DESTROYED:
+                            274 ;;    AF,DE,IX,HL,BC
+   0133                     275 man_entity_init::
+   0133 CD 7B 00      [17]  276   call  man_entity_init_player
+   0136 CD 7C 00      [17]  277   call  man_entity_init_entities
+   0139 CD 8E 00      [17]  278   call  man_entity_init_bombs
+   013C C9            [10]  279   ret
+                            280 
+                            281 
+                            282 ;;
+                            283 ;;  INPUT:
+                            284 ;;    none
+                            285 ;;  RETURN: 
+                            286 ;;    none
+                            287 ;;  DESTROYED:
+                            288 ;;    AF,DE,IX,HL,BC
+   013D                     289 man_entity_update::
+   013D CD 9A 00      [17]  290   call  man_entity_player_update
+   0140 CD 9B 00      [17]  291   call  man_entity_enemies_update
+   0143 CD E7 00      [17]  292   call  man_entity_bombs_update
+   0146 C9            [10]  293   ret
+                            294 
+                            295 
+                            296 ;;
+                            297 ;;  INPUT:
+                            298 ;;    none
+                            299 ;;  RETURN: 
+                            300 ;;    hl with memory address of free space for new entity
+                            301 ;;    ix with memory address of last created entity
+                            302 ;;  DESTROYED:
+                            303 ;;    A,HL,BC
+   0147                     304 man_entity_create_entity::  
+   0147 3E 01         [ 7]  305   ld    a, #max_entities
+   0149 21 09 00      [10]  306   ld    hl, #_enemy_num
+   014C BE            [ 7]  307   cp   (hl)                  ;; max_entities - _enemy_num
+   014D C8            [11]  308   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
+                            309 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 12.
 Hexadecimal [16-Bits]
 
 
 
-                            310 ;;  INPUT:
-                            311 ;;    none
-                            312 ;;  RETURN: 
-                            313 ;;    hl with memory address of free space for new bomb
-                            314 ;;    ix with memory address of last created bomb
-                            315 ;;  DESTROYED:
-                            316 ;;    A,HL,BC
-   0151                     317 man_entity_create_bomb::  
-   0151 3E 01         [ 7]  318   ld    a, #max_bombs
-   0153 21 15 00      [10]  319   ld    hl, #_bomb_num
-   0156 BE            [ 7]  320   cp   (hl)                  ;; max_bombs - _bomb_num
-   0157 C8            [11]  321   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
-                            322 
-   0158 CD 51 01      [17]  323   call  man_entity_create_bomb
-   015B CD 68 00      [17]  324   call  man_entity_initialize_bomb
-   015E C9            [10]  325   ret
-                            326 
-                            327 
-                            328 ;;
-                            329 ;;  INPUT:
-                            330 ;;    none
-                            331 ;;  RETURN: 
-                            332 ;;    ix with memory address of player
-                            333 ;;  DESTROYED:
-                            334 ;;    none
-   015F                     335 man_entity_get_player::
-   015F DD 21 00 00   [14]  336   ld    ix, #_player
-   0163 C9            [10]  337   ret
-                            338 
-                            339 
-                            340 ;;
-                            341 ;;  INPUT:
-                            342 ;;    none
-                            343 ;;  RETURN: 
-                            344 ;;    ix  begin of enemy array memory address
-                            345 ;;    a   number of enemies in the array
-                            346 ;;  DESTROYED:
-                            347 ;;    none
-   0164                     348 man_entity_get_enemy_array::
-   0164 DD 21 0C 00   [14]  349   ld    ix, #_enemy_array
-   0168 3A 09 00      [13]  350   ld     a, (_enemy_num)
-   016B C9            [10]  351   ret
-                            352 
-                            353 
-                            354 ;;
-                            355 ;;  INPUT:
-                            356 ;;    none
-                            357 ;;  RETURN: 
-                            358 ;;    ix  begin of bomb array memory address
-                            359 ;;    a   number of bombs in the array
-                            360 ;;  DESTROYED:
-                            361 ;;    none
-   016C                     362 man_entity_get_bomb_array::
-   016C DD 21 18 00   [14]  363   ld    ix, #_bomb_array
-   0170 3A 15 00      [13]  364   ld     a, (_bomb_num)
+   014E CD 1F 00      [17]  310   call  man_entity_new_entity
+   0151 CD 35 00      [17]  311   call  man_entity_initialize_entity
+   0154 C9            [10]  312   ret
+                            313 
+                            314 
+                            315 ;;
+                            316 ;;  INPUT:
+                            317 ;;    none
+                            318 ;;  RETURN: 
+                            319 ;;    hl with memory address of free space for new bomb
+                            320 ;;    ix with memory address of last created bomb
+                            321 ;;  DESTROYED:
+                            322 ;;    A,HL,BC
+   0155                     323 man_entity_create_bomb::  
+   0155 3E 01         [ 7]  324   ld    a, #max_bombs
+   0157 21 15 00      [10]  325   ld    hl, #_bomb_num
+   015A BE            [ 7]  326   cp   (hl)                  ;; max_bombs - _bomb_num
+   015B C8            [11]  327   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
+                            328 
+   015C CD 55 01      [17]  329   call  man_entity_create_bomb
+   015F CD 68 00      [17]  330   call  man_entity_initialize_bomb
+   0162 C9            [10]  331   ret
+                            332 
+                            333 
+                            334 ;;
+                            335 ;;  INPUT:
+                            336 ;;    none
+                            337 ;;  RETURN: 
+                            338 ;;    ix with memory address of player
+                            339 ;;  DESTROYED:
+                            340 ;;    none
+   0163                     341 man_entity_get_player::
+   0163 DD 21 00 00   [14]  342   ld    ix, #_player
+   0167 C9            [10]  343   ret
+                            344 
+                            345 
+                            346 ;;
+                            347 ;;  INPUT:
+                            348 ;;    none
+                            349 ;;  RETURN: 
+                            350 ;;    ix  begin of enemy array memory address
+                            351 ;;    a   number of enemies in the array
+                            352 ;;  DESTROYED:
+                            353 ;;    none
+   0168                     354 man_entity_get_enemy_array::
+   0168 DD 21 0C 00   [14]  355   ld    ix, #_enemy_array
+   016C 3A 09 00      [13]  356   ld     a, (_enemy_num)
+   016F C9            [10]  357   ret
+                            358 
+                            359 
+                            360 ;;
+                            361 ;;  INPUT:
+                            362 ;;    none
+                            363 ;;  RETURN: 
+                            364 ;;    ix  begin of bomb array memory address
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 13.
 Hexadecimal [16-Bits]
 
 
 
-   0173 C9            [10]  365   ret
-                            366 
-                            367 
-                            368 ;;
-                            369 ;;  INPUT:
-                            370 ;;    none
-                            371 ;;  RETURN: 
-                            372 ;;    ix  begin of player memory address
-                            373 ;;  DESTROYED:
-                            374 ;;    A
-   0174                     375 man_entity_set_player_dead::
-   0174 DD 21 00 00   [14]  376   ld    ix, #_player
-   0178 3E FE         [ 7]  377   ld     a, #dead_type
-   017A DD 77 00      [19]  378   ld    e_type(ix), a
-   017D C9            [10]  379   ret
-                            380 
-                            381 
-                            382 ;;
-                            383 ;;  INPUT:
-                            384 ;;    ix with memory address of entity that must me marked as dead
-                            385 ;;  RETURN: 
-                            386 ;;    none
-                            387 ;;  DESTROYED:
-                            388 ;;    A
-   017E                     389 man_entity_set_enemy_dead::
-   017E 3E FE         [ 7]  390   ld    a, #dead_type
-   0180 DD 77 00      [19]  391   ld    e_type(ix), a
-   0183 C9            [10]  392   ret
+                            365 ;;    a   number of bombs in the array
+                            366 ;;  DESTROYED:
+                            367 ;;    none
+   0170                     368 man_entity_get_bomb_array::
+   0170 DD 21 18 00   [14]  369   ld    ix, #_bomb_array
+   0174 3A 15 00      [13]  370   ld     a, (_bomb_num)
+   0177 C9            [10]  371   ret
+                            372 
+                            373 
+                            374 ;;
+                            375 ;;  INPUT:
+                            376 ;;    none
+                            377 ;;  RETURN: 
+                            378 ;;    ix  begin of player memory address
+                            379 ;;  DESTROYED:
+                            380 ;;    A
+   0178                     381 man_entity_set_player_dead::
+   0178 DD 21 00 00   [14]  382   ld    ix, #_player
+   017C 3E FE         [ 7]  383   ld     a, #dead_type
+   017E DD 77 00      [19]  384   ld    e_type(ix), a
+   0181 C9            [10]  385   ret
+                            386 
+                            387 
+                            388 ;;
+                            389 ;;  INPUT:
+                            390 ;;    ix with memory address of entity that must me marked as dead
+                            391 ;;  RETURN: 
+                            392 ;;    none
+                            393 ;;  DESTROYED:
+                            394 ;;    A
+   0182                     395 man_entity_set_enemy_dead::
+   0182 3E FE         [ 7]  396   ld    a, #dead_type
+   0184 DD 77 00      [19]  397   ld    e_type(ix), a
+   0187 C9            [10]  398   ret
