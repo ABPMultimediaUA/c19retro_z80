@@ -7,12 +7,18 @@
 -k /home/ceas/Documents/cpctelera/cpctelera/tools/sdcc-3.6.8-r9946/share/sdcc/lib/z80
 -l /home/ceas/Documents/cpctelera/cpctelera/cpctelera.lib
 -l z80
+obj/assets/sprites/bomb.rel
+obj/assets/sprites/enemy.rel
+obj/assets/sprites/player.rel
 obj/main.rel
 obj/cpct_functions.h.rel
 obj/sys/physics_system.h.rel
 obj/sys/physics_system.rel
+obj/sys/input_system.rel
 obj/sys/render_system.rel
+obj/sys/input_system.h.rel
 obj/sys/render_system.h.rel
+obj/assets/assets.h.rel
 obj/man/entity_manager.rel
 obj/man/entity_manager.h.rel
 

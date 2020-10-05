@@ -1,45 +1,139 @@
+;;
+;;  PHYSICS SYSTEM
+;;
+
 .include "../man/entity_manager.h.s"
 .include "physics_system.h.s"
+.include "render_system.h.s"
 .include "../cpct_functions.h.s"
 
-physicssys_init::
+;;########################################################
+;;                   PRIVATE FUNCTIONS                   #             
+;;########################################################
+
+;;
+;;  INPUT:
+;;    ix  address memory where entity starts
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_update_entity::
+  ;; Calculate the X coordinate where the entity should be positioned and stores result in B
+  ld    a, e_x(ix)
+  add   e_vx(ix)
+  ;add   #2
+  ld    b, a
+
+  ;; Check is new X coordinate is greater than min allowed
+  ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+  cp    #min_map_x_coord_valid
+  jr    c, check_y
+
+  ;; Calculate max X coordinate where an entity could be
+  ld    a, #max_map_x_coord_valid
+  sub   e_w(ix)  
+
+  ;; Check is new X coordinate is smaller than max allowed
+  ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+  cp    b
+  jr    c, check_y
+
+  ld    e_x(ix), b    ;; Update X coordinate
+
+check_y:
+  ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
+  ld    a, e_y(ix)
+  add   e_vy(ix)
+  ld    b, a
+
+  ;; Check is new Y coordinate is greater than min allowed
+  ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+  cp    #min_map_y_coord_valid
+  ret   c
+
+  ;; Calculate max X coordinate where an entity could be
+  ld    a, #max_map_y_coord_valid
+  sub   e_h(ix)  
+
+  ;; Check is new Y coordinate is smaller than max allowed
+  ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+  cp    b
+  ret   c
+  
+  ld    e_y(ix), b    ;; Update X coordinate
   ret
 
-physicssys_update::
-  call  get_entity_array
-  or     a
-  ret    z
 
-physicssys_loop:    
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    A,BC,IX
+sys_physics_player_update::
+  call  man_entity_get_player
+  call  sys_physics_update_entity
+  ret
+
+
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    A,BC,IX
+sys_physics_enemies_update::
+  call  man_entity_get_enemy_array
+
+physics_enemies_loop:
   push  af
-
-  ld    c, e_x(ix)                  ;; C = x coordinate       
-  ld    a, e_vx(ix)                 ;; L = x velocity       
-  add   a, c
-  jp    m, invalid_x
-
-continue_x:
-  ld    e_x(ix), a  
-
-  ld    b, e_y(ix)                  ;; B = y coordinate  
-  ld    a, e_vy(ix)                 ;; H = y velocity  
-  add   a, b
-  jp    m, invalid_y
-continue_y:
-  ld    e_y(ix), a
+  
+  call  sys_physics_update_entity
 
   ld    bc, #sizeof_e
   add   ix, bc
 
   pop   af
-  dec   a  
+  dec   a
   ret   z
-  jr    physicssys_loop
+  jr    physics_enemies_loop
+  ret
 
-invalid_x:
-  call  entityman_set_dead
-  jr    continue_x
 
-invalid_y:
-  call  entityman_set_dead
-  jr    continue_y
+;;
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_bomb_update::
+  ret
+
+
+
+;;########################################################
+;;                   PUBLIC FUNCTIONS                    #             
+;;########################################################
+
+;;
+;;  none
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    none
+sys_physics_init::
+  ret
+
+
+sys_physics_update::
+  call  sys_physics_player_update
+  call  sys_physics_enemies_update
+  call  sys_physics_bomb_update
+  ret
+  

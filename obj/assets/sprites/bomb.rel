@@ -1,0 +1,27 @@
+XL2
+H 9 areas 2 global symbols
+M bomb
+O -mz80
+S .__.ABS. Def0000
+A _CODE size 40 flags 0 addr 0
+S _sp_bomb Def0000
+A _DATA size 0 flags 0 addr 0
+A _INITIALIZED size 0 flags 0 addr 0
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _INITIALIZER size 0 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00
+R 00 00 00 00
+T 00 00 00 00 00 00 00 00 00 00 00 45 8A 00 00 45
+R 00 00 00 00
+T 0E 00 8A 00 00 45 8A 00 00 DB F3 00 00 DB F3 00
+R 00 00 00 00
+T 1C 00 00 DB F3 00 00 DB F3 00 00 DB F3 00 00 DB
+R 00 00 00 00
+T 2A 00 F3 00 00 51 F3 00 00 00 00 00 00 00 00 00
+R 00 00 00 00
+T 38 00 00 00 00 00 00 00 00 00
+R 00 00 00 00
