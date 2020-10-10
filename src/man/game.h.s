@@ -22,8 +22,8 @@ move_up = -move_down
 ;;  In bytes
 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
-min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
-max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+min_map_y_coord_valid = 12     ;;  [0-3] border, >=4 map
+max_map_y_coord_valid = 188    ;;  [196-199] border, <=195 map
 
 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
