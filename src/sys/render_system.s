@@ -176,6 +176,20 @@ sys_render_init::
   ld    (enemy_num), a    
 
   call  sys_render_map
+
+  ;; ========== CHAPUZA para poner el ultimo puntero del player a su posicion
+  call  man_entity_get_player
+    ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, e_x(ix)                  ;; C = x coordinate       
+  ld    b, e_y(ix)                  ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  
+  ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ld  e_sp_ptr_0(ix), l
+  ld  e_sp_ptr_1(ix), h
+  ;;============= FIN CHAPUZA
+
   ret
 
 
@@ -245,79 +259,79 @@ sys_render_one_border_block::
   ;;  Draw sprite blended
   ex    de, hl                      ;; DE = Destination video memory pointer
   ld    hl, #_sp_border_block          ;; Source Sprite Pointer (array with pixel data)
-  ld    c, #4                 ;; Sprite width
-  ld    b, #16            ;; Sprite height
+  ld    c, #border_block_w                 ;; Sprite width
+  ld    b, #border_block_h            ;; Sprite height
   call  cpct_drawSprite_asm 
   ret
 ;================================================================
 sys_render_min_row_map::
-  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
-  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+  ld    c, #min_map_x_coord_valid-border_block_w         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid-border_block_h        ;; B = y coordinate  
 
 min_row:
   push bc
   call sys_render_one_border_block 
   pop bc
-  ld  hl, #0x0004
+  ld  hl, #0x0002
   add hl, bc
   ld b, h
   ld c, l
   
-  ld a, #max_map_x_coord_valid-4
+  ld a, #max_map_x_coord_valid
   cp c
   jr  nc, min_row
   ret
   ;================================================================
 sys_render_max_row_map::
-  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
-  ld    b, #max_map_y_coord_valid-16         ;; B = y coordinate  
+  ld    c, #min_map_x_coord_valid-border_block_w         ;; C = x coordinate       
+  ld    b, #max_map_y_coord_valid         ;; B = y coordinate  
 
 max_row:
   push bc
   call sys_render_one_border_block 
   pop bc
-  ld  hl, #0x0004
+  ld  hl, #0x0002
   add hl, bc
   ld b, h
   ld c, l
   
-  ld a, #max_map_x_coord_valid-4
+  ld a, #max_map_x_coord_valid
   cp c
   jr  nc, max_row
   ret
 ;================================================================
 sys_render_min_col_map::
-  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
-  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+  ld    c, #min_map_x_coord_valid-border_block_w         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid-border_block_h         ;; B = y coordinate  
 
 min_col:
   push bc
   call sys_render_one_border_block 
   pop bc
-  ld  hl, #0x1000 ;+16
+  ld  hl, #0x0800 
   add hl, bc
   ld b, h
   ld c, l
   
-  ld a, #max_map_y_coord_valid-16
+  ld a, #max_map_y_coord_valid
   cp b
   jr  nc, min_col
   ret
 ;================================================================
 sys_render_max_col_map::
-  ld    c, #max_map_x_coord_valid-4         ;; C = x coordinate       
-  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+  ld    c, #max_map_x_coord_valid        ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid-border_block_h        ;; B = y coordinate  
 
 max_col:
   push bc
   call sys_render_one_border_block 
   pop bc
-  ld  hl, #0x1000 ;+16
+  ld  hl, #0x0800 
   add hl, bc
   ld b, h
   ld c, l
   
-  ld a, #max_map_y_coord_valid-16
+  ld a, #max_map_y_coord_valid
   cp b
   jr  nc, max_col
   ret
