@@ -171,8 +171,8 @@ sys_render_init::
 ;;    A,DE,BC,HL,IX
 sys_render_update::
   call  sys_render_player
-  ; call  sys_render_enemies
-  ; call  sys_render_bombs
+  ;call  sys_render_enemies
+  ;call  sys_render_bombs
   ret  
 
 

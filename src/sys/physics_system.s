@@ -3,6 +3,7 @@
 ;;
 
 .include "../man/entity_manager.h.s"
+.include "../man/game.h.s"
 .include "physics_system.h.s"
 .include "render_system.h.s"
 .include "../cpct_functions.h.s"
