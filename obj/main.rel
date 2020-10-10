@@ -1,63 +1,39 @@
 XL2
-H 2 areas 28 global symbols
+H 2 areas 18 global symbols
 M cpct_keyboard
-S _sp_bomb Ref0000
-S sys_input_init Ref0000
-S man_entity_get_player Ref0000
 S cpct_isKeyPressed_asm Ref0000
 S cpct_scanKeyboard_f_asm Ref0000
 S cpct_setPALColour_asm Ref0000
-S man_entity_create_entity Ref0000
+S man_game_init Ref0000
 S Key_A Def2008
-S man_entity_create_bomb Ref0000
-S man_entity_init Ref0000
-S man_entity_set_enemy_dead Ref0000
 S cpct_drawSprite_asm Ref0000
-S sys_input_update Ref0000
-S sys_render_init Ref0000
-S man_entity_get_enemy_array Ref0000
-S sys_physics_init Ref0000
-S man_entity_get_bomb_array Ref0000
+S man_game_update Ref0000
 S Key_O Def0404
 S Key_P Def0803
 S Key_Q Def0808
-S man_entity_update Ref0000
+S Key_R Def0406
 S HW_BLACK Def0014
+S man_game_terminate Ref0000
 S .__.ABS. Def0000
-S sys_render_update Ref0000
-S sys_physics_update Ref0000
-S sys_render_remove_entity Ref0000
-S sys_render_remove_bomb Ref0000
 S CPCT_VMEM_START_ASM DefC000
-S _sp_player Ref0000
 S cpct_waitVSYNC_asm Ref0000
 S cpct_setVideoMode_asm Ref0000
 S cpct_disableFirmware_asm Ref0000
 S cpct_drawSolidBox_asm Ref0000
 S cpct_getRandom_mxor_u8_asm Ref0000
-S man_entity_set_player_dead Ref0000
 S cpct_drawSpriteBlended_asm Ref0000
-S _sp_enemy Ref0000
 S cpct_getScreenPtr_asm Ref0000
 S HW_WHITE Def0000
-A _CODE size 36 flags 0 addr 0
+A _CODE size 1A flags 0 addr 0
 S _main Def0000
 A _DATA size 0 flags 0 addr 0
 T 00 00
 R 00 00 00 00
-T 00 00 CD 00 00 CD 00 00 CD 00 00 CD
-R 00 00 00 00 02 03 1F 00 02 06 09 00 02 09 01 00
-T 0A 00 00 00 CD 00 00
-R 00 00 00 00 02 02 0F 00 02 05 0D 00
-T 0F 00
+T 00 00 CD 00 00 CD 00 00
+R 00 00 00 00 02 03 11 00 02 06 03 00
+T 06 00
 R 00 00 00 00
-T 0F 00 CD 00 00 CD 00 00 CD 00 00 CD
-R 00 00 00 00 02 03 0C 00 02 06 18 00 02 09 14 00
-T 19 00 00 00 CD 20 00 18 EF
-R 00 00 00 00 02 02 17 00 00 05 00 00
-T 20 00
-R 00 00 00 00
-T 20 00 CD 00 00 76 76 76 76 CD 00 00 76 76 76 76
-R 00 00 00 00 02 03 1D 00 02 0A 1D 00
-T 2E 00 CD 00 00 76 76 76 76 C9
-R 00 00 00 00 02 03 1D 00
+T 06 00 CD 00 00 CD 00 00 76 76 CD 00 00 76 76 CD
+R 00 00 00 00 02 03 06 00 02 06 0F 00 02 0B 0F 00
+T 14 00 00 00 76 76 18 EC
+R 00 00 00 00 02 02 0F 00

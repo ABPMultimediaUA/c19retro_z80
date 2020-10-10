@@ -48,49 +48,34 @@ Symbol Table
     Key_J   =  2005     |     Key_K   =  2004     |     Key_L   =  1004 
     Key_M   =  4004     |     Key_N   =  4005     |     Key_O   =  0404 G
     Key_Open=  0202     |     Key_P   =  0803 G   |     Key_Q   =  0808 G
-    Key_R   =  0406     |     Key_Retu=  0402     |     Key_S   =  1007 
+    Key_R   =  0406 G   |     Key_Retu=  0402     |     Key_S   =  1007 
     Key_Semi=  1003     |     Key_Shif=  2002     |     Key_Slas=  4003 
     Key_Spac=  8005     |     Key_T   =  0806     |     Key_Tab =  1008 
     Key_U   =  0405     |     Key_V   =  8006     |     Key_W   =  0807 
     Key_X   =  8007     |     Key_Y   =  0805     |     Key_Z   =  8008 
     PAL_INKR=  0040     |     PAL_PENR=  0000     |     PPI_PORT=  00F5 
-  0 _main      0000 GR  |     _sp_bomb   **** GX  |     _sp_enem   **** GX
-    _sp_play   **** GX  |     alive_ty=  0001     |     b_h     =  0004 
-    b_sp_ptr=  0005     |     b_sp_ptr=  0006     |     b_timer =  0000 
-    b_w     =  0003     |     b_x     =  0001     |     b_y     =  0002 
+  0 _main      0000 GR  |     cpct_dis   **** GX  |     cpct_dra   **** GX
+    cpct_dra   **** GX  |     cpct_dra   **** GX  |     cpct_get   **** GX
+    cpct_get   **** GX  |     cpct_isK   **** GX  |     cpct_pag=  0000 
+    cpct_pag=  0010     |     cpct_pag=  0020     |     cpct_pag=  0030 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]
 
 Symbol Table
 
-    cpct_dis   **** GX  |     cpct_dra   **** GX  |     cpct_dra   **** GX
-    cpct_dra   **** GX  |     cpct_get   **** GX  |     cpct_get   **** GX
-    cpct_isK   **** GX  |     cpct_pag=  0000     |     cpct_pag=  0010 
-    cpct_pag=  0020     |     cpct_pag=  0030     |     cpct_sca   **** GX
-    cpct_set   **** GX  |     cpct_set   **** GX  |     cpct_wai   **** GX
-    dead_typ=  00FE     |     e_h     =  0004     |     e_sp_ptr=  0007 
-    e_sp_ptr=  0008     |     e_type  =  0000     |     e_vx    =  0005 
-    e_vy    =  0006     |     e_w     =  0003     |     e_x     =  0001 
-    e_y     =  0002     |     invalid_=  00FF     |   0 loop       000F R
-    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    man_enti   **** GX  |     man_enti   **** GX  |     man_enti   **** GX
-    max_bomb=  0001     |     max_enti=  0001     |     max_map_=  004E 
-    max_map_=  00C4     |     max_time=  00FF     |     min_map_=  001E 
-    min_map_=  0004     |     move_dow=  0010     |     move_lef=  FFFFFFFC 
-    move_rig=  0004     |     move_up =  FFFFFFF0     |     opc_DI  =  00F3 
-    opc_EI  =  00FB     |     opc_JR  =  0018     |     opc_LD_D=  0016 
-    screen_h=  00C8     |     screen_w=  00A0     |     sizeof_b=  0007 
-    sizeof_e=  0009     |     sys_inpu   **** GX  |     sys_inpu   **** GX
-    sys_phys   **** GX  |     sys_phys   **** GX  |     sys_rend   **** GX
-    sys_rend   **** GX  |     sys_rend   **** GX  |     sys_rend   **** GX
-    video_mo=  0000     |   0 wait_n_t   0020 R   |     zero_tim=  0000 
+    cpct_sca   **** GX  |     cpct_set   **** GX  |     cpct_set   **** GX
+    cpct_wai   **** GX  |   0 loop       0006 R   |     man_game   **** GX
+    man_game   **** GX  |     man_game   **** GX  |     max_map_=  004E 
+    max_map_=  00C4     |     min_map_=  001E     |     min_map_=  0004 
+    move_dow=  0010     |     move_lef=  FFFFFFFC     |     move_rig=  0004 
+    move_up =  FFFFFFF0     |     opc_DI  =  00F3     |     opc_EI  =  00FB 
+    opc_JR  =  0018     |     opc_LD_D=  0016 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 3.
 Hexadecimal [16-Bits]
 
 Area Table
 
-   0 _CODE      size   36   flags    0
+   0 _CODE      size   1A   flags    0
    1 _DATA      size    0   flags    0
 

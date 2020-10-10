@@ -8,8 +8,8 @@ Hexadecimal [16-Bits]
                               3 ;;
                               4 
                               5 .globl  man_entity_init
-                              6 
-                              7 .globl  man_entity_update
+                              6 .globl  man_entity_update
+                              7 .globl  man_entity_terminate
                               8 
                               9 .globl  man_entity_create_entity
                              10 .globl  man_entity_create_bomb

@@ -21,25 +21,25 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000000  s__DABS                         
      00000014  HW_BLACK                           cpct_keyboard
      00000404  Key_O                              cpct_keyboard
-     0000063C  l__CODE                         
+     00000406  Key_R                              cpct_keyboard
+     000006B0  l__CODE                         
      00000803  Key_P                              cpct_keyboard
      00000808  Key_Q                              cpct_keyboard
      00002008  Key_A                              cpct_keyboard
      00004000  s__CODE                         
-     0000463C  s__DATA                         
-     0000463C  s__GSFINAL                      
-     0000463C  s__GSINIT                       
-     0000463C  s__HOME                         
-     0000463C  s__INITIALIZED                  
-     0000463C  s__INITIALIZER                  
+     000046B0  s__DATA                         
+     000046B0  s__GSFINAL                      
+     000046B0  s__GSINIT                       
+     000046B0  s__HOME                         
+     000046B0  s__INITIALIZED                  
+     000046B0  s__INITIALIZER                  
      0000C000  CPCT_VMEM_START_ASM                cpct_keyboard
-
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    0000063C =        1596. bytes (REL,CON)
+_CODE                               00004000    000006B0 =        1712. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -47,74 +47,82 @@ _CODE                               00004000    0000063C =        1596. bytes (R
      00004040  _sp_enemy                          enemy
      00004080  _sp_player                         player
      000040C0  _main                              cpct_keyboard
-     000040F6  sys_physics_update_entity          
-     00004121  sys_physics_player_update          
-     00004128  sys_physics_enemies_update         
-     0000413A  sys_physics_bomb_update            
-     0000413B  sys_physics_init                   
-     0000413C  sys_physics_update                 
-     00004146  sys_input_init                     
+     000040DA  sys_physics_update_entity          
+     00004105  sys_physics_player_update          
+     0000410D  sys_physics_enemies_update         
+     00004122  sys_physics_bomb_update            
+     00004123  sys_physics_init                   
+     00004135  sys_physics_update                 
+     0000413F  sys_input_init                     
      00004147  sys_input_update                   
-     00004189  sys_render_player                  
-     000041AF  sys_render_enemies                 
-     000041DD  sys_render_bombs                   
-     0000420D  sys_render_init                    
-     0000421A  sys_render_update                  
-     0000421E  sys_render_remove_entity           
-     00004230  sys_render_remove_bomb             
-     00004250  man_entity_new_entity              
-     00004266  man_entity_initialize_entity       
-     00004283  man_entity_new_bomb                
-     00004299  man_entity_initialize_bomb         
-     000042AC  man_entity_init_player             
-     000042AD  man_entity_init_entities           
-     000042BF  man_entity_init_bombs              
-     000042CB  man_entity_player_update           
-     000042CC  man_entity_enemies_update          
-     00004318  man_entity_bombs_update            
-     00004364  man_entity_init                    
-     0000436E  man_entity_update                  
-     00004378  man_entity_create_entity           
-     00004386  man_entity_create_bomb             
-     00004394  man_entity_get_player              
-     00004399  man_entity_get_enemy_array         
-     000043A1  man_entity_get_bomb_array          
-     000043A9  man_entity_set_player_dead         
-     000043B3  man_entity_set_enemy_dead          
-     000043B9  _cpct_scanKeyboard_f               cpct_keyboard
-     000043B9  cpct_scanKeyboard_f_asm            cpct_keyboard
-     00004423  _cpct_isKeyPressed                 cpct_keyboard
-     00004423  cpct_isKeyPressed_asm              cpct_keyboard
-     0000442F  cpct_setPALColour_asm              cpct_video
-     00004439  cpct_drawSprite_asm                cpct_sprites
-     000044D9  _cpct_keyboardStatusBuffer         cpct_keyboard
-     000044E3  cpct_setVideoMode_asm              cpct_video
-     000044F0  _cpct_waitVSYNC                    cpct_video
-     000044F0  cpct_waitVSYNC_asm                 cpct_video
-     000044F8  _cpct_disableFirmware              cpct_firmware
-     000044F8  _cpct_removeInterruptHandler       cpct_firmware
+     00004196  sys_render_player                  
+     000041BD  sys_render_enemies                 
+     000041EE  sys_render_bombs                   
+     0000421E  sys_render_init                    
+     0000423C  sys_render_update                  
+     00004240  sys_render_remove_entity           
+     00004252  sys_render_remove_bomb             
+     00004272  man_entity_new_entity              
+     00004288  man_entity_initialize_entity       
+     000042A3  man_entity_new_bomb                
+     000042B9  man_entity_initialize_bomb         
+     000042CC  man_entity_init_player             
+     000042D8  man_entity_init_entities           
+     000042EE  man_entity_init_bombs              
+     000042FA  man_entity_player_update           
+     000042FB  man_entity_enemies_update          
+     00004347  man_entity_bombs_update            
+     00004393  man_entity_init                    
+     0000439D  man_entity_update                  
+     000043A7  man_entity_create_entity           
+     000043B5  man_entity_create_bomb             
+     000043C3  man_entity_get_player              
+     000043C8  man_entity_get_enemy_array         
+     000043D0  man_entity_get_bomb_array          
+     000043D8  man_entity_set_player_dead         
+     000043E2  man_entity_set_enemy_dead          
+     000043E8  man_entity_terminate               
+     000043FD  man_game_init2                     
+     0000440A  man_game_update2                   
+     0000440B  man_game_render                    
+     0000440C  man_game_init                      
+     00004419  man_game_update                    
+     00004426  man_game_terminate                 
+     0000442D  _cpct_scanKeyboard_f               cpct_keyboard
+     0000442D  cpct_scanKeyboard_f_asm            cpct_keyboard
+     00004497  _cpct_isKeyPressed                 cpct_keyboard
+     00004497  cpct_isKeyPressed_asm              cpct_keyboard
+     000044A3  cpct_setPALColour_asm              cpct_video
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    0000063C =        1596. bytes (REL,CON)
+_CODE                               00004000    000006B0 =        1712. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000044F8  cpct_disableFirmware_asm           cpct_firmware
-     000044F8  cpct_removeInterruptHandler_asm    cpct_firmware
-     00004508  _cpct_getRandom_mxor_u8            cpct_random
-     00004508  cpct_getRandom_mxor_u8_asm         cpct_random
-     00004509  cpct_randomIdx_mxor_u8             cpct_random
-     0000452D  cpct_drawSolidBox_asm              cpct_sprites
-     000045D1  cpct_drawSpriteBlended_asm         cpct_sprites
-     000045D7  _cpct_dsb_blendFunction            cpct_sprites
-     000045F8  _cpct_mode_rom_status              cpct_firmware
-     000045F9  cpct_getScreenPtr_asm              cpct_video
-     00004615  _cpct_mxor32_seed                  cpct_random
-     00004619  _cpct_nextRandom_mxor_u32          cpct_random
-     00004619  cpct_nextRandom_mxor_u32_asm       cpct_random
+     000044AD  cpct_drawSprite_asm                cpct_sprites
+     0000454D  _cpct_keyboardStatusBuffer         cpct_keyboard
+     00004557  cpct_setVideoMode_asm              cpct_video
+     00004564  _cpct_waitVSYNC                    cpct_video
+     00004564  cpct_waitVSYNC_asm                 cpct_video
+     0000456C  _cpct_disableFirmware              cpct_firmware
+     0000456C  _cpct_removeInterruptHandler       cpct_firmware
+     0000456C  cpct_disableFirmware_asm           cpct_firmware
+     0000456C  cpct_removeInterruptHandler_asm    cpct_firmware
+     0000457C  _cpct_getRandom_mxor_u8            cpct_random
+     0000457C  cpct_getRandom_mxor_u8_asm         cpct_random
+     0000457D  cpct_randomIdx_mxor_u8             cpct_random
+     000045A1  cpct_drawSolidBox_asm              cpct_sprites
+     00004645  cpct_drawSpriteBlended_asm         cpct_sprites
+     0000464B  _cpct_dsb_blendFunction            cpct_sprites
+     0000466C  _cpct_mode_rom_status              cpct_firmware
+     0000466D  cpct_getScreenPtr_asm              cpct_video
+     00004689  _cpct_mxor32_seed                  cpct_random
+     0000468D  _cpct_nextRandom_mxor_u32          cpct_random
+     0000468D  cpct_nextRandom_mxor_u32_asm       cpct_random
+
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 
 Files Linked                              [ module(s) ]
@@ -132,7 +140,11 @@ obj/sys/input_system.h.rel                [  ]
 obj/sys/render_system.h.rel               [  ]
 obj/assets/assets.h.rel                   [  ]
 obj/man/entity_manager.rel                [  ]
+obj/man/game_manager.rel                  [  ]
+obj/man/game_manager.h.rel                [  ]
 obj/man/entity_manager.h.rel              [  ]
+obj/man/game.h.rel                        [  ]
+obj/man/game.rel                          [  ]
 
 
 Libraries Linked                          [ object file ]

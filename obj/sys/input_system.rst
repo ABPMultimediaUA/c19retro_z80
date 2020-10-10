@@ -18,8 +18,8 @@ Hexadecimal [16-Bits]
                               3 ;;
                               4 
                               5 .globl  man_entity_init
-                              6 
-                              7 .globl  man_entity_update
+                              6 .globl  man_entity_update
+                              7 .globl  man_entity_terminate
                               8 
                               9 .globl  man_entity_create_entity
                              10 .globl  man_entity_create_bomb
@@ -129,7 +129,47 @@ Hexadecimal [16-Bits]
 
 
 
-                              6 .include "../cpct_functions.h.s"
+                              6 .include "../man/game.h.s"
+                              1 ;;
+                              2 ;;  GAME MANAGER HEADER
+                              3 ;;
+                              4 
+                              5 .globl  man_game_init
+                              6 .globl  man_game_update
+                              7 .globl  man_game_terminate
+                              8 
+                              9 
+                             10 ;;########################################################
+                             11 ;;                       CONSTANTS                       #             
+                             12 ;;########################################################
+                             13 
+                             14 ;; in bytes
+                     0004    15 move_right = 4
+                     FFFFFFFC    16 move_left = -move_right
+                     0010    17 move_down = 16
+                     FFFFFFF0    18 move_up = -move_down
+                             19 
+                             20 
+                             21 
+                             22 ;;  In bytes
+                             23 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
+                             24 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
+                     0004    25 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
+                     00C4    26 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+                             27 
+                             28 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
+                             29 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+                             30 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
+                             31 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
+                             32 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
+                     001E    33 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+                     004E    34 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+Hexadecimal [16-Bits]
+
+
+
+                              7 .include "../cpct_functions.h.s"
                               1 
                               2 .globl  cpct_disableFirmware_asm
                               3 .globl  cpct_setVideoMode_asm
@@ -153,105 +193,104 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+                             24 .globl  Key_R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
 Hexadecimal [16-Bits]
 
 
 
-                              7 .include "input_system.h.s"
+                              8 .include "input_system.h.s"
                               1 ;;
                               2 ;;  INPUT SYSTEM HEADER
                               3 ;;
                               4 
                               5 .globl  sys_input_init
                               6 .globl  sys_input_update
-                              7 
-                              8 
-                              9 ;;########################################################
-                             10 ;;                       CONSTANTS                       #             
-                             11 ;;########################################################
-                             12 
-                             13 ;; in bytes
-                     0004    14 move_right = 4
-                     FFFFFFFC    15 move_left = -move_right
-                     0010    16 move_down = 16
-                     FFFFFFF0    17 move_up = -move_down
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
-Hexadecimal [16-Bits]
-
-
-
-                              8 
-                              9 ;;########################################################
-                             10 ;;                   PRIVATE FUNCTIONS                   #             
-                             11 ;;########################################################
-                             12 
-                             13 
-                             14 ;;########################################################
-                             15 ;;                   PUBLIC FUNCTIONS                    #             
-                             16 ;;########################################################
-                             17 
-                             18 ;;
-                             19 ;;  INPUT:
-                             20 ;;    none
-                             21 ;;  RETURN: 
-                             22 ;;    none
-                             23 ;;  DESTROYED:
-                             24 ;;    none
-   4146                      25 sys_input_init::
-   4146 C9            [10]   26   ret
-                             27 
-                             28 
-                             29 ;;
-                             30 ;;  INPUT:
-                             31 ;;    none
-                             32 ;;  RETURN: 
-                             33 ;;    none
-                             34 ;;  DESTROYED:
-                             35 ;;    none
-   4147                      36 sys_input_update::
-   4147 CD 94 43      [17]   37   call  man_entity_get_player
-                             38 
-                             39   ;; Reset velocities
-   414A DD 36 05 00   [19]   40   ld    e_vx(ix), #0
-   414E DD 36 06 00   [19]   41   ld    e_vy(ix), #0
-                             42 
-   4152 CD B9 43      [17]   43   call  cpct_scanKeyboard_f_asm
-                             44 
-   4155 21 04 04      [10]   45   ld    hl, #Key_O
-   4158 CD 23 44      [17]   46   call  cpct_isKeyPressed_asm
-   415B 28 05         [12]   47   jr    z, O_NotPressed
-   415D                      48 O_Pressed:
-   415D DD 36 05 FC   [19]   49     ld    e_vx(ix), #move_left
-   4161 C9            [10]   50     ret
-   4162                      51 O_NotPressed:
-                             52 
-   4162 21 03 08      [10]   53     ld    hl, #Key_P
-   4165 CD 23 44      [17]   54     call  cpct_isKeyPressed_asm
-   4168 28 05         [12]   55     jr    z, P_NotPressed
-                             56 
-   416A                      57 P_Pressed:
-   416A DD 36 05 04   [19]   58     ld    e_vx(ix), #move_right
-   416E C9            [10]   59     ret
-   416F                      60 P_NotPressed:
-                             61 
-   416F 21 08 08      [10]   62     ld    hl, #Key_Q
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-   4172 CD 23 44      [17]   63     call  cpct_isKeyPressed_asm
-   4175 28 05         [12]   64     jr    z, Q_NotPressed
-   4177                      65 Q_Pressed:
-   4177 DD 36 06 F0   [19]   66     ld    e_vy(ix), #move_up
-   417B C9            [10]   67     ret
-   417C                      68 Q_NotPressed:
-                             69 
-   417C 21 08 20      [10]   70     ld    hl, #Key_A
-   417F CD 23 44      [17]   71     call  cpct_isKeyPressed_asm
-   4182 28 04         [12]   72     jr    z, A_NotPressed
-   4184                      73 A_Pressed:
-   4184 DD 36 06 10   [19]   74     ld    e_vy(ix), #move_down    
-   4188                      75 A_NotPressed:    
-   4188 C9            [10]   76     ret
+                              9 
+                             10 ;;########################################################
+                             11 ;;                   PRIVATE FUNCTIONS                   #             
+                             12 ;;########################################################
+                             13 
+                             14 
+                             15 ;;########################################################
+                             16 ;;                   PUBLIC FUNCTIONS                    #             
+                             17 ;;########################################################
+                             18 
+                             19 ;;
+                             20 ;;  INPUT:
+                             21 ;;    none
+                             22 ;;  RETURN: 
+                             23 ;;    none
+                             24 ;;  DESTROYED:
+                             25 ;;    IX
+   413F                      26 sys_input_init::
+   413F CD C3 43      [17]   27   call  man_entity_get_player
+   4142 DD 22 49 41   [20]   28   ld    (player_ptr), ix
+   4146 C9            [10]   29   ret
+                             30 
+                             31 
+                             32 ;;
+                             33 ;;  INPUT:
+                             34 ;;    none
+                             35 ;;  RETURN: 
+                             36 ;;    none
+                             37 ;;  DESTROYED:
+                             38 ;;    none
+   4147                      39 sys_input_update::  
+                     000A    40   player_ptr = .+2
+   4147 DD 21 00 00   [14]   41   ld    ix, #0x0000    
+                             42 
+                             43   ;; Reset velocities
+   414B DD 36 05 00   [19]   44   ld    e_vx(ix), #0
+   414F DD 36 06 00   [19]   45   ld    e_vy(ix), #0
+                             46 
+   4153 CD 2D 44      [17]   47   call  cpct_scanKeyboard_f_asm
+                             48 
+   4156 21 04 04      [10]   49   ld    hl, #Key_O
+   4159 CD 97 44      [17]   50   call  cpct_isKeyPressed_asm
+   415C 28 05         [12]   51   jr    z, O_NotPressed
+   415E                      52 O_Pressed:
+   415E DD 36 05 FC   [19]   53   ld    e_vx(ix), #move_left
+   4162 C9            [10]   54   ret
+   4163                      55 O_NotPressed:
+                             56 
+   4163 21 03 08      [10]   57   ld    hl, #Key_P
+   4166 CD 97 44      [17]   58   call  cpct_isKeyPressed_asm
+   4169 28 05         [12]   59   jr    z, P_NotPressed
+   416B                      60 P_Pressed:
+   416B DD 36 05 04   [19]   61   ld    e_vx(ix), #move_right
+   416F C9            [10]   62   ret
+   4170                      63 P_NotPressed:
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
+Hexadecimal [16-Bits]
+
+
+
+                             64 
+   4170 21 08 08      [10]   65   ld    hl, #Key_Q
+   4173 CD 97 44      [17]   66   call  cpct_isKeyPressed_asm
+   4176 28 05         [12]   67   jr    z, Q_NotPressed
+   4178                      68 Q_Pressed:
+   4178 DD 36 06 F0   [19]   69   ld    e_vy(ix), #move_up
+   417C C9            [10]   70   ret
+   417D                      71 Q_NotPressed:
+                             72 
+   417D 21 08 20      [10]   73   ld    hl, #Key_A
+   4180 CD 97 44      [17]   74   call  cpct_isKeyPressed_asm
+   4183 28 05         [12]   75   jr    z, A_NotPressed
+   4185                      76 A_Pressed:
+   4185 DD 36 06 10   [19]   77   ld    e_vy(ix), #move_down    
+   4189 C9            [10]   78   ret
+   418A                      79 A_NotPressed:    
+   418A 21 06 04      [10]   80   ld    hl, #Key_R
+   418D CD 97 44      [17]   81   call  cpct_isKeyPressed_asm
+   4190 28 03         [12]   82   jr    z, R_NotPressed
+   4192                      83 R_Pressed:
+   4192 CD 26 44      [17]   84   call  man_game_terminate
+   4195                      85 R_NotPressed:
+   4195 C9            [10]   86   ret

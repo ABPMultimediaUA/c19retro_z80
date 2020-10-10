@@ -57,7 +57,6 @@ O_NotPressed:
   ld    hl, #Key_P
   call  cpct_isKeyPressed_asm
   jr    z, P_NotPressed
-
 P_Pressed:
   ld    e_vx(ix), #move_right
   ret
@@ -85,4 +84,3 @@ R_Pressed:
   call  man_game_terminate
 R_NotPressed:
   ret
-  

@@ -18,8 +18,8 @@ Hexadecimal [16-Bits]
                               3 ;;
                               4 
                               5 .globl  man_entity_init
-                              6 
-                              7 .globl  man_entity_update
+                              6 .globl  man_entity_update
+                              7 .globl  man_entity_terminate
                               8 
                               9 .globl  man_entity_create_entity
                              10 .globl  man_entity_create_bomb
@@ -153,6 +153,7 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 .globl  Key_R
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
 Hexadecimal [16-Bits]
 
@@ -177,20 +178,6 @@ Hexadecimal [16-Bits]
                              16 ;;  In pixels
                      00A0    17 screen_width = 160
                      00C8    18 screen_height = 200
-                             19 
-                             20 ;;  In bytes
-                             21 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
-                             22 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
-                     0004    23 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
-                     00C4    24 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
-                             25 
-                             26 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
-                             27 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
-                             28 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
-                             29 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
-                             30 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
-                     001E    31 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
-                     004E    32 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
 Hexadecimal [16-Bits]
 
@@ -219,198 +206,208 @@ Hexadecimal [16-Bits]
                              20 ;;  DESTROYED:
                              21 ;;    DE,BC,HL,IX
    0000                      22 sys_render_player::
-   0000 CD 00 00      [17]   23   call  man_entity_get_player
-                             24 
-   0003 CD 95 00      [17]   25   call  sys_render_remove_entity
-                             26   
-                             27   ;; Calculate a video-memory location for sprite
-   0006 11 00 00      [10]   28   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-   0009 DD 4E 01      [19]   29   ld    c, e_x(ix)                  ;; C = x coordinate       
-   000C DD 46 02      [19]   30   ld    b, e_y(ix)                  ;; B = y coordinate   
-   000F CD 00 00      [17]   31   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-                             32   
-                             33   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-   0012 DD 75 07      [19]   34   ld  e_sp_ptr_0(ix), l
-   0015 DD 74 08      [19]   35   ld  e_sp_ptr_1(ix), h
-                             36 
-                             37   ;;  Draw sprite blended
-   0018 EB            [ 4]   38   ex    de, hl                      ;; DE = Destination video memory pointer
-   0019 21 00 00      [10]   39   ld    hl, #_sp_player             ;; Source Sprite Pointer (array with pixel data)
-   001C DD 4E 03      [19]   40   ld    c, e_w(ix)                  ;; Sprite width
-   001F DD 46 04      [19]   41   ld    b, e_h(ix)                  ;; Sprite height
-   0022 CD 00 00      [17]   42   call  cpct_drawSprite_asm 
-   0025 C9            [10]   43   ret
-                             44 
+                     0002    23   player_ptr = .+2
+   0000 DD 21 00 00   [14]   24   ld    ix, #0x0000  
+                             25 
+   0004 CD AA 00      [17]   26   call  sys_render_remove_entity
+                             27   
+                             28   ;; Calculate a video-memory location for sprite
+   0007 11 00 00      [10]   29   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+   000A DD 4E 01      [19]   30   ld    c, e_x(ix)                  ;; C = x coordinate       
+   000D DD 46 02      [19]   31   ld    b, e_y(ix)                  ;; B = y coordinate   
+   0010 CD 00 00      [17]   32   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+                             33   
+                             34   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+   0013 DD 75 07      [19]   35   ld  e_sp_ptr_0(ix), l
+   0016 DD 74 08      [19]   36   ld  e_sp_ptr_1(ix), h
+                             37 
+                             38   ;;  Draw sprite blended
+   0019 EB            [ 4]   39   ex    de, hl                      ;; DE = Destination video memory pointer
+   001A 21 00 00      [10]   40   ld    hl, #_sp_player             ;; Source Sprite Pointer (array with pixel data)
+   001D DD 4E 03      [19]   41   ld    c, e_w(ix)                  ;; Sprite width
+   0020 DD 46 04      [19]   42   ld    b, e_h(ix)                  ;; Sprite height
+   0023 CD 00 00      [17]   43   call  cpct_drawSprite_asm 
+   0026 C9            [10]   44   ret
                              45 
-                             46 ;;
-                             47 ;;  Render enemies and update their sp_ptr
-                             48 ;;  INPUT:
-                             49 ;;    none
-                             50 ;;  RETURN: 
-                             51 ;;    none
-                             52 ;;  DESTROYED:
-                             53 ;;    A,DE,BC,HL,IX
-   0026                      54 sys_render_enemies::
-   0026 CD 00 00      [17]   55   call   man_entity_get_enemy_array
-   0029                      56   render_enemies_loop:
-   0029 F5            [11]   57     push  af
-                             58 
-                             59     ;call  sys_render_remove_entity
-                             60     
-                             61     ;; Calculate a video-memory location for sprite
-   002A 11 00 00      [10]   62     ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-   002D DD 4E 01      [19]   63     ld    c, e_x(ix)                  ;; C = x coordinate       
+                             46 
+                             47 ;;
+                             48 ;;  Render enemies and update their sp_ptr
+                             49 ;;  INPUT:
+                             50 ;;    none
+                             51 ;;  RETURN: 
+                             52 ;;    none
+                             53 ;;  DESTROYED:
+                             54 ;;    A,DE,BC,HL,IX
+   0027                      55 sys_render_enemies::
+                     0029    56   enemy_ptr = .+2
+   0027 DD 21 00 00   [14]   57   ld    ix, #0x0000
+                     002C    58   enemy_num = .+1
+   002B 3E 00         [ 7]   59   ld     a, #0
+   002D                      60   render_enemies_loop:
+   002D F5            [11]   61     push  af
+                             62 
+                             63     ;call  sys_render_remove_entity
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
 Hexadecimal [16-Bits]
 
 
 
-   0030 DD 46 02      [19]   64     ld    b, e_y(ix)                  ;; B = y coordinate   
-   0033 CD 00 00      [17]   65     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-                             66     
-                             67     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-   0036 DD 75 07      [19]   68     ld  e_sp_ptr_0(ix), l
-   0039 DD 74 08      [19]   69     ld  e_sp_ptr_1(ix), h
-                             70 
-                             71     ;;  Draw sprite blended
-   003C EB            [ 4]   72     ex    de, hl                      ;; DE = Destination video memory pointer
-   003D 21 00 00      [10]   73     ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
-   0040 DD 46 03      [19]   74     ld    b, e_w(ix)                  ;; Sprite width
-   0043 DD 4E 04      [19]   75     ld    c, e_h(ix)                  ;; Sprite height
-   0046 CD 00 00      [17]   76     call  cpct_drawSpriteBlended_asm    
-                             77   
-   0049 01 09 00      [10]   78     ld   bc, #sizeof_e
-   004C DD 09         [15]   79     add  ix, bc
-                             80 
-   004E F1            [10]   81     pop   af
-   004F 3D            [ 4]   82     dec   a
-   0050 C8            [11]   83     ret   z
-   0051 18 D6         [12]   84     jr    render_enemies_loop
-   0053 C9            [10]   85     ret
-                             86 
-                             87 
-                             88 ;;
-                             89 ;;  Render bombs and update their sp_ptr
-                             90 ;;  INPUT:
-                             91 ;;    none
-                             92 ;;  RETURN: 
-                             93 ;;    none
-                             94 ;;  DESTROYED:
-                             95 ;;    A,DE,BC,HL,IX
-   0054                      96 sys_render_bombs::
-   0054 CD 00 00      [17]   97   call   man_entity_get_bomb_array
-   0057 B7            [ 4]   98   or     a   ;; _bomb_num OR _bomb_num: if Z=1, they're equal, 0 bombs in _bomb_array
-   0058 C8            [11]   99   ret    z
-   0059                     100   render_bombs_loop:
-   0059 F5            [11]  101     push af
-                            102 
-                            103     ;call  sys_render_remove_entity
-                            104     
-                            105     ;; Calculate a video-memory location for sprite
-   005A 11 00 00      [10]  106     ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-   005D DD 4E 01      [19]  107     ld    c, b_x(ix)                  ;; C = x coordinate       
-   0060 DD 46 02      [19]  108     ld    b, b_y(ix)                  ;; B = y coordinate   
-   0063 CD 00 00      [17]  109     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-                            110     
-                            111     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-   0066 DD 75 05      [19]  112     ld  b_sp_ptr_0(ix), l
-   0069 DD 74 06      [19]  113     ld  b_sp_ptr_1(ix), h
-                            114 
-                            115     ;;  Draw sprite blended
-   006C EB            [ 4]  116     ex    de, hl                      ;; DE = Destination video memory pointer
-   006D 21 00 00      [10]  117     ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)    
-   0070 DD 46 03      [19]  118     ld    b, b_w(ix)                  ;; Sprite width
+                             64     
+                             65     ;; Calculate a video-memory location for sprite
+   002E 11 00 00      [10]   66     ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+   0031 DD 4E 01      [19]   67     ld    c, e_x(ix)                  ;; C = x coordinate       
+   0034 DD 46 02      [19]   68     ld    b, e_y(ix)                  ;; B = y coordinate   
+   0037 CD 00 00      [17]   69     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+                             70     
+                             71     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+   003A DD 75 07      [19]   72     ld  e_sp_ptr_0(ix), l
+   003D DD 74 08      [19]   73     ld  e_sp_ptr_1(ix), h
+                             74 
+                             75     ;;  Draw sprite blended
+   0040 EB            [ 4]   76     ex    de, hl                      ;; DE = Destination video memory pointer
+   0041 21 00 00      [10]   77     ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
+   0044 DD 46 03      [19]   78     ld    b, e_w(ix)                  ;; Sprite width
+   0047 DD 4E 04      [19]   79     ld    c, e_h(ix)                  ;; Sprite height
+   004A CD 00 00      [17]   80     call  cpct_drawSpriteBlended_asm    
+                             81   
+   004D 01 09 00      [10]   82     ld   bc, #sizeof_e
+   0050 DD 09         [15]   83     add  ix, bc
+                             84 
+   0052 F1            [10]   85     pop   af
+   0053 3D            [ 4]   86     dec   a
+   0054 C8            [11]   87     ret   z
+   0055 18 D6         [12]   88     jr    render_enemies_loop
+   0057 C9            [10]   89     ret
+                             90 
+                             91 
+                             92 ;;
+                             93 ;;  Render bombs and update their sp_ptr
+                             94 ;;  INPUT:
+                             95 ;;    none
+                             96 ;;  RETURN: 
+                             97 ;;    none
+                             98 ;;  DESTROYED:
+                             99 ;;    A,DE,BC,HL,IX
+   0058                     100 sys_render_bombs::
+   0058 CD 00 00      [17]  101   call   man_entity_get_bomb_array
+   005B B7            [ 4]  102   or     a   ;; _bomb_num OR _bomb_num: if Z=1, they're equal, 0 bombs in _bomb_array
+   005C C8            [11]  103   ret    z
+   005D                     104   render_bombs_loop:
+   005D F5            [11]  105     push af
+                            106 
+                            107     ;call  sys_render_remove_entity
+                            108     
+                            109     ;; Calculate a video-memory location for sprite
+   005E 11 00 00      [10]  110     ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+   0061 DD 4E 01      [19]  111     ld    c, b_x(ix)                  ;; C = x coordinate       
+   0064 DD 46 02      [19]  112     ld    b, b_y(ix)                  ;; B = y coordinate   
+   0067 CD 00 00      [17]  113     call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+                            114     
+                            115     ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+   006A DD 75 05      [19]  116     ld  b_sp_ptr_0(ix), l
+   006D DD 74 06      [19]  117     ld  b_sp_ptr_1(ix), h
+                            118 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
 Hexadecimal [16-Bits]
 
 
 
-   0073 DD 4E 04      [19]  119     ld    c, b_h(ix)                  ;; Sprite height
-   0076 CD 00 00      [17]  120     call  cpct_drawSpriteBlended_asm    
-                            121   
-   0079 01 07 00      [10]  122     ld   bc, #sizeof_b
-   007C DD 09         [15]  123     add  ix, bc
-                            124 
-   007E F1            [10]  125     pop   af
-   007F 3D            [ 4]  126     dec   a
-   0080 C8            [11]  127     ret   z
-   0081 18 D6         [12]  128     jr    render_bombs_loop
-   0083 C9            [10]  129     ret
-                            130 
-                            131 ;;########################################################
-                            132 ;;                   PUBLIC FUNCTIONS                    #             
-                            133 ;;########################################################
+                            119     ;;  Draw sprite blended
+   0070 EB            [ 4]  120     ex    de, hl                      ;; DE = Destination video memory pointer
+   0071 21 00 00      [10]  121     ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)    
+   0074 DD 46 03      [19]  122     ld    b, b_w(ix)                  ;; Sprite width
+   0077 DD 4E 04      [19]  123     ld    c, b_h(ix)                  ;; Sprite height
+   007A CD 00 00      [17]  124     call  cpct_drawSpriteBlended_asm    
+                            125   
+   007D 01 07 00      [10]  126     ld   bc, #sizeof_b
+   0080 DD 09         [15]  127     add  ix, bc
+                            128 
+   0082 F1            [10]  129     pop   af
+   0083 3D            [ 4]  130     dec   a
+   0084 C8            [11]  131     ret   z
+   0085 18 D6         [12]  132     jr    render_bombs_loop
+   0087 C9            [10]  133     ret
                             134 
-                            135 ;;
-                            136 ;;  Set video mode and palette
-                            137 ;;  INPUT:
-                            138 ;;    none
-                            139 ;;  RETURN: 
-                            140 ;;    none
-                            141 ;;  DESTROYED:
-                            142 ;;    AF,BC,DE,HL
-   0084                     143 sys_render_init::  
-   0084 0E 00         [ 7]  144   ld    c, #0
-   0086 CD 00 00      [17]  145   call  cpct_setVideoMode_asm    
-                            146 
-   0089 2E 00         [ 7]  147   ld    l, #0
-   008B 26 00         [ 7]  148   ld    h, #HW_BLACK
-   008D CD 00 00      [17]  149   call  cpct_setPALColour_asm
-                            150     
-   0090 C9            [10]  151   ret
-                            152 
-                            153 
-                            154 ;;
-                            155 ;;  Updates the sprites on screen (video-memory)
-                            156 ;;  INPUT:
-                            157 ;;    none
-                            158 ;;  RETURN: 
-                            159 ;;    none
-                            160 ;;  DESTROYED:
-                            161 ;;    A,DE,BC,HL,IX
-   0091                     162 sys_render_update::
-   0091 CD 00 00      [17]  163   call  sys_render_player
-                            164   ; call  sys_render_enemies
-                            165   ; call  sys_render_bombs
-   0094 C9            [10]  166   ret  
-                            167 
-                            168 
-                            169 ;;
-                            170 ;;  Remove an entity from screen (video-memory)
-                            171 ;;  INPUT:
-                            172 ;;    ix  with memory address of entity that must be removed
-                            173 ;;  RETURN: 
+                            135 ;;########################################################
+                            136 ;;                   PUBLIC FUNCTIONS                    #             
+                            137 ;;########################################################
+                            138 
+                            139 ;;
+                            140 ;;  Set video mode and palette
+                            141 ;;  INPUT:
+                            142 ;;    none
+                            143 ;;  RETURN: 
+                            144 ;;    none
+                            145 ;;  DESTROYED:
+                            146 ;;    AF,BC,DE,HL
+   0088                     147 sys_render_init::  
+   0088 0E 00         [ 7]  148   ld    c, #0
+   008A CD 00 00      [17]  149   call  cpct_setVideoMode_asm    
+                            150 
+   008D 2E 00         [ 7]  151   ld    l, #0
+   008F 26 00         [ 7]  152   ld    h, #HW_BLACK
+   0091 CD 00 00      [17]  153   call  cpct_setPALColour_asm
+                            154 
+   0094 CD 00 00      [17]  155   call  man_entity_get_player
+   0097 DD 22 02 00   [20]  156   ld    (player_ptr), ix
+                            157 
+   009B CD 00 00      [17]  158   call  man_entity_get_enemy_array
+   009E DD 22 29 00   [20]  159   ld    (enemy_ptr), ix
+   00A2 32 2C 00      [13]  160   ld    (enemy_num), a    
+   00A5 C9            [10]  161   ret
+                            162 
+                            163 
+                            164 ;;
+                            165 ;;  Updates the sprites on screen (video-memory)
+                            166 ;;  INPUT:
+                            167 ;;    none
+                            168 ;;  RETURN: 
+                            169 ;;    none
+                            170 ;;  DESTROYED:
+                            171 ;;    A,DE,BC,HL,IX
+   00A6                     172 sys_render_update::
+   00A6 CD 00 00      [17]  173   call  sys_render_player
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
 Hexadecimal [16-Bits]
 
 
 
-                            174 ;;    none
-                            175 ;;  DESTROYED:
-                            176 ;;    AF,BC,DE,HL
-   0095                     177 sys_render_remove_entity::
-   0095 DD 5E 07      [19]  178   ld    e, e_sp_ptr_0(ix)          
-   0098 DD 56 08      [19]  179   ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
-   009B 3E 00         [ 7]  180   ld    a, #0x00  ;;0xFF rojo
-   009D DD 4E 03      [19]  181   ld    c, e_w(ix)                  ;; Sprite width
-   00A0 DD 46 04      [19]  182   ld    b, e_h(ix)                  ;; Sprite height
-   00A3 CD 00 00      [17]  183   call  cpct_drawSolidBox_asm
-   00A6 C9            [10]  184   ret
-                            185 
-                            186 
-                            187 ;;
-                            188 ;;  Remove an entity from screen (video-memory)
-                            189 ;;  INPUT:
-                            190 ;;    ix  with memory address of entity that must be removed
-                            191 ;;  RETURN: 
-                            192 ;;    none
-                            193 ;;  DESTROYED:
-                            194 ;;    AF,BC,DE,HL
-   00A7                     195 sys_render_remove_bomb::
-                            196   ;ld    e, b_sp_ptr_0(ix)          
-                            197   ;ld    d, b_sp_ptr_1(ix)           ;; Destination video memory pointer
-                            198   ;ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)
-                            199   ;ld    b, b_w(ix)                  ;; Sprite width
-                            200   ;ld    c, b_h(ix)                  ;; Sprite height
-                            201   ;call  cpct_drawSpriteBlended_asm
-   00A7 C9            [10]  202   ret
+                            174   ;call  sys_render_enemies
+                            175   ;call  sys_render_bombs
+   00A9 C9            [10]  176   ret  
+                            177 
+                            178 
+                            179 ;;
+                            180 ;;  Remove an entity from screen (video-memory)
+                            181 ;;  INPUT:
+                            182 ;;    ix  with memory address of entity that must be removed
+                            183 ;;  RETURN: 
+                            184 ;;    none
+                            185 ;;  DESTROYED:
+                            186 ;;    AF,BC,DE,HL
+   00AA                     187 sys_render_remove_entity::
+   00AA DD 5E 07      [19]  188   ld    e, e_sp_ptr_0(ix)          
+   00AD DD 56 08      [19]  189   ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
+   00B0 3E 00         [ 7]  190   ld    a, #0x00  ;;0xFF rojo
+   00B2 DD 4E 03      [19]  191   ld    c, e_w(ix)                  ;; Sprite width
+   00B5 DD 46 04      [19]  192   ld    b, e_h(ix)                  ;; Sprite height
+   00B8 CD 00 00      [17]  193   call  cpct_drawSolidBox_asm
+   00BB C9            [10]  194   ret
+                            195 
+                            196 
+                            197 ;;
+                            198 ;;  Remove an entity from screen (video-memory)
+                            199 ;;  INPUT:
+                            200 ;;    ix  with memory address of entity that must be removed
+                            201 ;;  RETURN: 
+                            202 ;;    none
+                            203 ;;  DESTROYED:
+                            204 ;;    AF,BC,DE,HL
+   00BC                     205 sys_render_remove_bomb::
+                            206   ;ld    e, b_sp_ptr_0(ix)          
+                            207   ;ld    d, b_sp_ptr_1(ix)           ;; Destination video memory pointer
+                            208   ;ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)
+                            209   ;ld    b, b_w(ix)                  ;; Sprite width
+                            210   ;ld    c, b_h(ix)                  ;; Sprite height
+                            211   ;call  cpct_drawSpriteBlended_asm
+   00BC C9            [10]  212   ret

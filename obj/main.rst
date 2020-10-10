@@ -2739,274 +2739,99 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
+                             24 .globl  Key_R
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 54.
 Hexadecimal [16-Bits]
 
 
 
-                             22 .include "man/entity_manager.h.s"
+                             22 .include "man/game.h.s"
                               1 ;;
-                              2 ;;  ENTITY MANAGER HEADER
+                              2 ;;  GAME MANAGER HEADER
                               3 ;;
                               4 
-                              5 .globl  man_entity_init
-                              6 
-                              7 .globl  man_entity_update
+                              5 .globl  man_game_init
+                              6 .globl  man_game_update
+                              7 .globl  man_game_terminate
                               8 
-                              9 .globl  man_entity_create_entity
-                             10 .globl  man_entity_create_bomb
-                             11 
-                             12 .globl  man_entity_get_player
-                             13 .globl  man_entity_get_enemy_array
-                             14 .globl  man_entity_get_bomb_array
-                             15 
-                             16 .globl  man_entity_set_player_dead
-                             17 .globl  man_entity_set_enemy_dead
-                             18 
-                             19 ;;########################################################
-                             20 ;;                        MACROS                         #              
-                             21 ;;########################################################
-                             22 
-                             23 ;;-----------------------  ENTITY  -----------------------
-                             24 .macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
-                             25     .db _type
-                             26     .db _x, _y
-                             27     .db _w, _h      ;; both in bytes
-                             28     .db _vx, _vy    
-                             29     .dw _sp_ptr
-                             30 .endm
-                             31 
-                             32 .macro DefineEntityDefault
-                             33     .db alive_type
-                             34     .db 0xDE, 0xAD
-                             35     .db 4, 16  
-                             36     .dw 0xADDE 
-                             37     .dw 0xCCCC
-                             38 .endm
-                             39 
-                             40 .macro DefineEntityArray _Tname,_N,_DefineEntity
-                             41     _Tname'_num:    .db 0    
-                             42     _Tname'_last:   .dw _Tname'_array
-                             43     _Tname'_array: 
-                             44     .rept _N    
-                             45         _DefineEntity
-                             46     .endm
-                             47 .endm
-                             48 
-                             49 ;;-----------------------  BOMBS  ------------------------
-                             50 .macro DefineBombDefault    
-                             51     .db max_timer   ;; timer    
-                             52     .db 0xDE,0xAD   ;; coordinates (x, y)
-                             53     .db #4, #16     ;; width, height -> both in bytes    
-                             54     .dw 0xCCCC      ;; sprite  pointer (where it's in memory video)
+                              9 
+                             10 ;;########################################################
+                             11 ;;                       CONSTANTS                       #             
+                             12 ;;########################################################
+                             13 
+                             14 ;; in bytes
+                     0004    15 move_right = 4
+                     FFFFFFFC    16 move_left = -move_right
+                     0010    17 move_down = 16
+                     FFFFFFF0    18 move_up = -move_down
+                             19 
+                             20 
+                             21 
+                             22 ;;  In bytes
+                             23 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
+                             24 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
+                     0004    25 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
+                     00C4    26 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+                             27 
+                             28 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
+                             29 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+                             30 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
+                             31 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
+                             32 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
+                     001E    33 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+                     004E    34 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 55.
 Hexadecimal [16-Bits]
 
 
 
-                             55 .endm
-                             56 
-                             57 .macro DefineBombArray _Tname,_N,_DefineBomb
-                             58     _Tname'_num:    .db 0    
-                             59     _Tname'_last:   .dw _Tname'_array
-                             60     _Tname'_array: 
-                             61     .rept _N    
-                             62         _DefineBomb
-                             63     .endm
-                             64 .endm
-                             65 
-                             66 ;;########################################################
-                             67 ;;                       CONSTANTS                       #             
-                             68 ;;########################################################
-                             69 
-                             70 ;;-----------------------  ENTITY  -----------------------
-                     0000    71 e_type = 0
-                     0001    72 e_x = 1
-                     0002    73 e_y = 2
-                     0003    74 e_w = 3
-                     0004    75 e_h = 4
-                     0005    76 e_vx = 5
-                     0006    77 e_vy = 6
-                     0007    78 e_sp_ptr_0 = 7
-                     0008    79 e_sp_ptr_1 = 8
-                     0009    80 sizeof_e = 9
-                     0001    81 max_entities = 1
-                             82 
-                             83 ;;-----------------------  BOMBS  ------------------------
-                     0000    84 b_timer = 0
-                     0001    85 b_x = 1
-                     0002    86 b_y = 2
-                     0003    87 b_w = 3
-                     0004    88 b_h = 4
-                     0005    89 b_sp_ptr_0 = 5
-                     0006    90 b_sp_ptr_1 = 6
-                     0007    91 sizeof_b = 7
-                     0001    92 max_bombs = 1
-                             93 
-                             94 ;;########################################################
-                             95 ;;                      ENTITY TYPES                     #             
-                             96 ;;########################################################
-                     0001    97 alive_type = 0x01
-                     00FE    98 dead_type = 0xFE
-                     00FF    99 invalid_type = 0xFF
-                            100 
-                            101 
-                            102 ;;########################################################
-                            103 ;;                       BOMB TIMERS                     #             
-                            104 ;;########################################################
-                     0000   105 zero_timer = 0x00
-                     00FF   106 max_timer = 0xFF
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 56.
-Hexadecimal [16-Bits]
-
-
-
-                             23 .include "sys/render_system.h.s"
-                              1 ;;
-                              2 ;;  RENDER SYSTEM HEADER
-                              3 ;;
-                              4 
-                              5 .globl  sys_render_init
-                              6 .globl  sys_render_update
-                              7 .globl  sys_render_remove_entity
-                              8 .globl  sys_render_remove_bomb
-                              9 
-                             10 
-                             11 ;;########################################################
-                             12 ;;                       CONSTANTS                       #             
-                             13 ;;########################################################
-                     0000    14 video_mode = 0
-                             15 
-                             16 ;;  In pixels
-                     00A0    17 screen_width = 160
-                     00C8    18 screen_height = 200
-                             19 
-                             20 ;;  In bytes
-                             21 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
-                             22 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
-                     0004    23 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
-                     00C4    24 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
-                             25 
-                             26 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
-                             27 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
-                             28 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
-                             29 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
-                             30 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
-                     001E    31 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
-                     004E    32 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 57.
-Hexadecimal [16-Bits]
-
-
-
-                             24 .include "sys/physics_system.h.s"
-                              1 ;;
-                              2 ;;  PHYSICS SYSTEM HEADER
-                              3 ;;
-                              4 
-                              5 .globl  sys_physics_init
-                              6 .globl  sys_physics_update
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 58.
-Hexadecimal [16-Bits]
-
-
-
-                             25 .include "sys/input_system.h.s"
-                              1 ;;
-                              2 ;;  INPUT SYSTEM HEADER
-                              3 ;;
-                              4 
-                              5 .globl  sys_input_init
-                              6 .globl  sys_input_update
-                              7 
-                              8 
-                              9 ;;########################################################
-                             10 ;;                       CONSTANTS                       #             
-                             11 ;;########################################################
-                             12 
-                             13 ;; in bytes
-                     0004    14 move_right = 4
-                     FFFFFFFC    15 move_left = -move_right
-                     0010    16 move_down = 16
-                     FFFFFFF0    17 move_up = -move_down
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 59.
-Hexadecimal [16-Bits]
-
-
-
-                             26 .include "assets/assets.h.s"
-                              1 .globl  _sp_player
-                              2 .globl  _sp_enemy
-                              3 .globl  _sp_bomb
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 60.
-Hexadecimal [16-Bits]
-
-
-
-                             27 
-                             28 ;;
-                             29 ;; Start of _DATA area 
-                             30 ;;  SDCC requires at least _DATA and _CODE areas to be declared, but you may use
-                             31 ;;  any one of them for any purpose. Usually, compiler puts _DATA area contents
-                             32 ;;  right after _CODE area contents.
-                             33 ;;
-                             34 .area _DATA
-                             35 
-                             36 ;;
-                             37 ;; Start of _CODE area
-                             38 ;; 
-                             39 .area _CODE
-                             40 
-                             41 ;; 
-                             42 ;; Declare all function entry points as global symbols for the compiler.
-                             43 ;; (The linker will know what to do with them)
-                             44 ;; WARNING: Every global symbol declared will be linked, so DO NOT declare 
-                             45 ;; symbols for functions you do not use.
-                             46 ;;
-                             47 
-                             48 ;;
-                             49 ;; MAIN function. This is the entry point of the application.
-                             50 ;;    _main:: global symbol is required for correctly compiling and linking
-                             51 ;;
-   40C0                      52 _main::   
-                             53    ;; Disable firmware to prevent it from interfering with string drawing
-   40C0 CD F8 44      [17]   54    call cpct_disableFirmware_asm     
-                             55 
-                             56    ;;call  man_entity_init
-   40C3 CD 64 43      [17]   57    call  man_entity_init   
-   40C6 CD 46 41      [17]   58    call  sys_input_init
-   40C9 CD 3B 41      [17]   59    call  sys_physics_init
-   40CC CD 0D 42      [17]   60    call  sys_render_init   
-                             61 
-                             62 ;; Loop forever
-   40CF                      63 loop:
-   40CF CD 47 41      [17]   64    call  sys_input_update
-   40D2 CD 3C 41      [17]   65    call  sys_physics_update
-   40D5 CD 6E 43      [17]   66    call  man_entity_update
-   40D8 CD 1A 42      [17]   67    call  sys_render_update
-                             68 
-   40DB CD E0 40      [17]   69    call wait_n_times
-   40DE 18 EF         [12]   70    jr    loop
-                             71 
-   40E0                      72 wait_n_times:
-   40E0 CD F0 44      [17]   73    call  cpct_waitVSYNC_asm   
-   40E3 76            [ 4]   74    halt
-   40E4 76            [ 4]   75    halt
-   40E5 76            [ 4]   76    halt
-   40E6 76            [ 4]   77    halt
-   40E7 CD F0 44      [17]   78    call  cpct_waitVSYNC_asm   
-   40EA 76            [ 4]   79    halt
-   40EB 76            [ 4]   80    halt
-   40EC 76            [ 4]   81    halt
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 61.
-Hexadecimal [16-Bits]
-
-
-
-   40ED 76            [ 4]   82    halt
-   40EE CD F0 44      [17]   83    call  cpct_waitVSYNC_asm   
-   40F1 76            [ 4]   84    halt
-   40F2 76            [ 4]   85    halt
-   40F3 76            [ 4]   86    halt
-   40F4 76            [ 4]   87    halt
-   40F5 C9            [10]   88    ret
+                             23 
+                             24 ;;
+                             25 ;; Start of _DATA area 
+                             26 ;;  SDCC requires at least _DATA and _CODE areas to be declared, but you may use
+                             27 ;;  any one of them for any purpose. Usually, compiler puts _DATA area contents
+                             28 ;;  right after _CODE area contents.
+                             29 ;;
+                             30 .area _DATA
+                             31 
+                             32 ;;
+                             33 ;; Start of _CODE area
+                             34 ;; 
+                             35 .area _CODE
+                             36 
+                             37 ;; 
+                             38 ;; Declare all function entry points as global symbols for the compiler.
+                             39 ;; (The linker will know what to do with them)
+                             40 ;; WARNING: Every global symbol declared will be linked, so DO NOT declare 
+                             41 ;; symbols for functions you do not use.
+                             42 ;;
+                             43 
+                             44 ;;
+                             45 ;; MAIN function. This is the entry point of the application.
+                             46 ;;    _main:: global symbol is required for correctly compiling and linking
+                             47 ;;
+   40C0                      48 _main::   
+                             49    ;; Disable firmware to prevent it from interfering with string drawing
+   40C0 CD 6C 45      [17]   50    call  cpct_disableFirmware_asm     
+                             51    
+   40C3 CD 0C 44      [17]   52    call  man_game_init
+                             53 ;; Loop forever
+   40C6                      54 loop:
+   40C6 CD 19 44      [17]   55    call  man_game_update
+                             56    
+                             57    .rept 3
+                             58       call  cpct_waitVSYNC_asm   
+                             59       halt
+                             60       halt
+                             61    .endm
+   40C9 CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40CC 76            [ 4]    2       halt
+   40CD 76            [ 4]    3       halt
+   40CE CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40D1 76            [ 4]    2       halt
+   40D2 76            [ 4]    3       halt
+   40D3 CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40D6 76            [ 4]    2       halt
+   40D7 76            [ 4]    3       halt
+                             62 
+   40D8 18 EC         [12]   63    jr    loop   

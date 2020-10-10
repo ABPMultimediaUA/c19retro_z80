@@ -20,6 +20,10 @@ obj/sys/input_system.h.rel
 obj/sys/render_system.h.rel
 obj/assets/assets.h.rel
 obj/man/entity_manager.rel
+obj/man/game_manager.rel
+obj/man/game_manager.h.rel
 obj/man/entity_manager.h.rel
+obj/man/game.h.rel
+obj/man/game.rel
 
 -e
