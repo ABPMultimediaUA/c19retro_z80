@@ -19,11 +19,7 @@
 ;; Include all CPCtelera constant definitions, macros and variables
 .include "cpctelera.h.s"
 .include "cpct_functions.h.s"
-.include "man/entity_manager.h.s"
-.include "sys/render_system.h.s"
-.include "sys/physics_system.h.s"
-.include "sys/input_system.h.s"
-.include "assets/assets.h.s"
+.include "man/game.h.s"
 
 ;;
 ;; Start of _DATA area 
@@ -51,26 +47,14 @@
 ;;
 _main::   
    ;; Disable firmware to prevent it from interfering with string drawing
-   call cpct_disableFirmware_asm     
-
-   ;;call  man_entity_init
-   call  man_entity_init   
-   call  sys_input_init
-   call  sys_physics_init
-   call  sys_render_init  
-
-   call  sys_render_map 
+   call  cpct_disableFirmware_asm     
    
-
+   call  man_game_init
 ;; Loop forever
 loop:
-
-   call  sys_input_update
-   call  sys_physics_update
-   call  man_entity_update
-   call  sys_render_update
+   call  man_game_update
    
-   .rept 4
+   .rept 3
       call  cpct_waitVSYNC_asm   
       halt
       halt

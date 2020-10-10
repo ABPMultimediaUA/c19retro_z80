@@ -4,11 +4,9 @@ Hexadecimal [16-Bits]
 Symbol Table
 
     .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
-    .__.H$L.=  0000 L   |     max_map_=  004E     |     max_map_=  00C4 
-    min_map_=  001E     |     min_map_=  0004     |     screen_h=  00C8 
-    screen_w=  00A0     |     sys_rend   **** GX  |     sys_rend   **** GX
+    .__.H$L.=  0000 L   |     screen_h=  00C8     |     screen_w=  00A0 
     sys_rend   **** GX  |     sys_rend   **** GX  |     sys_rend   **** GX
-    video_mo=  0000 
+    sys_rend   **** GX  |     sys_rend   **** GX  |     video_mo=  0000 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 2.
 Hexadecimal [16-Bits]

@@ -3,6 +3,7 @@
 ;;
 
 .include "../man/entity_manager.h.s"
+.include "../man/game.h.s"
 .include "../cpct_functions.h.s"
 .include "render_system.h.s"
 .include "../assets/assets.h.s"
@@ -145,6 +146,7 @@ sys_render_bombs::
 ;;  DESTROYED:
 ;;    AF,BC,DE,HL
 sys_render_init::  
+  call sys_render_map
   ld    c, #0
   call  cpct_setVideoMode_asm    
 
@@ -171,8 +173,8 @@ sys_render_init::
 ;;    A,DE,BC,HL,IX
 sys_render_update::
   call  sys_render_player
-  ; call  sys_render_enemies
-  ; call  sys_render_bombs
+  ;call  sys_render_enemies
+  ;call  sys_render_bombs
   ret  
 
 

@@ -18,8 +18,8 @@ Hexadecimal [16-Bits]
                               3 ;;
                               4 
                               5 .globl  man_entity_init
-                              6 
-                              7 .globl  man_entity_update
+                              6 .globl  man_entity_update
+                              7 .globl  man_entity_terminate
                               8 
                               9 .globl  man_entity_create_entity
                              10 .globl  man_entity_create_bomb
@@ -129,19 +129,59 @@ Hexadecimal [16-Bits]
 
 
 
-                              6 .include "physics_system.h.s"
+                              6 .include "../man/game.h.s"
+                              1 ;;
+                              2 ;;  GAME MANAGER HEADER
+                              3 ;;
+                              4 
+                              5 .globl  man_game_init
+                              6 .globl  man_game_update
+                              7 .globl  man_game_terminate
+                              8 
+                              9 
+                             10 ;;########################################################
+                             11 ;;                       CONSTANTS                       #             
+                             12 ;;########################################################
+                             13 
+                             14 ;; in bytes
+                     0004    15 move_right = 4
+                     FFFFFFFC    16 move_left = -move_right
+                     0010    17 move_down = 16
+                     FFFFFFF0    18 move_up = -move_down
+                             19 
+                             20 
+                             21 
+                             22 ;;  In bytes
+                             23 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
+                             24 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
+                     0004    25 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
+                     00C4    26 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
+                             27 
+                             28 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
+                             29 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+                             30 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
+                             31 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
+                             32 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
+                     001E    33 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+                     004E    34 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+Hexadecimal [16-Bits]
+
+
+
+                              7 .include "physics_system.h.s"
                               1 ;;
                               2 ;;  PHYSICS SYSTEM HEADER
                               3 ;;
                               4 
                               5 .globl  sys_physics_init
                               6 .globl  sys_physics_update
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 5.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
 Hexadecimal [16-Bits]
 
 
 
-                              7 .include "render_system.h.s"
+                              8 .include "render_system.h.s"
                               1 ;;
                               2 ;;  RENDER SYSTEM HEADER
                               3 ;;
@@ -161,26 +201,12 @@ Hexadecimal [16-Bits]
                              17 ;;  In pixels
                      00A0    18 screen_width = 160
                      00C8    19 screen_height = 200
-                             20 
-                             21 ;;  In bytes
-                             22 ;;  The max constants are max+1 because this way they represent the first pixel where border begins.
-                             23 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
-                     0004    24 min_map_y_coord_valid = 4     ;;  [0-3] border, >=4 map
-                     00C4    25 max_map_y_coord_valid = 196    ;;  [196-199] border, <=195 map
-                             26 
-                             27 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
-                             28 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
-                             29 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
-                             30 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
-                             31 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
-                     001E    32 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
-                     004E    33 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 6.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
 Hexadecimal [16-Bits]
 
 
 
-                              8 .include "../cpct_functions.h.s"
+                              9 .include "../cpct_functions.h.s"
                               1 
                               2 .globl  cpct_disableFirmware_asm
                               3 .globl  cpct_setVideoMode_asm
@@ -204,164 +230,160 @@ Hexadecimal [16-Bits]
                              21 .globl  Key_P
                              22 .globl  Key_Q
                              23 .globl  Key_A
-                             24 
-                             25 ;;for normal people
-                             26 .globl  Key_W
-                             27 .globl  Key_S
-                             28 .globl  Key_D
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 7.
-Hexadecimal [16-Bits]
-
-
-
-                              9 
-                             10 ;;########################################################
-                             11 ;;                   PRIVATE FUNCTIONS                   #             
-                             12 ;;########################################################
-                             13 
-                             14 ;;
-                             15 ;;  INPUT:
-                             16 ;;    ix  address memory where entity starts
-                             17 ;;  RETURN: 
-                             18 ;;    none
-                             19 ;;  DESTROYED:
-                             20 ;;    none
-   4134                      21 sys_physics_update_entity::
-                             22   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
-   4134 DD 7E 01      [19]   23   ld    a, e_x(ix)
-   4137 DD 86 05      [19]   24   add   e_vx(ix)
-                             25   ;add   #2
-   413A 47            [ 4]   26   ld    b, a
-                             27 
-                             28   ;; Check is new X coordinate is greater than min allowed
-                             29   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   413B FE 1E         [ 7]   30   cp    #min_map_x_coord_valid
-   413D 38 0B         [12]   31   jr    c, check_y
-                             32 
-                             33   ;; Calculate max X coordinate where an entity could be
-   413F 3E 4E         [ 7]   34   ld    a, #max_map_x_coord_valid
-   4141 DD 96 03      [19]   35   sub   e_w(ix)  
-                             36 
-                             37   ;; Check is new X coordinate is smaller than max allowed
-                             38   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   4144 B8            [ 4]   39   cp    b
-   4145 38 03         [12]   40   jr    c, check_y
-                             41 
-   4147 DD 70 01      [19]   42   ld    e_x(ix), b    ;; Update X coordinate
-                             43 
-   414A                      44 check_y:
-                             45   ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
-   414A DD 7E 02      [19]   46   ld    a, e_y(ix)
-   414D DD 86 06      [19]   47   add   e_vy(ix)
-   4150 47            [ 4]   48   ld    b, a
-                             49 
-                             50   ;; Check is new Y coordinate is greater than min allowed
-                             51   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-   4151 FE 04         [ 7]   52   cp    #min_map_y_coord_valid
-   4153 D8            [11]   53   ret   c
-                             54 
-                             55   ;; Calculate max X coordinate where an entity could be
-   4154 3E C4         [ 7]   56   ld    a, #max_map_y_coord_valid
-   4156 DD 96 04      [19]   57   sub   e_h(ix)  
-                             58 
-                             59   ;; Check is new Y coordinate is smaller than max allowed
-                             60   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
-   4159 B8            [ 4]   61   cp    b
-   415A D8            [11]   62   ret   c
-                             63   
+                             24 .globl  Key_R
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 8.
 Hexadecimal [16-Bits]
 
 
 
-   415B DD 70 02      [19]   64   ld    e_y(ix), b    ;; Update X coordinate
-   415E C9            [10]   65   ret
-                             66 
-                             67 
-                             68 ;;
-                             69 ;;  INPUT:
-                             70 ;;    none
-                             71 ;;  RETURN: 
-                             72 ;;    none
-                             73 ;;  DESTROYED:
-                             74 ;;    A,BC,IX
-   415F                      75 sys_physics_player_update::
-                     002D    76   player_ptr = .+2
-   415F DD 21 00 00   [14]   77   ld    ix, #0x0000  
-   4163 CD 34 41      [17]   78   call  sys_physics_update_entity
-   4166 C9            [10]   79   ret
-                             80 
-                             81 
-                             82 ;;
-                             83 ;;  INPUT:
-                             84 ;;    none
-                             85 ;;  RETURN: 
-                             86 ;;    none
-                             87 ;;  DESTROYED:
-                             88 ;;    A,BC,IX
-   4167                      89 sys_physics_enemies_update::
-                     0035    90   enemy_ptr = .+2
-   4167 DD 21 00 00   [14]   91   ld    ix, #0x0000
-                     0038    92   enemy_num = .+1
-   416B 3E 00         [ 7]   93   ld     a, #0
-                             94 
-   416D                      95 physics_enemies_loop:
-   416D F5            [11]   96   push  af
-                             97   
-   416E CD 34 41      [17]   98   call  sys_physics_update_entity
-                             99 
-   4171 01 09 00      [10]  100   ld    bc, #sizeof_e
-   4174 DD 09         [15]  101   add   ix, bc
-                            102 
-   4176 F1            [10]  103   pop   af
-   4177 3D            [ 4]  104   dec   a
-   4178 C8            [11]  105   ret   z
-   4179 18 F2         [12]  106   jr    physics_enemies_loop
-   417B C9            [10]  107   ret
-                            108 
-                            109 
-                            110 ;;
-                            111 ;;  INPUT:
-                            112 ;;    none
-                            113 ;;  RETURN: 
-                            114 ;;    none
-                            115 ;;  DESTROYED:
-                            116 ;;    none
-   417C                     117 sys_physics_bomb_update::
-   417C C9            [10]  118   ret
+                             10 
+                             11 ;;########################################################
+                             12 ;;                   PRIVATE FUNCTIONS                   #             
+                             13 ;;########################################################
+                             14 
+                             15 ;;
+                             16 ;;  INPUT:
+                             17 ;;    ix  address memory where entity starts
+                             18 ;;  RETURN: 
+                             19 ;;    none
+                             20 ;;  DESTROYED:
+                             21 ;;    none
+   411A                      22 sys_physics_update_entity::
+                             23   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
+   411A DD 7E 01      [19]   24   ld    a, e_x(ix)
+   411D DD 86 05      [19]   25   add   e_vx(ix)
+                             26   ;add   #2
+   4120 47            [ 4]   27   ld    b, a
+                             28 
+                             29   ;; Check is new X coordinate is greater than min allowed
+                             30   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+   4121 FE 1E         [ 7]   31   cp    #min_map_x_coord_valid
+   4123 38 0B         [12]   32   jr    c, check_y
+                             33 
+                             34   ;; Calculate max X coordinate where an entity could be
+   4125 3E 4E         [ 7]   35   ld    a, #max_map_x_coord_valid
+   4127 DD 96 03      [19]   36   sub   e_w(ix)  
+                             37 
+                             38   ;; Check is new X coordinate is smaller than max allowed
+                             39   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+   412A B8            [ 4]   40   cp    b
+   412B 38 03         [12]   41   jr    c, check_y
+                             42 
+   412D DD 70 01      [19]   43   ld    e_x(ix), b    ;; Update X coordinate
+                             44 
+   4130                      45 check_y:
+                             46   ;; Calculate the Y coordinate where the entity should be positioned and stores result in B
+   4130 DD 7E 02      [19]   47   ld    a, e_y(ix)
+   4133 DD 86 06      [19]   48   add   e_vy(ix)
+   4136 47            [ 4]   49   ld    b, a
+                             50 
+                             51   ;; Check is new Y coordinate is greater than min allowed
+                             52   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
+   4137 FE 04         [ 7]   53   cp    #min_map_y_coord_valid
+   4139 D8            [11]   54   ret   c
+                             55 
+                             56   ;; Calculate max X coordinate where an entity could be
+   413A 3E C4         [ 7]   57   ld    a, #max_map_y_coord_valid
+   413C DD 96 04      [19]   58   sub   e_h(ix)  
+                             59 
+                             60   ;; Check is new Y coordinate is smaller than max allowed
+                             61   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
+   413F B8            [ 4]   62   cp    b
+   4140 D8            [11]   63   ret   c
+                             64   
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 9.
 Hexadecimal [16-Bits]
 
 
 
-                            119 
+   4141 DD 70 02      [19]   65   ld    e_y(ix), b    ;; Update X coordinate
+   4144 C9            [10]   66   ret
+                             67 
+                             68 
+                             69 ;;
+                             70 ;;  INPUT:
+                             71 ;;    none
+                             72 ;;  RETURN: 
+                             73 ;;    none
+                             74 ;;  DESTROYED:
+                             75 ;;    A,BC,IX
+   4145                      76 sys_physics_player_update::
+                     002D    77   player_ptr = .+2
+   4145 DD 21 00 00   [14]   78   ld    ix, #0x0000  
+   4149 CD 1A 41      [17]   79   call  sys_physics_update_entity
+   414C C9            [10]   80   ret
+                             81 
+                             82 
+                             83 ;;
+                             84 ;;  INPUT:
+                             85 ;;    none
+                             86 ;;  RETURN: 
+                             87 ;;    none
+                             88 ;;  DESTROYED:
+                             89 ;;    A,BC,IX
+   414D                      90 sys_physics_enemies_update::
+                     0035    91   enemy_ptr = .+2
+   414D DD 21 00 00   [14]   92   ld    ix, #0x0000
+                     0038    93   enemy_num = .+1
+   4151 3E 00         [ 7]   94   ld     a, #0
+                             95 
+   4153                      96 physics_enemies_loop:
+   4153 F5            [11]   97   push  af
+                             98   
+   4154 CD 1A 41      [17]   99   call  sys_physics_update_entity
+                            100 
+   4157 01 09 00      [10]  101   ld    bc, #sizeof_e
+   415A DD 09         [15]  102   add   ix, bc
+                            103 
+   415C F1            [10]  104   pop   af
+   415D 3D            [ 4]  105   dec   a
+   415E C8            [11]  106   ret   z
+   415F 18 F2         [12]  107   jr    physics_enemies_loop
+   4161 C9            [10]  108   ret
+                            109 
+                            110 
+                            111 ;;
+                            112 ;;  INPUT:
+                            113 ;;    none
+                            114 ;;  RETURN: 
+                            115 ;;    none
+                            116 ;;  DESTROYED:
+                            117 ;;    none
+   4162                     118 sys_physics_bomb_update::
+   4162 C9            [10]  119   ret
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180), page 10.
+Hexadecimal [16-Bits]
+
+
+
                             120 
                             121 
-                            122 ;;########################################################
-                            123 ;;                   PUBLIC FUNCTIONS                    #             
-                            124 ;;########################################################
-                            125 
-                            126 ;;
-                            127 ;;  none
-                            128 ;;  INPUT:
-                            129 ;;    none
-                            130 ;;  RETURN: 
-                            131 ;;    none
-                            132 ;;  DESTROYED:
-                            133 ;;    none
-   417D                     134 sys_physics_init::
-   417D CD 86 44      [17]  135   call  man_entity_get_player
-   4180 DD 22 61 41   [20]  136   ld    (player_ptr), ix
-                            137 
-   4184 CD 8B 44      [17]  138   call  man_entity_get_enemy_array
-   4187 DD 22 69 41   [20]  139   ld    (enemy_ptr), ix
-   418B 32 6C 41      [13]  140   ld    (enemy_num), a
-   418E C9            [10]  141   ret
-                            142 
+                            122 
+                            123 ;;########################################################
+                            124 ;;                   PUBLIC FUNCTIONS                    #             
+                            125 ;;########################################################
+                            126 
+                            127 ;;
+                            128 ;;  none
+                            129 ;;  INPUT:
+                            130 ;;    none
+                            131 ;;  RETURN: 
+                            132 ;;    none
+                            133 ;;  DESTROYED:
+                            134 ;;    none
+   4163                     135 sys_physics_init::
+   4163 CD 9A 44      [17]  136   call  man_entity_get_player
+   4166 DD 22 47 41   [20]  137   ld    (player_ptr), ix
+                            138 
+   416A CD 9F 44      [17]  139   call  man_entity_get_enemy_array
+   416D DD 22 4F 41   [20]  140   ld    (enemy_ptr), ix
+   4171 32 52 41      [13]  141   ld    (enemy_num), a
+   4174 C9            [10]  142   ret
                             143 
-   418F                     144 sys_physics_update::
-   418F CD 5F 41      [17]  145   call  sys_physics_player_update
-   4192 CD 67 41      [17]  146   call  sys_physics_enemies_update
-   4195 CD 7C 41      [17]  147   call  sys_physics_bomb_update
-   4198 C9            [10]  148   ret
-                            149   
+                            144 
+   4175                     145 sys_physics_update::
+   4175 CD 45 41      [17]  146   call  sys_physics_player_update
+   4178 CD 4D 41      [17]  147   call  sys_physics_enemies_update
+   417B CD 62 41      [17]  148   call  sys_physics_bomb_update
+   417E C9            [10]  149   ret
+                            150   

@@ -3,8 +3,8 @@
 ;;
 
 .globl  man_entity_init
-
 .globl  man_entity_update
+.globl  man_entity_terminate
 
 .globl  man_entity_create_entity
 .globl  man_entity_create_bomb

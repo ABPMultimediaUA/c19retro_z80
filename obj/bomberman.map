@@ -21,28 +21,25 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000000  s__DABS                         
      00000014  HW_BLACK                           cpct_keyboard
      00000404  Key_O                              cpct_keyboard
-     0000072E  l__CODE                         
+     00000406  Key_R                              cpct_keyboard
+     00000757  l__CODE                         
      00000803  Key_P                              cpct_keyboard
-     00000807  Key_W                              cpct_keyboard
      00000808  Key_Q                              cpct_keyboard
-     00001007  Key_S                              cpct_keyboard
-     00002007  Key_D                              cpct_keyboard
      00002008  Key_A                              cpct_keyboard
      00004000  s__CODE                         
-     0000472E  s__DATA                         
-     0000472E  s__GSFINAL                      
-     0000472E  s__GSINIT                       
-     0000472E  s__HOME                         
-     0000472E  s__INITIALIZED                  
-     0000472E  s__INITIALIZER                  
+     00004757  s__DATA                         
+     00004757  s__GSFINAL                      
+     00004757  s__GSINIT                       
+     00004757  s__HOME                         
+     00004757  s__INITIALIZED                  
+     00004757  s__INITIALIZER                  
      0000C000  CPCT_VMEM_START_ASM                cpct_keyboard
-
 ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    0000072E =        1838. bytes (REL,CON)
+_CODE                               00004000    00000757 =        1879. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -51,83 +48,84 @@ _CODE                               00004000    0000072E =        1838. bytes (R
      00004080  _sp_enemy                          enemy
      000040C0  _sp_player                         player
      00004100  _main                              cpct_keyboard
-     00004134  sys_physics_update_entity          
-     0000415F  sys_physics_player_update          
-     00004167  sys_physics_enemies_update         
-     0000417C  sys_physics_bomb_update            
-     0000417D  sys_physics_init                   
-     0000418F  sys_physics_update                 
-     00004199  sys_input_init                     
-     000041A1  sys_input_update                   
-     000041E4  sys_render_player                  
-     0000420B  sys_render_enemies                 
-     0000423C  sys_render_bombs                   
-     0000426C  sys_render_init                    
-     0000428A  sys_render_update                  
-     0000428E  sys_render_remove_entity           
-     000042A0  sys_render_remove_bomb             
-     000042A1  sys_render_one_border_block        
-     000042B3  sys_render_min_row_map             
-     000042C8  sys_render_max_row_map             
-     000042DD  sys_render_min_col_map             
-     000042F2  sys_render_max_col_map             
-     00004307  sys_render_map                     
-     00004314  man_game_init                      
-     00004321  man_game_update                    
-     00004322  man_game_render                    
-     00004342  man_entity_new_entity              
-     00004358  man_entity_initialize_entity       
-     00004375  man_entity_new_bomb                
-     0000438B  man_entity_initialize_bomb         
-     0000439E  man_entity_init_player             
-     0000439F  man_entity_init_entities           
-     000043B1  man_entity_init_bombs              
-     000043BD  man_entity_player_update           
-     000043BE  man_entity_enemies_update          
-     0000440A  man_entity_bombs_update            
-     00004456  man_entity_init                    
-     00004460  man_entity_update                  
-     0000446A  man_entity_create_entity           
-     00004478  man_entity_create_bomb             
-     00004486  man_entity_get_player              
-     0000448B  man_entity_get_enemy_array         
-     00004493  man_entity_get_bomb_array          
-     0000449B  man_entity_set_player_dead         
-     000044A5  man_entity_set_enemy_dead          
-     000044AB  _cpct_scanKeyboard_f               cpct_keyboard
-     000044AB  cpct_scanKeyboard_f_asm            cpct_keyboard
+     0000411A  sys_physics_update_entity          
+     00004145  sys_physics_player_update          
+     0000414D  sys_physics_enemies_update         
+     00004162  sys_physics_bomb_update            
+     00004163  sys_physics_init                   
+     00004175  sys_physics_update                 
+     0000417F  sys_input_init                     
+     00004187  sys_input_update                   
+     000041D6  sys_render_player                  
+     000041FD  sys_render_enemies                 
+     0000422E  sys_render_bombs                   
+     0000425E  sys_render_init                    
+     0000427F  sys_render_update                  
+     00004283  sys_render_remove_entity           
+     00004295  sys_render_remove_bomb             
+     00004296  sys_render_one_border_block        
+     000042A8  sys_render_min_row_map             
+     000042BD  sys_render_max_row_map             
+     000042D2  sys_render_min_col_map             
+     000042E7  sys_render_max_col_map             
+     000042FC  sys_render_map                     
+     00004309  man_game_init                      
+     00004316  man_game_update                    
+     00004323  man_game_terminate                 
+     00004349  man_entity_new_entity              
+     0000435F  man_entity_initialize_entity       
+     0000437A  man_entity_new_bomb                
+     00004390  man_entity_initialize_bomb         
+     000043A3  man_entity_init_player             
+     000043AF  man_entity_init_entities           
+     000043C5  man_entity_init_bombs              
+     000043D1  man_entity_player_update           
+     000043D2  man_entity_enemies_update          
+     0000441E  man_entity_bombs_update            
+     0000446A  man_entity_init                    
+     00004474  man_entity_update                  
+     0000447E  man_entity_create_entity           
+     0000448C  man_entity_create_bomb             
+     0000449A  man_entity_get_player              
+     0000449F  man_entity_get_enemy_array         
+     000044A7  man_entity_get_bomb_array          
+     000044AF  man_entity_set_player_dead         
+     000044B9  man_entity_set_enemy_dead          
+     000044BF  man_entity_terminate               
+     000044D4  _cpct_scanKeyboard_f               cpct_keyboard
 ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    0000072E =        1838. bytes (REL,CON)
+_CODE                               00004000    00000757 =        1879. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00004515  _cpct_isKeyPressed                 cpct_keyboard
-     00004515  cpct_isKeyPressed_asm              cpct_keyboard
-     00004521  cpct_setPALColour_asm              cpct_video
-     0000452B  cpct_drawSprite_asm                cpct_sprites
-     000045CB  _cpct_keyboardStatusBuffer         cpct_keyboard
-     000045D5  cpct_setVideoMode_asm              cpct_video
-     000045E2  _cpct_waitVSYNC                    cpct_video
-     000045E2  cpct_waitVSYNC_asm                 cpct_video
-     000045EA  _cpct_disableFirmware              cpct_firmware
-     000045EA  _cpct_removeInterruptHandler       cpct_firmware
-     000045EA  cpct_disableFirmware_asm           cpct_firmware
-     000045EA  cpct_removeInterruptHandler_asm    cpct_firmware
-     000045FA  _cpct_getRandom_mxor_u8            cpct_random
-     000045FA  cpct_getRandom_mxor_u8_asm         cpct_random
-     000045FB  cpct_randomIdx_mxor_u8             cpct_random
-     0000461F  cpct_drawSolidBox_asm              cpct_sprites
-     000046C3  cpct_drawSpriteBlended_asm         cpct_sprites
-     000046C9  _cpct_dsb_blendFunction            cpct_sprites
-     000046EA  _cpct_mode_rom_status              cpct_firmware
-     000046EB  cpct_getScreenPtr_asm              cpct_video
-     00004707  _cpct_mxor32_seed                  cpct_random
-     0000470B  _cpct_nextRandom_mxor_u32          cpct_random
-     0000470B  cpct_nextRandom_mxor_u32_asm       cpct_random
+     000044D4  cpct_scanKeyboard_f_asm            cpct_keyboard
+     0000453E  _cpct_isKeyPressed                 cpct_keyboard
+     0000453E  cpct_isKeyPressed_asm              cpct_keyboard
+     0000454A  cpct_setPALColour_asm              cpct_video
+     00004554  cpct_drawSprite_asm                cpct_sprites
+     000045F4  _cpct_keyboardStatusBuffer         cpct_keyboard
+     000045FE  cpct_setVideoMode_asm              cpct_video
+     0000460B  _cpct_waitVSYNC                    cpct_video
+     0000460B  cpct_waitVSYNC_asm                 cpct_video
+     00004613  _cpct_disableFirmware              cpct_firmware
+     00004613  _cpct_removeInterruptHandler       cpct_firmware
+     00004613  cpct_disableFirmware_asm           cpct_firmware
+     00004613  cpct_removeInterruptHandler_asm    cpct_firmware
+     00004623  _cpct_getRandom_mxor_u8            cpct_random
+     00004623  cpct_getRandom_mxor_u8_asm         cpct_random
+     00004624  cpct_randomIdx_mxor_u8             cpct_random
+     00004648  cpct_drawSolidBox_asm              cpct_sprites
+     000046EC  cpct_drawSpriteBlended_asm         cpct_sprites
+     000046F2  _cpct_dsb_blendFunction            cpct_sprites
+     00004713  _cpct_mode_rom_status              cpct_firmware
+     00004714  cpct_getScreenPtr_asm              cpct_video
+     00004730  _cpct_mxor32_seed                  cpct_random
+     00004734  _cpct_nextRandom_mxor_u32          cpct_random
+     00004734  cpct_nextRandom_mxor_u32_asm       cpct_random
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
 
@@ -146,8 +144,8 @@ obj/sys/render_system.h.rel               [  ]
 obj/sys/input_system.rel                  [  ]
 obj/sys/render_system.rel                 [  ]
 obj/man/entity_manager.h.rel              [  ]
-obj/man/game_manager.h.rel                [  ]
-obj/man/game_manager.rel                  [  ]
+obj/man/game.rel                          [  ]
+obj/man/game.h.rel                        [  ]
 obj/man/entity_manager.rel                [  ]
 obj/assets/assets.h.rel                   [  ]
 

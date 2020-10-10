@@ -3,6 +3,7 @@
 ;;
 
 .include "entity_manager.h.s"
+.include "game.h.s"
 .include "../sys/render_system.h.s"
 .include "../cpct_functions.h.s"
 
@@ -11,7 +12,7 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, min_map_x_coord_valid, min_map_y_coord_valid, 4, 16, 0, 0, 0xCCCC
+_player:  DefineEntity alive_type, 0, 0, 4, 16, 0, 0, 0xCCCC
 DefineEntityArray _enemy, max_entities, DefineEntityDefault
 
 DefineBombArray _bomb, max_bombs, DefineBombDefault
@@ -44,7 +45,9 @@ man_entity_new_entity::
 ;;
 ;;  Initialize data for all enemies and player.
 ;;  INPUT:
-;;    ix with memory address of entity that must be initialized
+;;    ix  with memory address of entity that must be initialized
+;;    b   X coordinate
+;;    c   Y coordinate
 ;;  RETURN: 
 ;;    none
 ;;  DESTROYED:
@@ -52,14 +55,14 @@ man_entity_new_entity::
 man_entity_initialize_entity::  
   ld    e_type(ix), #alive_type  
   
-  ld    e_x(ix), #40          ;; set X coordiante
-  ld    e_y(ix), #12           ;; set Y coordiante
+  ld    e_x(ix), b        ;; set X coordiante
+  ld    e_y(ix), c        ;; set Y coordiante
 
-  ld    e_vx(ix), #0         ;; set X velocity  
-  ld    e_vy(ix), #0          ;; set Y velocity    
+  ld    e_vx(ix), #0      ;; set X velocity  
+  ld    e_vy(ix), #0      ;; set Y velocity    
   
-  ld    e_w(ix), #4           ;; set sprite width
-  ld    e_h(ix), #16          ;; set sprite height
+  ld    e_w(ix), #4       ;; set sprite width
+  ld    e_h(ix), #16      ;; set sprite height
 
   ret
 
@@ -107,6 +110,10 @@ man_entity_initialize_bomb::
 
 
 man_entity_init_player::
+  ld    ix, #_player
+  ld    b, #min_map_x_coord_valid
+  ld    c, #min_map_y_coord_valid
+  call  man_entity_initialize_entity
   ret
 
 ;;
@@ -125,6 +132,9 @@ init_loop:
   push  af
   
   call  man_entity_new_entity
+
+  ld    b, #min_map_x_coord_valid
+  ld    c, #max_map_y_coord_valid-move_up
   call  man_entity_initialize_entity
   
   pop   af
@@ -395,4 +405,19 @@ man_entity_set_player_dead::
 man_entity_set_enemy_dead::
   ld    a, #dead_type
   ld    e_type(ix), a
+  ret
+
+
+man_entity_terminate::
+  ld  a, #_enemy_array
+  ld  (_enemy_last), a
+
+  ld  a, #0
+  ld  (_enemy_num), a
+
+  ld  a, #_bomb_array
+  ld  (_bomb_last), a
+
+  ld  a, #0
+  ld  (_bomb_num), a
   ret
