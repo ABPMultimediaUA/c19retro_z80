@@ -1,0 +1,195 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           cpct_random
+     00000000  HW_WHITE                           cpct_keyboard
+     00000000  l__CABS                         
+     00000000  l__DABS                         
+     00000000  l__DATA                         
+     00000000  l__GSFINAL                      
+     00000000  l__GSINIT                       
+     00000000  l__HOME                         
+     00000000  l__INITIALIZED                  
+     00000000  l__INITIALIZER                  
+     00000000  s__CABS                         
+     00000000  s__DABS                         
+     00000014  HW_BLACK                           cpct_keyboard
+     00000404  Key_O                              cpct_keyboard
+     0000072E  l__CODE                         
+     00000803  Key_P                              cpct_keyboard
+     00000807  Key_W                              cpct_keyboard
+     00000808  Key_Q                              cpct_keyboard
+     00001007  Key_S                              cpct_keyboard
+     00002007  Key_D                              cpct_keyboard
+     00002008  Key_A                              cpct_keyboard
+     00004000  s__CODE                         
+     0000472E  s__DATA                         
+     0000472E  s__GSFINAL                      
+     0000472E  s__GSINIT                       
+     0000472E  s__HOME                         
+     0000472E  s__INITIALIZED                  
+     0000472E  s__INITIALIZER                  
+     0000C000  CPCT_VMEM_START_ASM                cpct_keyboard
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000072E =        1838. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004000  _sp_border_block                   border_block
+     00004040  _sp_bomb                           bomb
+     00004080  _sp_enemy                          enemy
+     000040C0  _sp_player                         player
+     00004100  _main                              cpct_keyboard
+     00004134  sys_physics_update_entity          
+     0000415F  sys_physics_player_update          
+     00004167  sys_physics_enemies_update         
+     0000417C  sys_physics_bomb_update            
+     0000417D  sys_physics_init                   
+     0000418F  sys_physics_update                 
+     00004199  sys_input_init                     
+     000041A1  sys_input_update                   
+     000041E4  sys_render_player                  
+     0000420B  sys_render_enemies                 
+     0000423C  sys_render_bombs                   
+     0000426C  sys_render_init                    
+     0000428A  sys_render_update                  
+     0000428E  sys_render_remove_entity           
+     000042A0  sys_render_remove_bomb             
+     000042A1  sys_render_one_border_block        
+     000042B3  sys_render_min_row_map             
+     000042C8  sys_render_max_row_map             
+     000042DD  sys_render_min_col_map             
+     000042F2  sys_render_max_col_map             
+     00004307  sys_render_map                     
+     00004314  man_game_init                      
+     00004321  man_game_update                    
+     00004322  man_game_render                    
+     00004342  man_entity_new_entity              
+     00004358  man_entity_initialize_entity       
+     00004375  man_entity_new_bomb                
+     0000438B  man_entity_initialize_bomb         
+     0000439E  man_entity_init_player             
+     0000439F  man_entity_init_entities           
+     000043B1  man_entity_init_bombs              
+     000043BD  man_entity_player_update           
+     000043BE  man_entity_enemies_update          
+     0000440A  man_entity_bombs_update            
+     00004456  man_entity_init                    
+     00004460  man_entity_update                  
+     0000446A  man_entity_create_entity           
+     00004478  man_entity_create_bomb             
+     00004486  man_entity_get_player              
+     0000448B  man_entity_get_enemy_array         
+     00004493  man_entity_get_bomb_array          
+     0000449B  man_entity_set_player_dead         
+     000044A5  man_entity_set_enemy_dead          
+     000044AB  _cpct_scanKeyboard_f               cpct_keyboard
+     000044AB  cpct_scanKeyboard_f_asm            cpct_keyboard
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               00004000    0000072E =        1838. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004515  _cpct_isKeyPressed                 cpct_keyboard
+     00004515  cpct_isKeyPressed_asm              cpct_keyboard
+     00004521  cpct_setPALColour_asm              cpct_video
+     0000452B  cpct_drawSprite_asm                cpct_sprites
+     000045CB  _cpct_keyboardStatusBuffer         cpct_keyboard
+     000045D5  cpct_setVideoMode_asm              cpct_video
+     000045E2  _cpct_waitVSYNC                    cpct_video
+     000045E2  cpct_waitVSYNC_asm                 cpct_video
+     000045EA  _cpct_disableFirmware              cpct_firmware
+     000045EA  _cpct_removeInterruptHandler       cpct_firmware
+     000045EA  cpct_disableFirmware_asm           cpct_firmware
+     000045EA  cpct_removeInterruptHandler_asm    cpct_firmware
+     000045FA  _cpct_getRandom_mxor_u8            cpct_random
+     000045FA  cpct_getRandom_mxor_u8_asm         cpct_random
+     000045FB  cpct_randomIdx_mxor_u8             cpct_random
+     0000461F  cpct_drawSolidBox_asm              cpct_sprites
+     000046C3  cpct_drawSpriteBlended_asm         cpct_sprites
+     000046C9  _cpct_dsb_blendFunction            cpct_sprites
+     000046EA  _cpct_mode_rom_status              cpct_firmware
+     000046EB  cpct_getScreenPtr_asm              cpct_video
+     00004707  _cpct_mxor32_seed                  cpct_random
+     0000470B  _cpct_nextRandom_mxor_u32          cpct_random
+     0000470B  cpct_nextRandom_mxor_u32_asm       cpct_random
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+
+Files Linked                              [ module(s) ]
+
+obj/assets/sprites/border_block.rel       [ border_block ]
+obj/assets/sprites/bomb.rel               [ bomb ]
+obj/assets/sprites/enemy.rel              [ enemy ]
+obj/assets/sprites/player.rel             [ player ]
+obj/main.rel                              [ cpct_keyboard ]
+obj/cpct_functions.h.rel                  [  ]
+obj/sys/physics_system.h.rel              [  ]
+obj/sys/physics_system.rel                [  ]
+obj/sys/input_system.h.rel                [  ]
+obj/sys/render_system.h.rel               [  ]
+obj/sys/input_system.rel                  [  ]
+obj/sys/render_system.rel                 [  ]
+obj/man/entity_manager.h.rel              [  ]
+obj/man/game_manager.h.rel                [  ]
+obj/man/game_manager.rel                  [  ]
+obj/man/entity_manager.rel                [  ]
+obj/assets/assets.h.rel                   [  ]
+
+
+Libraries Linked                          [ object file ]
+
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_scanKeyboard_f.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_isKeyPressed.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setPALColour_asmbindings.re ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSprite_asmbindings.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ keyboard.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_setVideoMode_asmbindings.re ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_waitVSYNC.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_removeInterruptHandler.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getRandom_mxor_u8.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSolidBox_asmbindings.re ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_drawSpriteBlended_asmbindin ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpc_mode_rom_status.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_getScreenPtr_asmbindings.re ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_mxor32_seed.rel ]
+/home/ac/Desktop/Universidad_2021/RA/cpctelera/cpctelera/cpctelera.lib
+                                          [ cpct_nextRandom_mxor_u32.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+
+User Base Address Definitions
+
+_CODE = 0x4000
+_DATA = 0x0000
+
+

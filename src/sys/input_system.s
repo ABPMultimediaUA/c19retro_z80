@@ -23,6 +23,8 @@
 ;;  DESTROYED:
 ;;    none
 sys_input_init::
+  call  man_entity_get_player
+  ld    (player_ptr), ix
   ret
 
 
@@ -33,8 +35,9 @@ sys_input_init::
 ;;    none
 ;;  DESTROYED:
 ;;    none
-sys_input_update::
-  call  man_entity_get_player
+sys_input_update::  
+  player_ptr = .+2
+  ld    ix, #0x0000    
 
   ;; Reset velocities
   ld    e_vx(ix), #0

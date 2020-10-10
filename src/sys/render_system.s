@@ -20,7 +20,8 @@
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
 sys_render_player::
-  call  man_entity_get_player
+  player_ptr = .+2
+  ld    ix, #0x0000  
 
   call  sys_render_remove_entity
   
@@ -52,7 +53,10 @@ sys_render_player::
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_render_enemies::
-  call   man_entity_get_enemy_array
+  enemy_ptr = .+2
+  ld    ix, #0x0000
+  enemy_num = .+1
+  ld     a, #0
   render_enemies_loop:
     push  af
 
@@ -147,7 +151,13 @@ sys_render_init::
   ld    l, #0
   ld    h, #HW_BLACK
   call  cpct_setPALColour_asm
-    
+
+  call  man_entity_get_player
+  ld    (player_ptr), ix
+
+  call  man_entity_get_enemy_array
+  ld    (enemy_ptr), ix
+  ld    (enemy_num), a    
   ret
 
 
@@ -221,6 +231,79 @@ sys_render_one_border_block::
   ld    b, #16            ;; Sprite height
   call  cpct_drawSprite_asm 
   ret
+;================================================================
+sys_render_min_row_map::
+  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+min_row:
+  push bc
+  call sys_render_one_border_block 
+  pop bc
+  ld  hl, #0x0004
+  add hl, bc
+  ld b, h
+  ld c, l
+  
+  ld a, #max_map_x_coord_valid-4
+  cp c
+  jr  nc, min_row
+  ret
+  ;================================================================
+sys_render_max_row_map::
+  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
+  ld    b, #max_map_y_coord_valid-16         ;; B = y coordinate  
+
+max_row:
+  push bc
+  call sys_render_one_border_block 
+  pop bc
+  ld  hl, #0x0004
+  add hl, bc
+  ld b, h
+  ld c, l
+  
+  ld a, #max_map_x_coord_valid-4
+  cp c
+  jr  nc, max_row
+  ret
+;================================================================
+sys_render_min_col_map::
+  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+min_col:
+  push bc
+  call sys_render_one_border_block 
+  pop bc
+  ld  hl, #0x1000 ;+16
+  add hl, bc
+  ld b, h
+  ld c, l
+  
+  ld a, #max_map_y_coord_valid-16
+  cp b
+  jr  nc, min_col
+  ret
+;================================================================
+sys_render_max_col_map::
+  ld    c, #max_map_x_coord_valid-4         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+max_col:
+  push bc
+  call sys_render_one_border_block 
+  pop bc
+  ld  hl, #0x1000 ;+16
+  add hl, bc
+  ld b, h
+  ld c, l
+  
+  ld a, #max_map_y_coord_valid-16
+  cp b
+  jr  nc, max_col
+  ret
+
 
 ;  Render map
 ;;  INPUT:
@@ -230,26 +313,12 @@ sys_render_one_border_block::
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
 sys_render_map::
-  ;; TODO get pointer of array
-  
-
-  ld    c, #min_map_x_coord_valid                  ;; C = x coordinate       
-  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
-
-
-first_row:
-  push bc
-  call sys_render_one_border_block 
-  pop bc
-  ld  hl, #4
-  add hl, bc
-  ld b, h
-  ld c, l
-  
-  ld a, #max_map_x_coord_valid
-  cp c
-  jr  nc, first_row
-
+  call sys_render_min_row_map
+  call sys_render_max_row_map
+  call sys_render_min_col_map
+  call sys_render_max_col_map
   ret
+  
+
   
 
