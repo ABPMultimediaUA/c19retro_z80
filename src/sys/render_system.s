@@ -20,7 +20,8 @@
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
 sys_render_player::
-  call  man_entity_get_player
+  player_ptr = .+2
+  ld    ix, #0x0000  
 
   call  sys_render_remove_entity
   
@@ -52,7 +53,10 @@ sys_render_player::
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_render_enemies::
-  call   man_entity_get_enemy_array
+  enemy_ptr = .+2
+  ld    ix, #0x0000
+  enemy_num = .+1
+  ld     a, #0
   render_enemies_loop:
     push  af
 
@@ -147,7 +151,13 @@ sys_render_init::
   ld    l, #0
   ld    h, #HW_BLACK
   call  cpct_setPALColour_asm
-    
+
+  call  man_entity_get_player
+  ld    (player_ptr), ix
+
+  call  man_entity_get_enemy_array
+  ld    (enemy_ptr), ix
+  ld    (enemy_num), a    
   ret
 
 

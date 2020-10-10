@@ -73,7 +73,8 @@ check_y:
 ;;  DESTROYED:
 ;;    A,BC,IX
 sys_physics_player_update::
-  call  man_entity_get_player
+  player_ptr = .+2
+  ld    ix, #0x0000  
   call  sys_physics_update_entity
   ret
 
@@ -86,7 +87,10 @@ sys_physics_player_update::
 ;;  DESTROYED:
 ;;    A,BC,IX
 sys_physics_enemies_update::
-  call  man_entity_get_enemy_array
+  enemy_ptr = .+2
+  ld    ix, #0x0000
+  enemy_num = .+1
+  ld     a, #0
 
 physics_enemies_loop:
   push  af
@@ -128,6 +132,12 @@ sys_physics_bomb_update::
 ;;  DESTROYED:
 ;;    none
 sys_physics_init::
+  call  man_entity_get_player
+  ld    (player_ptr), ix
+
+  call  man_entity_get_enemy_array
+  ld    (enemy_ptr), ix
+  ld    (enemy_num), a
   ret
 
 

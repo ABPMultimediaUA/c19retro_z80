@@ -65,24 +65,11 @@ loop:
    call  sys_physics_update
    call  man_entity_update
    call  sys_render_update
+   
+   .rept 4
+      call  cpct_waitVSYNC_asm   
+      halt
+      halt
+   .endm
 
-   call wait_n_times
-   jr    loop
-
-wait_n_times:
-   call  cpct_waitVSYNC_asm   
-   halt
-   halt
-   halt
-   halt
-   call  cpct_waitVSYNC_asm   
-   halt
-   halt
-   halt
-   halt
-   call  cpct_waitVSYNC_asm   
-   halt
-   halt
-   halt
-   halt
-   ret
+   jr    loop   
