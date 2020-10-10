@@ -200,3 +200,56 @@ sys_render_remove_bomb::
   ;ld    c, b_h(ix)                  ;; Sprite height
   ;call  cpct_drawSpriteBlended_asm
   ret
+
+
+;  Render map
+;;  INPUT:
+;;    C = x coordinate       
+;;    B = y coordinate 
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    DE,BC,HL,IX
+sys_render_one_border_block::
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen 
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ;;  Draw sprite blended
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_border_block          ;; Source Sprite Pointer (array with pixel data)
+  ld    c, #4                 ;; Sprite width
+  ld    b, #16            ;; Sprite height
+  call  cpct_drawSprite_asm 
+  ret
+
+;  Render map
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    DE,BC,HL,IX
+sys_render_map::
+  ;; TODO get pointer of array
+  
+
+  ld    c, #min_map_x_coord_valid                  ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+
+first_row:
+  push bc
+  call sys_render_one_border_block 
+  pop bc
+  ld  hl, #4
+  add hl, bc
+  ld b, h
+  ld c, l
+  
+  ld a, #max_map_x_coord_valid
+  cp c
+  jr  nc, first_row
+
+  ret
+  
+

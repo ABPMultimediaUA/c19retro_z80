@@ -57,10 +57,14 @@ _main::
    call  man_entity_init   
    call  sys_input_init
    call  sys_physics_init
-   call  sys_render_init   
+   call  sys_render_init  
+
+   call  sys_render_map 
+   
 
 ;; Loop forever
 loop:
+
    call  sys_input_update
    call  sys_physics_update
    call  man_entity_update
