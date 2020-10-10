@@ -22,3 +22,4 @@
 .globl  Key_Q
 .globl  Key_A
 .globl  Key_R
+.globl  Key_X

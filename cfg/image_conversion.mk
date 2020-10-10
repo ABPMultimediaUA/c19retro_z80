@@ -48,6 +48,8 @@ $(eval $(call IMG2SP, CONVERT, src/assets/img/enemy/enemy.png , 8, 16, sp_enemy 
 $(eval $(call IMG2SP, CONVERT, src/assets/img/bomb/bomb.png , 8, 16, sp_bomb ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/border_block.png , 8, 16, sp_border_block ))
 
+$(eval $(call IMG2SP, CONVERT, src/assets/img/menu/menu.png , 100, 100, sp_menu ))
+
 ##
 ## OLD MACROS (For compatibility)
 ##

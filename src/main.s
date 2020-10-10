@@ -47,9 +47,9 @@
 ;;
 _main::   
    ;; Disable firmware to prevent it from interfering with string drawing
-   call  cpct_disableFirmware_asm     
-   
-   call  man_game_init
+   call  cpct_disableFirmware_asm
+      
+   call  man_game_init   
 ;; Loop forever
 loop:
    call  man_game_update

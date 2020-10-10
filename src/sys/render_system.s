@@ -137,6 +137,21 @@ sys_render_bombs::
 ;;                   PUBLIC FUNCTIONS                    #             
 ;;########################################################
 
+sys_render_menu::
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #16                      ;; C = x coordinate       
+  ld    b, #40                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
+
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_menu               ;; Source Sprite Pointer (array with pixel data)
+  ld    b, #50                      ;; Sprite width
+  ld    c, #100                     ;; Sprite height
+  call  cpct_drawSpriteBlended_asm 
+  ret
+
 ;;
 ;;  Set video mode and palette
 ;;  INPUT:
@@ -145,8 +160,7 @@ sys_render_bombs::
 ;;    none
 ;;  DESTROYED:
 ;;    AF,BC,DE,HL
-sys_render_init::  
-  call sys_render_map
+sys_render_init::    
   ld    c, #0
   call  cpct_setVideoMode_asm    
 
@@ -160,6 +174,8 @@ sys_render_init::
   call  man_entity_get_enemy_array
   ld    (enemy_ptr), ix
   ld    (enemy_num), a    
+
+  call  sys_render_map
   ret
 
 
@@ -171,7 +187,7 @@ sys_render_init::
 ;;    none
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
-sys_render_update::
+sys_render_update::  
   call  sys_render_player
   ;call  sys_render_enemies
   ;call  sys_render_bombs
