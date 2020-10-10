@@ -40,8 +40,9 @@
 ;;  DESTROYED:
 ;;    none
 man_game_init::
-  call  man_entity_init   
+  call  man_entity_init     
   call  sys_input_init
+  ;call  sys_ai_init
   call  sys_physics_init
   call  sys_render_init   
   ret
@@ -57,6 +58,7 @@ man_game_init::
 ;;    none
 man_game_update::
   call  sys_input_update
+  ;call  sys_ai_update
   call  sys_physics_update
   call  man_entity_update
   call  sys_render_update

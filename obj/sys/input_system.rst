@@ -249,10 +249,10 @@ Hexadecimal [16-Bits]
    414B DD 36 05 00   [19]   44   ld    e_vx(ix), #0
    414F DD 36 06 00   [19]   45   ld    e_vy(ix), #0
                              46 
-   4153 CD 2D 44      [17]   47   call  cpct_scanKeyboard_f_asm
+   4153 CD 1E 44      [17]   47   call  cpct_scanKeyboard_f_asm
                              48 
    4156 21 04 04      [10]   49   ld    hl, #Key_O
-   4159 CD 97 44      [17]   50   call  cpct_isKeyPressed_asm
+   4159 CD 88 44      [17]   50   call  cpct_isKeyPressed_asm
    415C 28 05         [12]   51   jr    z, O_NotPressed
    415E                      52 O_Pressed:
    415E DD 36 05 FC   [19]   53   ld    e_vx(ix), #move_left
@@ -260,7 +260,7 @@ Hexadecimal [16-Bits]
    4163                      55 O_NotPressed:
                              56 
    4163 21 03 08      [10]   57   ld    hl, #Key_P
-   4166 CD 97 44      [17]   58   call  cpct_isKeyPressed_asm
+   4166 CD 88 44      [17]   58   call  cpct_isKeyPressed_asm
    4169 28 05         [12]   59   jr    z, P_NotPressed
    416B                      60 P_Pressed:
    416B DD 36 05 04   [19]   61   ld    e_vx(ix), #move_right
@@ -273,7 +273,7 @@ Hexadecimal [16-Bits]
 
                              64 
    4170 21 08 08      [10]   65   ld    hl, #Key_Q
-   4173 CD 97 44      [17]   66   call  cpct_isKeyPressed_asm
+   4173 CD 88 44      [17]   66   call  cpct_isKeyPressed_asm
    4176 28 05         [12]   67   jr    z, Q_NotPressed
    4178                      68 Q_Pressed:
    4178 DD 36 06 F0   [19]   69   ld    e_vy(ix), #move_up
@@ -281,16 +281,16 @@ Hexadecimal [16-Bits]
    417D                      71 Q_NotPressed:
                              72 
    417D 21 08 20      [10]   73   ld    hl, #Key_A
-   4180 CD 97 44      [17]   74   call  cpct_isKeyPressed_asm
+   4180 CD 88 44      [17]   74   call  cpct_isKeyPressed_asm
    4183 28 05         [12]   75   jr    z, A_NotPressed
    4185                      76 A_Pressed:
    4185 DD 36 06 10   [19]   77   ld    e_vy(ix), #move_down    
    4189 C9            [10]   78   ret
    418A                      79 A_NotPressed:    
    418A 21 06 04      [10]   80   ld    hl, #Key_R
-   418D CD 97 44      [17]   81   call  cpct_isKeyPressed_asm
+   418D CD 88 44      [17]   81   call  cpct_isKeyPressed_asm
    4190 28 03         [12]   82   jr    z, R_NotPressed
    4192                      83 R_Pressed:
-   4192 CD 26 44      [17]   84   call  man_game_terminate
+   4192 CD 17 44      [17]   84   call  man_game_terminate
    4195                      85 R_NotPressed:
    4195 C9            [10]   86   ret

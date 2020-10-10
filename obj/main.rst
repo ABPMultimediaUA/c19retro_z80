@@ -2812,25 +2812,25 @@ Hexadecimal [16-Bits]
                              47 ;;
    40C0                      48 _main::   
                              49    ;; Disable firmware to prevent it from interfering with string drawing
-   40C0 CD 6C 45      [17]   50    call  cpct_disableFirmware_asm     
+   40C0 CD 5D 45      [17]   50    call  cpct_disableFirmware_asm     
                              51    
-   40C3 CD 0C 44      [17]   52    call  man_game_init
+   40C3 CD FD 43      [17]   52    call  man_game_init
                              53 ;; Loop forever
    40C6                      54 loop:
-   40C6 CD 19 44      [17]   55    call  man_game_update
+   40C6 CD 0A 44      [17]   55    call  man_game_update
                              56    
                              57    .rept 3
                              58       call  cpct_waitVSYNC_asm   
                              59       halt
                              60       halt
                              61    .endm
-   40C9 CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40C9 CD 55 45      [17]    1       call  cpct_waitVSYNC_asm   
    40CC 76            [ 4]    2       halt
    40CD 76            [ 4]    3       halt
-   40CE CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40CE CD 55 45      [17]    1       call  cpct_waitVSYNC_asm   
    40D1 76            [ 4]    2       halt
    40D2 76            [ 4]    3       halt
-   40D3 CD 64 45      [17]    1       call  cpct_waitVSYNC_asm   
+   40D3 CD 55 45      [17]    1       call  cpct_waitVSYNC_asm   
    40D6 76            [ 4]    2       halt
    40D7 76            [ 4]    3       halt
                              62 
