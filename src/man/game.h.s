@@ -25,6 +25,8 @@ move_up = -move_down
 ;;  This way, when calculating the last allowed position where an entity may be positioned, it is easier and cleaner.
 min_map_y_coord_valid = 12     ;;  [0-3] border, >=4 map
 max_map_y_coord_valid = 188    ;;  [196-199] border, <=195 map
+map_height_px = max_map_y_coord_valid - min_map_y_coord_valid  ;176
+map_height_cell = map_height_px / 16
 
 ;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
 ;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
@@ -33,3 +35,8 @@ max_map_y_coord_valid = 188    ;;  [196-199] border, <=195 map
 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
 min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
+map_width_px = max_map_x_coord_valid - min_map_x_coord_valid   ;48
+map_width_cell = map_width_px / 4
+
+map_resolution_px = map_height_px * map_width_px
+map_resolution_cell = map_height_cell * map_width_cell

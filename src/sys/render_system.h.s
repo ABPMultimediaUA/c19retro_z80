@@ -18,6 +18,8 @@ video_mode = 0
 ;;  In pixels
 screen_width = 160
 screen_height = 200
+window_resolution_px = 32000 ;screen_width*screen_height
+
 
 border_block_w = 2
 border_block_h = 8

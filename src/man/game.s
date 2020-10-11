@@ -4,6 +4,8 @@
 
 .include "entity_manager.h.s"
 .include "game.h.s"
+.include "map_manager.h.s"
+
 
 .include "../sys/render_system.h.s"
 .include "../sys/physics_system.h.s"
@@ -61,6 +63,7 @@ man_game_menu_loop:
 ;;  DESTROYED:
 ;;    none
 man_game_init::
+  call  man_map_init
   call  man_entity_init     
   call  sys_input_init
   ;call  sys_ai_init

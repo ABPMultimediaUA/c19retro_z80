@@ -4,6 +4,7 @@
 
 .include "../man/entity_manager.h.s"
 .include "../man/game.h.s"
+.include "../man/map_manager.h.s"
 .include "../cpct_functions.h.s"
 .include "render_system.h.s"
 .include "../assets/assets.h.s"
@@ -133,6 +134,51 @@ sys_render_bombs::
     jr    render_bombs_loop
     ret
 
+;INPUT: BC (y, x) coordinate
+sys_render_one_default_block::
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ;ld    hl, #_sp_floor_block          ;; Source Sprite Pointer (array with pixel data)
+  ld    a, #0x33  ;green
+  ld    c, #4                 ;; Sprite width
+  ld    b, #16            ;; Sprite height
+  call  cpct_drawSolidBox_asm 
+  ret
+
+sys_render_map::
+  map_ptr = .+2
+  ld    ix, #0x0000 ;map_ptr NOT USED
+  ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
+  ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+_row:
+  ld    c, #min_map_x_coord_valid         ;; C = x coordinate 
+  _col:
+    push bc
+    call sys_render_one_default_block 
+    pop bc
+    ld  hl, #0x0004 ;c+=4 (x+=4)
+    add hl, bc
+    ld b, h
+    ld c, l
+    
+    ld a, #max_map_x_coord_valid-4
+    cp c
+    jr  nc, _col
+  _endcol:
+  
+  ld  hl, #0x1000   ;b+=16 (y+=16)
+  add hl, bc
+  ld b, h
+  ld c, l
+
+  ld a, #max_map_y_coord_valid-16
+  cp b
+  jr  nc, _row
+ret
+
 ;;########################################################
 ;;                   PUBLIC FUNCTIONS                    #             
 ;;########################################################
@@ -175,6 +221,10 @@ sys_render_init::
   ld    (enemy_ptr), ix
   ld    (enemy_num), a    
 
+  call  sys_render_border_map
+
+  call  man_map_get_map_array
+  ld    (map_ptr), ix
   call  sys_render_map
 
   ;; ========== CHAPUZA para poner el ultimo puntero del player a su posicion
@@ -219,7 +269,8 @@ sys_render_update::
 sys_render_remove_entity::
   ld    e, e_sp_ptr_0(ix)          
   ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
-  ld    a, #0x00  ;;0xFF rojo
+  ld    a, #0x33  ;;0xFF rojo
+  ;;TODO sprite del suelo (default)
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height
   call  cpct_drawSolidBox_asm
@@ -344,7 +395,7 @@ max_col:
 ;;    none
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
-sys_render_map::
+sys_render_border_map::
   call sys_render_min_row_map
   call sys_render_max_row_map
   call sys_render_min_col_map
