@@ -157,7 +157,33 @@ _row:
   ld    c, #min_map_x_coord_valid         ;; C = x coordinate 
   _col:
     push bc
-    call sys_render_one_default_block 
+
+    ;;====================
+    ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+    call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+    ex    de, hl                      ;; DE = Destination video memory pointer
+    ;ld    hl, #_sp_floor_block          ;; Source Sprite Pointer (array with pixel data)
+    
+    ld    a, b_type(ix) ;;ld type of block
+    xor   #default_btype
+    jr    nz, _draw_solid_box
+  
+    ld    a, #0x33  ;green
+    jr    _end_draw_box
+
+    _draw_solid_box:
+      ld    a, #0x02  ;
+    _end_draw_box:
+    
+    ld    c, #4                 ;; Sprite width
+    ld    b, #16            ;; Sprite height
+    call  cpct_drawSolidBox_asm 
+    
+    ld    bc, #sizeof_block ;size of block type
+    add   ix, bc
+    ;;====================
+
     pop bc
     ld  hl, #0x0004 ;c+=4 (x+=4)
     add hl, bc
@@ -401,6 +427,40 @@ sys_render_border_map::
   call sys_render_min_col_map
   call sys_render_max_col_map
   ret
+
+
+  ;; Deprecated, it just print all map green
+; ;   sys_render_map::
+; ;   map_ptr = .+2
+; ;   ld    ix, #0x0000 ;map_ptr NOT USED
+; ;   ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
+; ;   ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
+
+; ; _row:
+; ;   ld    c, #min_map_x_coord_valid         ;; C = x coordinate 
+; ;   _col:
+; ;     push bc
+; ;     call sys_render_one_default_block 
+; ;     pop bc
+; ;     ld  hl, #0x0004 ;c+=4 (x+=4)
+; ;     add hl, bc
+; ;     ld b, h
+; ;     ld c, l
+    
+; ;     ld a, #max_map_x_coord_valid-4
+; ;     cp c
+; ;     jr  nc, _col
+; ;   _endcol:
+  
+; ;   ld  hl, #0x1000   ;b+=16 (y+=16)
+; ;   add hl, bc
+; ;   ld b, h
+; ;   ld c, l
+
+; ;   ld a, #max_map_y_coord_valid-16
+; ;   cp b
+; ;   jr  nc, _row
+; ; ret
   
 
   

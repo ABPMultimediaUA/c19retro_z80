@@ -12,7 +12,7 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, 0, 0, 4, 16, 0, 0, 0xCCCC
+_player:  DefineEntity alive_type, 0, 0, 0, 0, 4, 16, 0, 0, 0xCCCC
 DefineEntityArray _enemy, max_entities, DefineEntityDefault
 
 DefineBombArray _bomb, max_bombs, DefineBombDefault

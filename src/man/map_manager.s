@@ -16,7 +16,8 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-DefineBlockArray _map, map_resolution_cell, DefineBlockDefault
+;DefineBlockArray _map, map_resolution_cell, DefineBlockDefault
+DefineDefaultMap _map
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
