@@ -58,6 +58,9 @@ man_entity_initialize_entity::
   ld    e_x(ix), b        ;; set X coordiante
   ld    e_y(ix), c        ;; set Y coordiante
 
+  ld    e_xcell(ix), #0      ;; set X coordiante cell  
+  ld    e_ycell(ix), #0      ;; set Y coordiante cell 
+
   ld    e_vx(ix), #0      ;; set X velocity  
   ld    e_vy(ix), #0      ;; set Y velocity    
   
