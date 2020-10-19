@@ -37,7 +37,7 @@ sys_render_player::
   ld  e_sp_ptr_0(ix), l
   ld  e_sp_ptr_1(ix), h
 
-  ;;  Draw sprite blended
+  ;;  Draw sprite
   ex    de, hl                      ;; DE = Destination video memory pointer
   ld    hl, #_sp_player             ;; Source Sprite Pointer (array with pixel data)
   ld    c, e_w(ix)                  ;; Sprite width
@@ -65,21 +65,21 @@ sys_render_enemies::
     ;call  sys_render_remove_entity
     
     ;; Calculate a video-memory location for sprite
-    ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-    ld    c, e_x(ix)                  ;; C = x coordinate       
-    ld    b, e_y(ix)                  ;; B = y coordinate   
-    call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-    
-    ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-    ld  e_sp_ptr_0(ix), l
-    ld  e_sp_ptr_1(ix), h
+      ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+      ld    c, e_x(ix)                  ;; C = x coordinate       
+      ld    b, e_y(ix)                  ;; B = y coordinate   
+      call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+      
+      ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+      ld  e_sp_ptr_0(ix), l
+      ld  e_sp_ptr_1(ix), h
 
-    ;;  Draw sprite blended
-    ex    de, hl                      ;; DE = Destination video memory pointer
-    ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
-    ld    b, e_w(ix)                  ;; Sprite width
-    ld    c, e_h(ix)                  ;; Sprite height
-    call  cpct_drawSpriteBlended_asm    
+      ;;  Draw sprite
+      ex    de, hl                      ;; DE = Destination video memory pointer
+      ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
+      ld    c, e_w(ix)                  ;; Sprite width
+      ld    b, e_h(ix)                  ;; Sprite height
+      call  cpct_drawSprite_asm    
   
     ld   bc, #sizeof_e
     add  ix, bc
@@ -279,7 +279,7 @@ sys_render_init::
 ;;    A,DE,BC,HL,IX
 sys_render_update::  
   call  sys_render_player
-  ;call  sys_render_enemies
+  call  sys_render_enemies
   ;call  sys_render_bombs
   ret  
 

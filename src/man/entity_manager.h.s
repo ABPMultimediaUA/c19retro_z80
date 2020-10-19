@@ -83,7 +83,7 @@ e_vy = 8
 e_sp_ptr_0 = 9
 e_sp_ptr_1 = 10
 sizeof_e = 11
-max_entities = 1
+max_entities = 3
 
 ;;-----------------------  BOMBS  ------------------------
 b_timer = 0

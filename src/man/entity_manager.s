@@ -27,16 +27,14 @@ DefineBombArray _bomb, max_bombs, DefineBombDefault
 ;;    none
 ;;  RETURN: 
 ;;    hl with memory address of free space for new entity
-;;    ix with memory address of last created entity
 ;;  DESTROYED:
 ;;    AF,DE,BC
 man_entity_new_entity::
   ld    a, (_enemy_num)
   inc   a
   ld    (_enemy_num), a
-
-  ld    ix, (_enemy_last)    
-  ld    hl, (_enemy_last)    
+  
+  ld    hl, (_enemy_last)      
   ld    bc, #sizeof_e
   add   hl, bc
   ld    (_enemy_last), hl
@@ -128,22 +126,35 @@ man_entity_init_player::
 ;;    ix with memory address of last created entity
 ;;  DESTROYED:
 ;;    AF,DE,IX,HL,BC
-man_entity_init_entities::
-  ld    a, #max_entities
-  ld    de, (_enemy_last)
-init_loop:
-  push  af
-  
+man_entity_init_entities::    
+
+  ;; enemy 1
   call  man_entity_new_entity
 
+  ld    ix, #_enemy_array
   ld    b, #min_map_x_coord_valid
-  ld    c, #max_map_y_coord_valid-move_up
+  ld    c, #max_map_y_coord_valid+move_up
   call  man_entity_initialize_entity
-  
-  pop   af
-  dec   a
-  ret   z
-  jr    init_loop
+
+  ;; enemy 2
+  call  man_entity_new_entity
+
+  ld   bc, #sizeof_e
+  add  ix, bc
+  ld    b, #max_map_x_coord_valid+move_left
+  ld    c, #min_map_y_coord_valid
+  call  man_entity_initialize_entity
+
+  ;; enemy 3
+  call  man_entity_new_entity
+
+  ld   bc, #sizeof_e
+  add  ix, bc
+  ld    b, #max_map_x_coord_valid+move_left
+  ld    c, #max_map_y_coord_valid+move_up
+  call  man_entity_initialize_entity
+
+  ret   
 
 ;;
 ;;  Reset bombs data
