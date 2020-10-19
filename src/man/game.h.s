@@ -33,7 +33,7 @@ map_height_cell = map_height_px / 16    ;11
 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border
-min_map_x_coord_valid = 30      ;;  [0-29] border, >=30 map
+min_map_x_coord_valid = 30-4*7      ;;  [0-29] border, >=30 map
 max_map_x_coord_valid = 78    ;;  [78-79] border, <=77 map
 map_width_px = max_map_x_coord_valid - min_map_x_coord_valid   ;48
 map_width_cell = map_width_px / 4   ;12
