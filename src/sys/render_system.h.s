@@ -3,9 +3,11 @@
 ;;
 
 .globl  sys_render_menu
+.globl  sys_render_init_config
 .globl  sys_render_init
 .globl  sys_render_update
 .globl  sys_render_remove_entity
+.globl  sys_render_remove_menu
 .globl  sys_render_remove_bomb
 .globl  sys_render_map
 

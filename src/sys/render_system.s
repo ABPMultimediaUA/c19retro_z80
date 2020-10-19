@@ -219,9 +219,9 @@ sys_render_menu::
   ;;  Draw sprite
   ex    de, hl                      ;; DE = Destination video memory pointer
   ld    hl, #_sp_menu               ;; Source Sprite Pointer (array with pixel data)
-  ld    b, #50                      ;; Sprite width
-  ld    c, #100                     ;; Sprite height
-  call  cpct_drawSpriteBlended_asm 
+  ld    c, #50                      ;; Sprite width
+  ld    b, #100                     ;; Sprite height
+  call  cpct_drawSprite_asm 
   ret
 
 ;;
@@ -232,14 +232,26 @@ sys_render_menu::
 ;;    none
 ;;  DESTROYED:
 ;;    AF,BC,DE,HL
-sys_render_init::    
+
+sys_render_init_config::
   ld    c, #0
   call  cpct_setVideoMode_asm    
 
   ld    l, #0
   ld    h, #HW_BLACK
   call  cpct_setPALColour_asm
+  ret
 
+
+;;
+;;  Render map, borders and init pointers
+;;  INPUT:
+;;    none
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    AF,BC,DE,HL
+sys_render_init::      
   call  man_entity_get_player
   ld    (player_ptr), ix
 
@@ -302,6 +314,28 @@ sys_render_remove_entity::
   call  cpct_drawSolidBox_asm
   ret
 
+
+;;
+;;  Remove menu from screen (video-memory)
+;;  INPUT:
+;;    ix  with memory address of entity that must be removed
+;;  RETURN: 
+;;    none
+;;  DESTROYED:
+;;    AF,BC,DE,HL
+sys_render_remove_menu::
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #16                      ;; C = x coordinate       
+  ld    b, #40                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ex    de, hl
+  ld    a, #0x00  ;;0xFF rojo  
+  ld    c, #50                      ;; Sprite width
+  ld    b, #100                     ;; Sprite height
+  call  cpct_drawSolidBox_asm
+  ret
 
 ;;
 ;;  Remove an entity from screen (video-memory)

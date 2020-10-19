@@ -51,7 +51,7 @@ man_game_menu_loop:
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
   jr    z, man_game_menu_loop
 
-  call  sys_render_menu
+  call  sys_render_remove_menu
   ret
 
 ;;
@@ -63,6 +63,7 @@ man_game_menu_loop:
 ;;  DESTROYED:
 ;;    none
 man_game_init::
+  call  man_game_menu
   call  man_map_init
   call  man_entity_init     
   call  sys_input_init
@@ -70,7 +71,6 @@ man_game_init::
   call  sys_physics_init
   call  sys_render_init   
 
-  ;call man_game_menu
   ret
 
 

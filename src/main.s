@@ -20,6 +20,7 @@
 .include "cpctelera.h.s"
 .include "cpct_functions.h.s"
 .include "man/game.h.s"
+.include "sys/render_system.h.s"
 
 ;;
 ;; Start of _DATA area 
@@ -49,6 +50,7 @@ _main::
    ;; Disable firmware to prevent it from interfering with string drawing
    call  cpct_disableFirmware_asm
       
+   call  sys_render_init_config
    call  man_game_init   
 ;; Loop forever
 loop:
