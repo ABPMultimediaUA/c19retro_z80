@@ -56,11 +56,11 @@ _main::
 ;; Loop forever
 loop:
    call  man_game_update
-   
-   .rept 3
-      call  cpct_waitVSYNC_asm   
-      halt
-      halt
+
+   call  cpct_waitVSYNC_asm   
+   call  sys_render_update   
+   .rept 10
+      halt            
    .endm
 
    jr    loop   
