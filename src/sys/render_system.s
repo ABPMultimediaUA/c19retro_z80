@@ -100,38 +100,7 @@ sys_render_enemies::
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_render_bombs::
-  call   man_entity_get_bomb_array
-  or     a   ;; _bomb_num OR _bomb_num: if Z=1, they're equal, 0 bombs in _bomb_array
-  ret    z
-  render_bombs_loop:
-    push af
-
-    ;call  sys_render_remove_entity
-    
-    ;; Calculate a video-memory location for sprite
-    ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-    ld    c, b_x(ix)                  ;; C = x coordinate       
-    ld    b, b_y(ix)                  ;; B = y coordinate   
-    call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-    
-    ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-    ld  b_sp_ptr_0(ix), l
-    ld  b_sp_ptr_1(ix), h
-
-    ;;  Draw sprite blended
-    ex    de, hl                      ;; DE = Destination video memory pointer
-    ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)    
-    ld    b, b_w(ix)                  ;; Sprite width
-    ld    c, b_h(ix)                  ;; Sprite height
-    call  cpct_drawSpriteBlended_asm    
   
-    ld   bc, #sizeof_b
-    add  ix, bc
-
-    pop   af
-    dec   a
-    ret   z
-    jr    render_bombs_loop
     ret
 
 ;INPUT: BC (y, x) coordinate

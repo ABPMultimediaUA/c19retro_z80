@@ -11,7 +11,6 @@
 
 .globl  man_entity_get_player
 .globl  man_entity_get_enemy_array
-.globl  man_entity_get_bomb_array
 
 .globl  man_entity_set_player_dead
 .globl  man_entity_set_enemy_dead
@@ -28,6 +27,9 @@
     .db _w, _h      ;; both in bytes
     .db _vx, _vy    
     .dw _sp_ptr
+    .rept max_bombs 
+        DefineBombDefault
+    .endm
 .endm
 
 .macro DefineEntityDefault
@@ -37,6 +39,9 @@
     .db 4, 16  
     .dw 0xADDE 
     .dw 0xCCCC
+    .rept max_bombs 
+        DefineBombDefault
+    .endm
 .endm
 
 .macro DefineEntityArray _Tname,_N,_DefineEntity
@@ -50,11 +55,11 @@
 
 ;;-----------------------  BOMBS  ------------------------
 .macro DefineBombDefault    
+    .db invalid_type
     .db max_timer   ;; timer    
     .db 0xDE,0xAD   ;; coordinates (x, y)
     .db 0xDE,0xAD   ;; coordinates in cells (x, y)
-    .db #4, #16     ;; width, height -> both in bytes    
-    .dw 0xCCCC      ;; sprite  pointer (where it's in memory video)
+    .db 4,16   ;;   
 .endm
 
 .macro DefineBombArray _Tname,_N,_DefineBomb
@@ -82,20 +87,21 @@ e_vx = 7
 e_vy = 8
 e_sp_ptr_0 = 9
 e_sp_ptr_1 = 10
-sizeof_e = 11
+sizeof_e_solo = 11
+sizeof_e = 11 + (sizeof_b * max_bombs)
 max_entities = 3
 
 ;;-----------------------  BOMBS  ------------------------
-b_timer = 0
-b_x = 1
-b_y = 2
-e_xcell = 3
-e_ycell = 4
-b_w = 5
-b_h = 6
-b_sp_ptr_0 = 7
-b_sp_ptr_1 = 8
-sizeof_b = 9
+bomb_type = 0
+bomb_timer = 1
+bomb_x = 2
+bomb_y = 3
+bomb_xcell = 4
+bomb_ycell = 5
+bomb_w = 6
+bomb_h = 7
+
+sizeof_b = 8
 max_bombs = 1
 
 ;;########################################################
@@ -109,5 +115,5 @@ invalid_type = 0xFF
 ;;########################################################
 ;;                       BOMB TIMERS                     #             
 ;;########################################################
-zero_timer = 0x00
+;zero_timer = 0x00
 max_timer = 0xFF
