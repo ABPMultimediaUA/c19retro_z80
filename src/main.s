@@ -50,6 +50,7 @@ _main::
    ;; Disable firmware to prevent it from interfering with string drawing
    call  cpct_disableFirmware_asm
       
+   cpctm_setBorder_asm #HW_BLACK
    call  sys_render_init_config
    call  man_game_init   
 ;; Loop forever

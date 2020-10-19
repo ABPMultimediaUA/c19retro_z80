@@ -240,6 +240,7 @@ sys_render_init_config::
   ld    l, #0
   ld    h, #HW_BLACK
   call  cpct_setPALColour_asm
+
   ret
 
 
