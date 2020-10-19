@@ -46,6 +46,8 @@ man_entity_new_entity::
 ;;    ix  with memory address of entity that must be initialized
 ;;    b   X coordinate
 ;;    c   Y coordinate
+;;    h   X cell
+;;    l   Y cell
 ;;  RETURN: 
 ;;    none
 ;;  DESTROYED:
@@ -56,8 +58,8 @@ man_entity_initialize_entity::
   ld    e_x(ix), b        ;; set X coordiante
   ld    e_y(ix), c        ;; set Y coordiante
 
-  ld    e_xcell(ix), #0      ;; set X coordiante cell  
-  ld    e_ycell(ix), #0      ;; set Y coordiante cell 
+  ld    e_xcell(ix), h      ;; set X coordiante cell  
+  ld    e_ycell(ix), l      ;; set Y coordiante cell 
 
   ld    e_vx(ix), #0      ;; set X velocity  
   ld    e_vy(ix), #0      ;; set Y velocity    
@@ -114,6 +116,8 @@ man_entity_init_player::
   ld    ix, #_player
   ld    b, #min_map_x_coord_valid
   ld    c, #min_map_y_coord_valid
+  ld    h, #0     ;; set X coordiante cell  
+  ld    l, #0     ;; set Y coordiante cell 
   call  man_entity_initialize_entity
   ret
 
@@ -128,30 +132,36 @@ man_entity_init_player::
 ;;    AF,DE,IX,HL,BC
 man_entity_init_entities::    
 
-  ;; enemy 1
+  ;; enemy 1 -> Abajo a la izda
   call  man_entity_new_entity
 
   ld    ix, #_enemy_array
   ld    b, #min_map_x_coord_valid
   ld    c, #max_map_y_coord_valid+move_up
+  ld    h, #0     ;; set X coordiante cell  
+  ld    l, #10    ;; set Y coordiante cell 
   call  man_entity_initialize_entity
 
-  ;; enemy 2
+  ;; enemy 2 -> Arriba a la derecha
   call  man_entity_new_entity
 
   ld   bc, #sizeof_e
   add  ix, bc
-  ld    b, #max_map_x_coord_valid+move_left
-  ld    c, #min_map_y_coord_valid
+  ld    b, #max_map_x_coord_valid+move_left   
+  ld    c, #min_map_y_coord_valid 
+  ld    h, #11     ;; set X coordiante cell  
+  ld    l, #0    ;; set Y coordiante cell 
   call  man_entity_initialize_entity
 
-  ;; enemy 3
+  ;; enemy 3 -> Abajo a la derecha
   call  man_entity_new_entity
 
   ld   bc, #sizeof_e
   add  ix, bc
   ld    b, #max_map_x_coord_valid+move_left
   ld    c, #max_map_y_coord_valid+move_up
+  ld    h, #11    ;; set X coordiante cell  
+  ld    l, #10    ;; set Y coordiante cell 
   call  man_entity_initialize_entity
 
   ret   
