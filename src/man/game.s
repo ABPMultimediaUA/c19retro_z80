@@ -87,7 +87,7 @@ man_game_update::
   ;call  sys_ai_update
   call  sys_physics_update
   call  man_entity_update
-  call  sys_render_update
+;  call  sys_render_update
   ret
 
 
