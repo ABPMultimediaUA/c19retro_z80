@@ -29,6 +29,14 @@ _str_move_right:
   .ascii "P move right"
   .db    0
 
+_str_pause: 
+  .ascii "Esc pause"
+  .db    0
+
+_str_restart: 
+  .ascii "R restart"
+  .db    0
+
 _str_start_game: 
   .ascii "Space to start"
   .db    0
@@ -211,13 +219,13 @@ sys_render_menu::
   ex    de, hl
   ld    a, #0x00  ;;0xFF rojo  
   ld    c, #60                      ;; Sprite width
-  ld    b, #150                     ;; Sprite height
+  ld    b, #175                     ;; Sprite height
   call  cpct_drawSolidBox_asm
 
   ;;#################################################################
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #21                  ;; C = x coordinate       
+  ld    c, #22                  ;; C = x coordinate       
   ld    b, #30                      ;; B = y coordinate   
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
   
@@ -301,12 +309,49 @@ sys_render_menu::
 
   ld    iy, #_str_move_right
   call  cpct_drawStringM0_asm
+
+  ;;#################################################################
+
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #18                  ;; C = x coordinate       
+  ld    b, #115                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
+  
+  ;;  Draw sprite
+  push  hl                      ;; DE = Destination video memory pointer
+  ld    h, #00           
+  ld    l, #04
+  call  cpct_setDrawCharM0_asm  
+  pop   hl
+
+  ld    iy, #_str_restart
+  call  cpct_drawStringM0_asm
+
+  ;;#################################################################
+
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #18                  ;; C = x coordinate       
+  ld    b, #130                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
+  
+  ;;  Draw sprite
+  push  hl                      ;; DE = Destination video memory pointer
+  ld    h, #00           
+  ld    l, #04
+  call  cpct_setDrawCharM0_asm  
+  pop   hl
+
+  ld    iy, #_str_pause
+  call  cpct_drawStringM0_asm
+  
   
   ;;#################################################################
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
   ld    c, #12                        ;; C = x coordinate       
-  ld    b, #125                      ;; B = y coordinate   
+  ld    b, #155                      ;; B = y coordinate   
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
   
   ;;  Draw sprite
