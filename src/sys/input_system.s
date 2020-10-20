@@ -6,6 +6,7 @@
 .include "../man/game.h.s"
 .include "../cpct_functions.h.s"
 .include "input_system.h.s"
+.include "render_system.h.s"
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -76,6 +77,7 @@ Q_NotPressed:
 A_Pressed:
   ld    e_vy(ix), #move_down    
   ret
+<<<<<<< HEAD
 A_NotPressed:   
 
 ;   ld    hl, #Key_Space
@@ -85,13 +87,26 @@ A_NotPressed:
 ;   call  man_entity_create_bomb    
 ;   ret
 ; Space_NotPressed: 
+=======
+A_NotPressed:    
+>>>>>>> carlos
 
   ld    hl, #Key_R
   call  cpct_isKeyPressed_asm
   jr    z, R_NotPressed
 R_Pressed:
   call  man_game_terminate
+  ret
 R_NotPressed:
+
+  ld    hl, #Key_Esc
+  call  cpct_isKeyPressed_asm
+  jr    z, Esc_NotPressed
+Esc_Pressed:
+  call  man_game_menu
+  call  sys_render_map
+  
+Esc_NotPressed:
   ret
 
 
@@ -100,9 +115,9 @@ sys_input_press_start::
 
   call  cpct_scanKeyboard_f_asm
 
-  ld    hl, #Key_X
+  ld    hl, #Key_Space
   call  cpct_isKeyPressed_asm
-  jr    z, X_NotPressed
+  jr    z, Space_NotPressed
   ld    a, #1
-X_NotPressed:
+Space_NotPressed:
   ret

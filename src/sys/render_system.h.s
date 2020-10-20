@@ -10,6 +10,7 @@
 .globl  sys_render_remove_menu
 .globl  sys_render_remove_bomb
 .globl  sys_render_map
+.globl  sys_render_border_map
 
 
 ;;########################################################
