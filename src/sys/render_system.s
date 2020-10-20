@@ -180,7 +180,7 @@ sys_render_one_default_block::
 
 sys_render_map::
   map_ptr = .+2
-  ld    ix, #0x0000 ;map_ptr NOT USED
+  ld    ix, #0x0000 
   ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
   ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
 
@@ -198,14 +198,21 @@ _row:
     
     ld    a, b_type(ix) ;;ld type of block
     xor   #default_btype
-    jr    nz, _draw_solid_box
-  
-    ld    a, #0x33  ;green
-    jr    _end_draw_box
+    jr    z, _draw_default_box
 
-    _draw_solid_box:
-      ld    a, #0x02  ;
-    _end_draw_box:
+    ld    a, b_type(ix) ;;ld type of block
+    xor   #exit_btype
+    jr    z, _draw_exit_box
+  
+    ld    a, #0x02  ;green
+    jr    _end_define_color_box
+
+    _draw_default_box:
+      ld    a, #0x33  
+      jr    _end_define_color_box
+    _draw_exit_box:
+      ld    a, #0x00  
+    _end_define_color_box:
     
     ld    c, #4                 ;; Sprite width
     ld    b, #16            ;; Sprite height
@@ -434,6 +441,7 @@ sys_render_init::
 
   call  sys_render_border_map
 
+  call man_map_get_lvl_map
   call  man_map_get_map_array
   ld    (map_ptr), ix
   call  sys_render_map

@@ -189,6 +189,10 @@ _endfor_sum_iy_xcell:
   xor   #default_btype
   jr   z, _end_update ; the cell is equal to default z = 0 (xor -> 1 if different)
 
+  ld    a, b_type(iy) ;;ld type of block
+  xor   #exit_btype
+  jr   z, _go_next_lvl ;
+
 
 ;; Rehacer el cambio de posicion x y xcell
   ld    a, e_vx(ix)
@@ -229,6 +233,9 @@ reupdate_y:
   ld    e_y(ix), b 
  
 _end_update:
+  ret
+_go_next_lvl:
+  call man_game_init_next_lvl
   ret
 
 ; Input: ix pointer to entity
@@ -296,6 +303,7 @@ sys_physics_init::
   ld    (enemy_ptr), ix
   ld    (enemy_num), a
 
+  call man_map_get_lvl_map
   call  man_map_get_map_array
   ld    (map_ptr),  ix
   ret

@@ -6,6 +6,7 @@
 .globl  man_game_init
 .globl  man_game_update
 .globl  man_game_terminate
+.globl  man_game_init_next_lvl
 
 
 ;;########################################################
