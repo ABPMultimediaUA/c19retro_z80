@@ -6,6 +6,7 @@
 .include "../man/game.h.s"
 .include "../cpct_functions.h.s"
 .include "input_system.h.s"
+.include "render_system.h.s"
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -77,12 +78,23 @@ A_Pressed:
   ld    e_vy(ix), #move_down    
   ret
 A_NotPressed:    
+
   ld    hl, #Key_R
   call  cpct_isKeyPressed_asm
   jr    z, R_NotPressed
 R_Pressed:
   call  man_game_terminate
+  ret
 R_NotPressed:
+
+  ld    hl, #Key_Esc
+  call  cpct_isKeyPressed_asm
+  jr    z, Esc_NotPressed
+Esc_Pressed:
+  call  man_game_menu
+  call  sys_render_map
+  
+Esc_NotPressed:
   ret
 
 

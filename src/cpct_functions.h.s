@@ -31,3 +31,4 @@
 .globl  Key_A
 .globl  Key_R
 .globl  Key_Space
+.globl  Key_Esc
