@@ -91,9 +91,9 @@ sys_input_press_start::
 
   call  cpct_scanKeyboard_f_asm
 
-  ld    hl, #Key_X
+  ld    hl, #Key_Space
   call  cpct_isKeyPressed_asm
-  jr    z, X_NotPressed
+  jr    z, Space_NotPressed
   ld    a, #1
-X_NotPressed:
+Space_NotPressed:
   ret
