@@ -13,13 +13,8 @@
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
 
-;;
-;;  INPUT:
-;;    ix  address memory where entity starts
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    none
+
+;;  INPUT:  ix  address memory where entity starts
 sys_physics_update_entity::
   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
 
@@ -236,26 +231,34 @@ reupdate_y:
 _end_update:
   ret
 
+; Input: ix pointer to entity
+sys_physics_update_entity_bombs::
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #invalid_type
+  ret   z   ;ret if invalid, nothing to update
 
-;;
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
+  ld    a,  bomb_timer+sizeof_e_solo(ix)
+  and   a
+  jr    nz, dec_timer ; if a != 0 : timer--
+  
+  ld    bomb_type+sizeof_e_solo(ix), #dead_type
+  ret
+
+dec_timer:
+  dec   bomb_timer+sizeof_e_solo(ix)
+  ret
+
+
 ;;  DESTROYED:
 ;;    A,BC,IX
 sys_physics_player_update::
   player_ptr = .+2
   ld    ix, #0x0000  
   call  sys_physics_update_entity
+  call  sys_physics_update_entity_bombs 
   ret
 
 
-;;
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
 ;;  DESTROYED:
 ;;    A,BC,IX
 sys_physics_enemies_update::
@@ -268,6 +271,7 @@ physics_enemies_loop:
   push  af
   
   call  sys_physics_update_entity
+  call  sys_physics_update_entity_bombs
 
   ld    bc, #sizeof_e
   add   ix, bc
@@ -279,30 +283,11 @@ physics_enemies_loop:
   ret
 
 
-;;
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    none
-sys_physics_bomb_update::
-  ret
-
-
 
 ;;########################################################
 ;;                   PUBLIC FUNCTIONS                    #             
 ;;########################################################
 
-;;
-;;  none
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    none
 sys_physics_init::
   call  man_entity_get_player
   ld    (player_ptr), ix
@@ -319,6 +304,5 @@ sys_physics_init::
 sys_physics_update::
   call  sys_physics_player_update
   call  sys_physics_enemies_update
-  call  sys_physics_bomb_update
   ret
   

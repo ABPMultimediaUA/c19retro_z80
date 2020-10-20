@@ -13,12 +13,38 @@
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
-;;
+
+; Input: ix pointer to entity
+sys_render_entity_bombs::
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #invalid_type
+  ret   z   ;ret if invalid, nothing to update
+
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #alive_type
+  jr    z, draw_bomb
+
+  ; Bomb dead
+  ; TODO: dibujar la explansion
+  ld    e, bomb_x+sizeof_e_solo(ix)          
+  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
+  ld    a, #0x33  ;;verde fondo
+  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
+  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
+  call  cpct_drawSolidBox_asm
+  ret
+
+draw_bomb:
+  ld    e, bomb_x+sizeof_e_solo(ix)          
+  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
+  ld    a, #0xFF  ;;0xFF rojo
+  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
+  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
+  call  cpct_drawSolidBox_asm
+  ret 
+
+
 ;;  Render player and update its sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
 sys_render_player::
@@ -43,6 +69,9 @@ sys_render_player::
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height
   call  cpct_drawSprite_asm 
+
+
+  call  sys_render_entity_bombs
   ret
 
 
@@ -62,6 +91,7 @@ sys_render_enemies::
   render_enemies_loop:
     push  af
 
+    call  sys_render_entity_bombs
     ;call  sys_render_remove_entity
     
     ;; Calculate a video-memory location for sprite
@@ -81,6 +111,7 @@ sys_render_enemies::
       ld    b, e_h(ix)                  ;; Sprite height
       call  cpct_drawSprite_asm    
   
+
     ld   bc, #sizeof_e
     add  ix, bc
 
