@@ -12,7 +12,7 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, 0, 0, 4, 16, 0, 0, 0xCCCC
+_player:  DefineEntity alive_type, 0, 0, 0, 0, 4, 16, 0, 0, 0xCCCC
 DefineEntityArray _enemy, max_entities, DefineEntityDefault
 
 DefineBombArray _bomb, max_bombs, DefineBombDefault
@@ -27,16 +27,14 @@ DefineBombArray _bomb, max_bombs, DefineBombDefault
 ;;    none
 ;;  RETURN: 
 ;;    hl with memory address of free space for new entity
-;;    ix with memory address of last created entity
 ;;  DESTROYED:
 ;;    AF,DE,BC
 man_entity_new_entity::
   ld    a, (_enemy_num)
   inc   a
   ld    (_enemy_num), a
-
-  ld    ix, (_enemy_last)    
-  ld    hl, (_enemy_last)    
+  
+  ld    hl, (_enemy_last)      
   ld    bc, #sizeof_e
   add   hl, bc
   ld    (_enemy_last), hl
@@ -48,6 +46,8 @@ man_entity_new_entity::
 ;;    ix  with memory address of entity that must be initialized
 ;;    b   X coordinate
 ;;    c   Y coordinate
+;;    h   X cell
+;;    l   Y cell
 ;;  RETURN: 
 ;;    none
 ;;  DESTROYED:
@@ -57,6 +57,9 @@ man_entity_initialize_entity::
   
   ld    e_x(ix), b        ;; set X coordiante
   ld    e_y(ix), c        ;; set Y coordiante
+
+  ld    e_xcell(ix), h      ;; set X coordiante cell  
+  ld    e_ycell(ix), l      ;; set Y coordiante cell 
 
   ld    e_vx(ix), #0      ;; set X velocity  
   ld    e_vy(ix), #0      ;; set Y velocity    
@@ -113,6 +116,8 @@ man_entity_init_player::
   ld    ix, #_player
   ld    b, #min_map_x_coord_valid
   ld    c, #min_map_y_coord_valid
+  ld    h, #0     ;; set X coordiante cell  
+  ld    l, #0     ;; set Y coordiante cell 
   call  man_entity_initialize_entity
   ret
 
@@ -125,22 +130,41 @@ man_entity_init_player::
 ;;    ix with memory address of last created entity
 ;;  DESTROYED:
 ;;    AF,DE,IX,HL,BC
-man_entity_init_entities::
-  ld    a, #max_entities
-  ld    de, (_enemy_last)
-init_loop:
-  push  af
-  
+man_entity_init_entities::    
+
+  ;; enemy 1 -> Abajo a la izda
   call  man_entity_new_entity
 
+  ld    ix, #_enemy_array
   ld    b, #min_map_x_coord_valid
-  ld    c, #max_map_y_coord_valid-move_up
+  ld    c, #max_map_y_coord_valid+move_up
+  ld    h, #0     ;; set X coordiante cell  
+  ld    l, #10    ;; set Y coordiante cell 
   call  man_entity_initialize_entity
-  
-  pop   af
-  dec   a
-  ret   z
-  jr    init_loop
+
+  ;; enemy 2 -> Arriba a la derecha
+  call  man_entity_new_entity
+
+  ld   bc, #sizeof_e
+  add  ix, bc
+  ld    b, #max_map_x_coord_valid+move_left   
+  ld    c, #min_map_y_coord_valid 
+  ld    h, #11     ;; set X coordiante cell  
+  ld    l, #0    ;; set Y coordiante cell 
+  call  man_entity_initialize_entity
+
+  ;; enemy 3 -> Abajo a la derecha
+  call  man_entity_new_entity
+
+  ld   bc, #sizeof_e
+  add  ix, bc
+  ld    b, #max_map_x_coord_valid+move_left
+  ld    c, #max_map_y_coord_valid+move_up
+  ld    h, #11    ;; set X coordiante cell  
+  ld    l, #10    ;; set Y coordiante cell 
+  call  man_entity_initialize_entity
+
+  ret   
 
 ;;
 ;;  Reset bombs data

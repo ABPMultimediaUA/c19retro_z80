@@ -84,3 +84,16 @@ R_Pressed:
   call  man_game_terminate
 R_NotPressed:
   ret
+
+
+sys_input_press_start::
+  ld    a, #0
+
+  call  cpct_scanKeyboard_f_asm
+
+  ld    hl, #Key_X
+  call  cpct_isKeyPressed_asm
+  jr    z, X_NotPressed
+  ld    a, #1
+X_NotPressed:
+  ret

@@ -21,9 +21,10 @@
 ;;########################################################
 
 ;;-----------------------  ENTITY  -----------------------
-.macro DefineEntity _type,_x,_y,_w,_h,_vx,_vy,_sp_ptr
+.macro DefineEntity _type,_x,_y,_xcell,_ycell,_w,_h,_vx,_vy,_sp_ptr
     .db _type
     .db _x, _y
+    .db _xcell, _ycell
     .db _w, _h      ;; both in bytes
     .db _vx, _vy    
     .dw _sp_ptr
@@ -31,6 +32,7 @@
 
 .macro DefineEntityDefault
     .db alive_type
+    .db 0xDE, 0xAD
     .db 0xDE, 0xAD
     .db 4, 16  
     .dw 0xADDE 
@@ -50,6 +52,7 @@
 .macro DefineBombDefault    
     .db max_timer   ;; timer    
     .db 0xDE,0xAD   ;; coordinates (x, y)
+    .db 0xDE,0xAD   ;; coordinates in cells (x, y)
     .db #4, #16     ;; width, height -> both in bytes    
     .dw 0xCCCC      ;; sprite  pointer (where it's in memory video)
 .endm
@@ -71,24 +74,28 @@
 e_type = 0
 e_x = 1
 e_y = 2
-e_w = 3
-e_h = 4
-e_vx = 5
-e_vy = 6
-e_sp_ptr_0 = 7
-e_sp_ptr_1 = 8
-sizeof_e = 9
-max_entities = 1
+e_xcell = 3
+e_ycell = 4
+e_w = 5
+e_h = 6
+e_vx = 7
+e_vy = 8
+e_sp_ptr_0 = 9
+e_sp_ptr_1 = 10
+sizeof_e = 11
+max_entities = 3
 
 ;;-----------------------  BOMBS  ------------------------
 b_timer = 0
 b_x = 1
 b_y = 2
-b_w = 3
-b_h = 4
-b_sp_ptr_0 = 5
-b_sp_ptr_1 = 6
-sizeof_b = 7
+e_xcell = 3
+e_ycell = 4
+b_w = 5
+b_h = 6
+b_sp_ptr_0 = 7
+b_sp_ptr_1 = 8
+sizeof_b = 9
 max_bombs = 1
 
 ;;########################################################
