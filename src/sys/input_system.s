@@ -77,7 +77,15 @@ Q_NotPressed:
 A_Pressed:
   ld    e_vy(ix), #move_down    
   ret
-A_NotPressed:    
+A_NotPressed:   
+
+; ;   ld    hl, #Key_Space
+; ;   call  cpct_isKeyPressed_asm
+; ;   jr    z, Space_NotPressed
+; ; Space_Pressed:
+; ;   call  man_entity_create_bomb    
+; ;   ret
+; ; Space_NotPressed: 
 
   ld    hl, #Key_R
   call  cpct_isKeyPressed_asm

@@ -44,12 +44,38 @@ _str_start_game:
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
-;;
+
+; Input: ix pointer to entity
+sys_render_entity_bombs::
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #invalid_type
+  ret   z   ;ret if invalid, nothing to update
+
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #alive_type
+  jr    z, draw_bomb
+
+  ; Bomb dead
+  ; TODO: dibujar la explansion
+  ld    e, bomb_x+sizeof_e_solo(ix)          
+  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
+  ld    a, #0x33  ;;verde fondo
+  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
+  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
+  call  cpct_drawSolidBox_asm
+  ret
+
+draw_bomb:
+  ld    e, bomb_x+sizeof_e_solo(ix)          
+  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
+  ld    a, #0xFF  ;;0xFF rojo
+  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
+  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
+  call  cpct_drawSolidBox_asm
+  ret 
+
+
 ;;  Render player and update its sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
 ;;  DESTROYED:
 ;;    DE,BC,HL,IX
 sys_render_player::
@@ -74,6 +100,9 @@ sys_render_player::
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height
   call  cpct_drawSprite_asm 
+
+
+  call  sys_render_entity_bombs
   ret
 
 
@@ -93,6 +122,7 @@ sys_render_enemies::
   render_enemies_loop:
     push  af
 
+    call  sys_render_entity_bombs
     ;call  sys_render_remove_entity
     
     ;; Calculate a video-memory location for sprite
@@ -112,6 +142,7 @@ sys_render_enemies::
       ld    b, e_h(ix)                  ;; Sprite height
       call  cpct_drawSprite_asm    
   
+
     ld   bc, #sizeof_e
     add  ix, bc
 
@@ -149,7 +180,7 @@ sys_render_one_default_block::
 
 sys_render_map::
   map_ptr = .+2
-  ld    ix, #0x0000 ;map_ptr NOT USED
+  ld    ix, #0x0000 
   ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
   ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
 
@@ -167,14 +198,21 @@ _row:
     
     ld    a, b_type(ix) ;;ld type of block
     xor   #default_btype
-    jr    nz, _draw_solid_box
-  
-    ld    a, #0x33  ;green
-    jr    _end_draw_box
+    jr    z, _draw_default_box
 
-    _draw_solid_box:
-      ld    a, #0x02  ;
-    _end_draw_box:
+    ld    a, b_type(ix) ;;ld type of block
+    xor   #exit_btype
+    jr    z, _draw_exit_box
+  
+    ld    a, #0x02  ;green
+    jr    _end_define_color_box
+
+    _draw_default_box:
+      ld    a, #0x33  
+      jr    _end_define_color_box
+    _draw_exit_box:
+      ld    a, #0x00  
+    _end_define_color_box:
     
     ld    c, #4                 ;; Sprite width
     ld    b, #16            ;; Sprite height
@@ -403,6 +441,7 @@ sys_render_init::
 
   call  sys_render_border_map
 
+  call man_map_get_lvl_map
   call  man_map_get_map_array
   ld    (map_ptr), ix
   call  sys_render_map

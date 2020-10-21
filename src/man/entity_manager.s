@@ -276,8 +276,8 @@ man_entity_terminate::
 ;only 1 bomb now
 man_entity_create_bomb::  
   ld    a,  bomb_type+sizeof_e_solo(ix)
-  and   #invalid_type
-  ret   z   ;ret if we have alive bomb
+  xor   #invalid_type
+  ret   nz   ;ret if we have alive bomb
 
   ld    bomb_type+sizeof_e_solo(ix), #alive_type
   ld    bomb_timer+sizeof_e_solo(ix), #max_timer
@@ -303,11 +303,12 @@ man_entity_create_bomb::
 ;Input: ix pointer to entity
 man_entity_bombs_update::
   ld    a,  bomb_type+sizeof_e_solo(ix)
-  and   #invalid_type
-  ret   nz   ;ret if invalid, nothing to update
+  xor   #invalid_type
+  ret   z   ;ret if invalid, nothing to update
 
-  and   #dead_type
-  ret   z     ;ret if is not dead
+  ld    a,  bomb_type+sizeof_e_solo(ix)
+  xor   #dead_type
+  ret   nz     ;ret if is not dead
 
   ld    bomb_type+sizeof_e_solo(ix), #invalid_type
   ret

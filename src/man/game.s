@@ -73,6 +73,19 @@ man_game_init::
 
   ret
 
+man_game_init_next_lvl::
+  call  man_entity_terminate
+
+  call man_map_update
+  
+  call  man_entity_init     
+  call  sys_input_init
+  ;call  sys_ai_init
+  call  sys_physics_init
+  call  sys_render_init   
+
+  ret
+
 
 ;;
 ;;  Increases counter of entities and pointer to the last element.
@@ -89,7 +102,6 @@ man_game_update::
   call  man_entity_update
 ;  call  sys_render_update
   ret
-
 
 ;;
 ;;  Increases counter of entities and pointer to the last element.
