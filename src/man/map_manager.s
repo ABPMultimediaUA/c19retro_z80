@@ -17,10 +17,12 @@
 ;;########################################################
 
 ;DefineBlockArray _map, map_resolution_cell, DefineBlockDefault
-DefineLevel1Map _level1
-DefineLevel2Map _level2
-num_lvl:    .db 0x01
+;DefineLevel1Map _level1
+;DefineLevel2Map _level2
+;_maps_num:    .db 0x01
 
+
+DefineMapsArray _maps
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -28,35 +30,39 @@ num_lvl:    .db 0x01
 
 man_map_init::
     ld  a,  #1
-    ld (num_lvl),  a
+    ld (_maps_num),  a
+
+    ld    hl, #_maps_array          
+    ld    (_maps_last), hl
     ret
 
 man_map_update::
-    ld  a, (num_lvl)
+    ld  a, (_maps_num)
     inc a
-    ld (num_lvl),  a
+    ld (_maps_num),  a
+
+    ld    hl, (_maps_last)      
+    ld    bc, #sizeof_map
+    add   hl, bc
+    ld    (_maps_last), hl
+
+    ld     a,  #max_maps 
+    ld    hl, #_maps_num
+    cp   (hl)                  ;; max_entities - _enemy_num    
+    ret   nc                    ;; IF Z=1 THEN array is full
+
+    call  man_map_init
+
     ret
 
 man_map_terminate::
     ret 
 
 man_map_get_lvl_map::
-    ld  a, (num_lvl)
+    ld  a, (_maps_num)    
     ret
 
 ; Input: a, number of level
 man_map_get_map_array::
-    ld  b, a
-    xor #1
-    jr  z,  ret_level1
-
-    ld  a, b
-    xor #2
-    jr  z,  ret_level2
-
-ret_level1:
-  ld    ix, #_level1_array
-  ret
-ret_level2:
-  ld    ix, #_level2_array
-  ret
+    ld    ix, (_maps_last)
+    ret

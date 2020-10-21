@@ -303,7 +303,7 @@ sys_physics_init::
   ld    (enemy_ptr), ix
   ld    (enemy_num), a
 
-  call man_map_get_lvl_map
+  call  man_map_get_lvl_map
   call  man_map_get_map_array
   ld    (map_ptr),  ix
   ret

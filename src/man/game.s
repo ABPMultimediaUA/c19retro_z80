@@ -76,7 +76,7 @@ man_game_init::
 man_game_init_next_lvl::
   call  man_entity_terminate
 
-  call man_map_update
+  call  man_map_update
   
   call  man_entity_init     
   call  sys_input_init
