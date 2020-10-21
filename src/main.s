@@ -52,6 +52,8 @@ _main::
       
    cpctm_setBorder_asm #HW_BLACK
    call  sys_render_init_config
+   
+   call  man_game_menu
    call  man_game_init   
 ;; Loop forever
 loop:

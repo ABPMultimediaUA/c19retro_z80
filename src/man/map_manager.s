@@ -51,7 +51,7 @@ man_map_update::
     cp   (hl)                  ;; max_entities - _enemy_num    
     ret   nc                    ;; IF Z=1 THEN array is full
 
-    call  man_map_init
+    call  man_game_end
 
     ret
 

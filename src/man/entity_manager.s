@@ -133,7 +133,7 @@ man_entity_player_update::
   ret
 
 
-man_entity_enemies_update::
+man_entity_enemies_update::  
   ld    ix, #_enemy_array
   ld     a, (_enemy_num)
   or     a
