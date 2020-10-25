@@ -12,7 +12,7 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, 0, 0, 0, 0, 4, 16, 0, 0, 0xCCCC
+_player:  DefineEntity alive_type, 0, 0, 0, 0, 4, 16, 0, 0, #CPCT_VMEM_START_ASM+402
 DefineEntityArray _enemy, max_entities, DefineEntityDefault
 
 ;DefineBombArray _bomb, max_bombs, DefineBombDefault
@@ -103,6 +103,8 @@ man_entity_init_entities::
   ld    h, #0     ;; set X coordiante cell  
   ld    l, #10    ;; set Y coordiante cell 
   call  man_entity_initialize_entity
+  ld    e_vx(ix), #4      ;; set X velocity  
+  ld    e_vy(ix), #0      ;; set Y velocity
 
   ;; enemy 2 -> Arriba a la derecha
   call  man_entity_new_entity

@@ -38,7 +38,7 @@
     .db 0xDE, 0xAD
     .db 4, 16  
     .dw 0xADDE 
-    .dw 0xCCCC
+    .dw #CPCT_VMEM_START_ASM+402
     .rept max_bombs 
         DefineBombDefault
     .endm
