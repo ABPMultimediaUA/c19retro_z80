@@ -90,53 +90,6 @@ update_y:
   ld    e_y(ix), b    ;; Update Y coordinate
 end_update_y:
   
-; _check_colision:
-; ;---------------------- X ---------------------
-;   ld    a, e_x(ix)
-;   add   e_vx(ix)  ;a = new x
-;   sub   #min_map_x_coord_valid
-;   ld    b, a  ; b = new x inside map
-
-;   ; get b / 4
-;   ld    a, #0
-;   _loop_x:
-;     jr  z,  _endloop_x
-;     push  af
-
-;     ld  a,  b
-;     sub #4
-;     ld  b,  a
-
-;     pop   af
-;     inc a
-;     jr  _loop_x
-;   _endloop_x:
-;   ld  b,  a
-;   ; b = b / 4
-; ;---------------------- Y ---------------------
-;   ld    a, e_y(ix)
-;   add   e_vy(ix)  ;;a = new x
-;   sub   #min_map_y_coord_valid
-;   ld    c, a  ; c = new y inside map
-
-;   ; get c / 16
-;   ld    a, #0
-;   _loop_y:
-;     jr  z,  _endloop_y
-;     push  af
-
-;     ld  a,  c
-;     sub #16
-;     ld  c,  a
-
-;     pop   af
-;     inc a
-;     jr  _loop_y
-;   _endloop_y:
-;   ld  c,  a
-  ; c = c / 16
-  ;-------------------------------------------
-  ; Now BC represent the cell of map and we can search the correspond tile
 
   map_ptr = .+2
   ld  iy, #0x0000
@@ -253,6 +206,30 @@ sys_physics_update_entity_bombs::
 
 dec_timer:
   dec   bomb_timer+sizeof_e_solo(ix)
+  ret
+
+; Input ix, iy (2 entities)
+; Return a { 1 if colision, 0 if not}
+sys_physics_check_colision_entity_entity::
+  ld  a, e_xcell(ix)
+  ld  b, a
+  ld  a, e_xcell(iy)
+
+  sub b   ; a - b (x2-x1)
+  jr  nz, no_colision
+
+  ld  a, e_ycell(ix)
+  ld  b, a
+  ld  a, e_ycell(iy)
+
+  sub b   ; a - b (y2-y1)
+  jr  nz, no_colision
+
+_colision:
+  ld  a, #1
+  ret
+_no_colision:
+  ld  a, #0
   ret
 
 
