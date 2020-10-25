@@ -27,6 +27,7 @@ DefineEntityArray _enemy, max_entities, DefineEntityDefault
 ;;    none
 ;;  RETURN: 
 ;;    hl with memory address of free space for new entity
+;;    ix with memory address of last entity
 ;;  DESTROYED:
 ;;    AF,DE,BC
 man_entity_new_entity::
@@ -34,6 +35,7 @@ man_entity_new_entity::
   inc   a
   ld    (_enemy_num), a
   
+  ld    ix, (_enemy_last)
   ld    hl, (_enemy_last)      
   ld    bc, #sizeof_e
   add   hl, bc
@@ -48,6 +50,8 @@ man_entity_new_entity::
 ;;    c   Y coordinate
 ;;    h   X cell
 ;;    l   Y cell
+;;    d   X velocity
+;;    e   Y velocity
 ;;  RETURN: 
 ;;    none
 ;;  DESTROYED:
@@ -61,8 +65,8 @@ man_entity_initialize_entity::
   ld    e_xcell(ix), h      ;; set X coordiante cell  
   ld    e_ycell(ix), l      ;; set Y coordiante cell 
 
-  ld    e_vx(ix), #0      ;; set X velocity  
-  ld    e_vy(ix), #0      ;; set Y velocity    
+  ld    e_vx(ix), d      ;; set X velocity  
+  ld    e_vy(ix), e      ;; set Y velocity    
   
   ld    e_w(ix), #4       ;; set sprite width
   ld    e_h(ix), #16      ;; set sprite height
@@ -79,7 +83,9 @@ man_entity_init_player::
   ld    b, #min_map_x_coord_valid
   ld    c, #min_map_y_coord_valid
   ld    h, #0     ;; set X coordiante cell  
-  ld    l, #0     ;; set Y coordiante cell 
+  ld    l, #0     ;; set Y coordiante cell        
+  ld    d, #0     ;; set X velocity
+  ld    e, #0     ;; set Y velocity
   call  man_entity_initialize_entity
   ret
 
@@ -112,7 +118,7 @@ man_entity_init_entities::
   ld    b, #max_map_x_coord_valid+move_left   
   ld    c, #min_map_y_coord_valid 
   ld    h, #11     ;; set X coordiante cell  
-  ld    l, #0    ;; set Y coordiante cell 
+  ld    l, #0      ;; set Y coordiante cell 
   call  man_entity_initialize_entity
 
   ;; enemy 3 -> Abajo a la derecha
@@ -197,7 +203,7 @@ man_entity_enemies_update::
 ;;    AF,DE,IX,HL,BC
 man_entity_init::
   call  man_entity_init_player
-  call  man_entity_init_entities
+  ;call  man_entity_init_entities
   ret
 
 
@@ -210,18 +216,32 @@ man_entity_update::
   ret
 
 
+;;  INPUT:
+;;    ix  with memory address of entity that must be initialized
+;;    b   X coordinate
+;;    c   Y coordinate
+;;    h   X cell
+;;    l   Y cell
+;;    d   X velocity
+;;    e   Y velocity
 ;;  RETURN: 
 ;;    hl with memory address of free space for new entity
 ;;    ix with memory address of last created entity
 ;;  DESTROYED:
 ;;    A,HL,BC
 man_entity_create_entity::  
+  push  hl
+  push  bc
+
   ld    a, #max_entities
   ld    hl, #_enemy_num
   cp   (hl)                  ;; max_entities - _enemy_num
   ret   z                    ;; IF Z=1 THEN array is full ELSE create more
 
   call  man_entity_new_entity
+
+  pop   hl
+  pop   bc
   call  man_entity_initialize_entity
   ret
 
