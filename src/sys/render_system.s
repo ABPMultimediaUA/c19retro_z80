@@ -332,8 +332,8 @@ sys_render_enemies::
   render_enemies_loop:
     push  af
 
-    call  sys_render_entity_bombs
-    ;call  sys_render_remove_entity
+    ;call  sys_render_entity_bombs
+    call  sys_render_remove_entity
     
     ;; Calculate a video-memory location for sprite
       ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
@@ -515,17 +515,45 @@ sys_render_init::
   ld    (map_ptr), ix
   call  sys_render_map
 
+  ; MEJOR NO DESCOMENTAR ESTAS CHAPUZAS
+  ; AVECES PRODUCEN BUGS IMPOSIBLES DE DEBUGUEAR
+  ; LA CHAPUZA SE HA MOVIDO A LA MACRO DE ENTIDADES
+  ; EL PUNTERO POR DEFECTO ES UNA POSICION HARDCODEADA
+  ;; ========== CHAPUZA para enemigos
+  ; _chapuza_render_enemies_loop:
+  ; call  man_entity_get_enemy_array
+  ;   push  af
+  ;   ;; Calculate a video-memory location for sprite
+  ;   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ;   ld    c, e_x(ix)                  ;; C = x coordinate       
+  ;   ld    b, e_y(ix)                  ;; B = y coordinate   
+  ;   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+    
+  ;   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ;   ld  e_sp_ptr_0(ix), l
+  ;   ld  e_sp_ptr_1(ix), h   
+
+  ;   ld   bc, #sizeof_e
+  ;   add  ix, bc
+
+  ;   pop   af
+  ;   dec   a
+  ;   jr    z, _chapuza_render_player
+  ;   jr    _chapuza_render_enemies_loop
+  ;;============= FIN CHAPUZA
+
   ;; ========== CHAPUZA para poner el ultimo puntero del player a su posicion
-  call  man_entity_get_player
-    ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, e_x(ix)                  ;; C = x coordinate       
-  ld    b, e_y(ix)                  ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  ; _chapuza_render_player:
+  ; call  man_entity_get_player
+  ;   ;; Calculate a video-memory location for sprite
+  ; ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ; ld    c, e_x(ix)                  ;; C = x coordinate       
+  ; ld    b, e_y(ix)                  ;; B = y coordinate   
+  ; call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
   
-  ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-  ld  e_sp_ptr_0(ix), l
-  ld  e_sp_ptr_1(ix), h
+  ; ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ; ld  e_sp_ptr_0(ix), l
+  ; ld  e_sp_ptr_1(ix), h
   ;;============= FIN CHAPUZA
 
   ret
