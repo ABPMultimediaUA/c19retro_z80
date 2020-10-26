@@ -91,7 +91,7 @@
 .macro DefineLevel3Map    
     enemies3:
         .db 3 ;; amount of enemies in the map
-        DefineEnemy 0, 10, 0, 16
+        DefineEnemy 8, 10, 0, 16
         DefineEnemy 16, 0, 0, -16
         DefineEnemy 8, 0, -4, 0
         DefineEnemy 0, 0, 0, 0
