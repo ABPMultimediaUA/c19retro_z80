@@ -74,7 +74,7 @@ man_map_update::
     add   hl, bc
     ld    (_maps_last), hl
 
-    ld     a,  #max_maps+1 
+    ld     a,  #max_maps 
     ld    hl, #_maps_num
     cp   (hl)                  ;; max_entities - _enemy_num    
     jr   nc, #game_no_end                    ;; IF Z=1 THEN array is full

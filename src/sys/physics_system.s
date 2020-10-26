@@ -450,7 +450,7 @@ sys_physics_enemies_update::
   ld    ix, #0x0000
   enemy_num = .+1
   ld     a, #0
-  ret   ;; CAMBIAR
+  ;ret   ;; CAMBIAR
 
 physics_enemies_loop:
   push  af
