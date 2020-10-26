@@ -421,7 +421,7 @@ _row:
       ld    a, #0x33  
       jr    _end_define_color_box
     _draw_exit_box:
-      ld    a, #0x00  
+      ld    a, #0x00
     _end_define_color_box:
     
     ld    c, #4                 ;; Sprite width

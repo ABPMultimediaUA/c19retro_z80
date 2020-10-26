@@ -70,7 +70,7 @@ _main::
 loop:
    call  man_game_update
 
-   ld    a, #8
+   ld    a, #7
    call  repeat_a
 
    jr    loop   
