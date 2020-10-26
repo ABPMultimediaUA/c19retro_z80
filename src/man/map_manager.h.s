@@ -19,7 +19,7 @@
 
 ;;-----------------------  BLOCK  ------------------------
 .macro DefineEnemy _cx, _cy, _vx, _vy
-    .db _cx*4,     _cy*16       ;; screen coordinates
+    .db (_cx*4)+2,     (_cy*16)+12       ;; screen coordinates
     .db _cx,    _cy             ;; map coordinates
     .db _vx,    _vy             ;; velocity
 .endm
@@ -42,8 +42,8 @@
 
 .macro DefineLevel1Map    
     enemies1:
-        .db 0 ;; amount of enemies in the map 
-        DefineEnemy 0, 0, 0, 0
+        .db 1 ;; amount of enemies in the map 
+        DefineEnemy 0, 10, 0, 0
         DefineEnemy 0, 0, 0, 0
         DefineEnemy 0, 0, 0, 0
         DefineEnemy 0, 0, 0, 0
@@ -146,7 +146,7 @@ enemy_vy = 5
 
 sizeof_enemy = 6
 
-sizeof_enemy_array = sizeof_enemy*5
+sizeof_enemy_array = sizeof_enemy*5+1
 ;;---------------------  BLOCK ENTITY  -------------------
 
 b_type = 0
