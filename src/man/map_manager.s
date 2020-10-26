@@ -48,10 +48,10 @@ man_map_enemies_init::
 man_map_enemies_init_loop:
     push    af    
     push    ix
-    ld      h, enemy_x(ix)
-    ld      l, enemy_y(ix)    
-    ld      b, enemy_cx(ix)
-    ld      c, enemy_cy(ix)
+    ld      b, enemy_x(ix)
+    ld      c, enemy_y(ix)    
+    ld      h, enemy_cx(ix)
+    ld      l, enemy_cy(ix)
     ld      d, enemy_vx(ix)
     ld      e, enemy_vy(ix)    
     call    man_entity_create_entity

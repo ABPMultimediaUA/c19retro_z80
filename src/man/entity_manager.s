@@ -246,8 +246,8 @@ man_entity_create_entity::
 
   call  man_entity_new_entity
 
-  pop   hl
   pop   bc
+  pop   hl
   call  man_entity_initialize_entity
   ret
 
