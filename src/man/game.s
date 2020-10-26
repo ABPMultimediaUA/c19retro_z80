@@ -112,6 +112,19 @@ man_game_update::
   ;call  sys_ai_update
   call  sys_physics_update
   call  man_entity_update
+
+  ; call man_entity_get_player
+  ; ld  e_vx(ix), #0
+  ; ld  e_vy(ix), #0
+  
+  ; ld  a,  #1
+  ; loop_velocity:
+  ;   push af
+  ;   call  sys_physics_update
+  ;   call  man_entity_update
+  ;   pop af
+  ;   dec a
+  ;   jr nz, loop_velocity
   ret
 
 ;;

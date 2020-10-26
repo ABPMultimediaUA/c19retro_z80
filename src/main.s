@@ -42,6 +42,17 @@
 ;; symbols for functions you do not use.
 ;;
 
+;Input a
+repeat_a::
+   push af
+   call  cpct_waitVSYNC_asm   
+   halt
+   pop af
+   dec a
+   jr nz, repeat_a
+
+   call  sys_render_update 
+   ret
 ;;
 ;; MAIN function. This is the entry point of the application.
 ;;    _main:: global symbol is required for correctly compiling and linking
@@ -59,10 +70,7 @@ _main::
 loop:
    call  man_game_update
 
-   call  cpct_waitVSYNC_asm   
-   call  sys_render_update   
-   .rept 10
-      halt            
-   .endm
+   ld    a, #8
+   call  repeat_a
 
    jr    loop   

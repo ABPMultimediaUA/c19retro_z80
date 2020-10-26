@@ -89,7 +89,7 @@ e_sp_ptr_0 = 9
 e_sp_ptr_1 = 10
 sizeof_e_solo = 11
 sizeof_e = 11 + (sizeof_b * max_bombs)
-max_entities = 3
+max_entities = 6
 
 ;;-----------------------  BOMBS  ------------------------
 bomb_type = 0

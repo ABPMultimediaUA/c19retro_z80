@@ -71,6 +71,10 @@ man_entity_initialize_entity::
   ld    e_w(ix), #4       ;; set sprite width
   ld    e_h(ix), #16      ;; set sprite height
 
+  ld    hl, #CPCT_VMEM_START_ASM+402
+  ld    e_sp_ptr_0(ix), h
+  ld    e_sp_ptr_1(ix), l
+
   ld    bomb_type+sizeof_e_solo(ix), #invalid_type
   ld    bomb_w+sizeof_e_solo(ix), #4
   ld    bomb_h+sizeof_e_solo(ix), #16   
