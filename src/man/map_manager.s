@@ -30,39 +30,12 @@ DefineMapsArray _maps
 ;;########################################################
 
 man_map_init::
-    ld  a,  #1
-    ld (_maps_num),  a
+    ld   a,  #1
+    ld   (_maps_num),  a
 
-    ld    hl, #_maps_array        
-    ld    (_maps_last), hl
-    call  man_map_enemies_init
+    ld   hl, #_maps_array        
+    ld   (_maps_last), hl    
     ret
-
-man_map_enemies_init::
-    ld      ix, (_maps_last)
-    ld      a, (ix)    
-    inc     ix
-    or      a
-    ret     z    
-
-man_map_enemies_init_loop:
-    push    af    
-    push    ix
-    ld      b, enemy_x(ix)
-    ld      c, enemy_y(ix)    
-    ld      h, enemy_cx(ix)
-    ld      l, enemy_cy(ix)
-    ld      d, enemy_vx(ix)
-    ld      e, enemy_vy(ix)    
-    call    man_entity_create_entity
-    
-    ld      bc, #sizeof_enemy
-    pop     ix
-    add     ix, bc
-    pop     af
-    dec     a
-    ret     z
-    jr      man_map_enemies_init_loop
 
 man_map_update::
     ld  a, (_maps_num)
@@ -80,10 +53,8 @@ man_map_update::
     jr   nc, #game_no_end                    ;; IF Z=1 THEN array is full
 
 game_end:
-    call  man_game_end
-    ret
-game_no_end:
-    call  man_map_enemies_init
+    call  man_game_end    
+game_no_end:    
     ret
 
 man_map_terminate::
@@ -95,7 +66,5 @@ man_map_get_lvl_map::
 
 ; Input: a, number of level
 man_map_get_map_array::
-    ld    ix, (_maps_last)
-    ld    bc, #sizeof_enemy_array
-    add   ix, bc
+    ld    ix, (_maps_last)    
     ret
