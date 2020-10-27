@@ -77,6 +77,7 @@ man_game_menu_remove:
 ;;    none
 man_game_init::  
   call  man_map_init
+  call  man_map_get_lvl_map
   call  man_entity_init     
   call  sys_input_init
   ;call  sys_ai_init
@@ -89,7 +90,7 @@ man_game_init_next_lvl::
   call  man_entity_terminate  
 
   call  man_map_update  
-  
+  call  man_map_get_lvl_map
   call  man_entity_init      
   call  sys_input_init
   ;call  sys_ai_init
