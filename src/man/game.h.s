@@ -31,8 +31,8 @@ max_map_y_coord_valid = 188    ;;  [196-199] border, <=195 map
 map_height_px = max_map_y_coord_valid - min_map_y_coord_valid  ;176
 map_height_cell = map_height_px / 16    ;11
 
-;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each bomberman cell is 2width*2height chars, so
-;;  20 width chars == 10 bomberman cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
+;;  Screen width is 160px, each char is 8px, so there are 20 chars. Each Cell Block cell is 2width*2height chars, so
+;;  20 width chars == 10 Cell Block cells. 0.75 cell as left border + 3 cells as left extra info + 6 cells map + 0.25 cell as right border = 10 cells
 ;;  1 cell = 2w char = 16px --> 3.75 cells on the left of the map = 3.75*16=60px. 
 ;;  2px = 1 byte  --> 60px*1byte/2px=30bytes on the left of the map
 ;;  Same reasoning for right border: 0.25cell=1char=4px=2byte of right border

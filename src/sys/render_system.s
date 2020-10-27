@@ -10,7 +10,7 @@
 .include "../assets/assets.h.s"
 
 _str_game_name: 
-  .ascii "BOMBERMAN"
+  .ascii "Cell Block"
   .db    0
 
 _str_move_up: 
@@ -37,8 +37,8 @@ _str_restart:
   .ascii "R restart"
   .db    0
 
-_str_start_game: 
-  .ascii "Space to start"
+_str_play_game: 
+  .ascii "Space to play"
   .db    0
 
 ;;########################################################
@@ -80,10 +80,10 @@ sys_render_restart_key::
 ;;    none
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
-sys_render_start_key::
+sys_render_play_key::
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #12                        ;; C = x coordinate       
+  ld    c, #14                       ;; C = x coordinate       
   ld    b, #157                      ;; B = y coordinate   
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
   
@@ -94,7 +94,7 @@ sys_render_start_key::
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
-  ld    iy, #_str_start_game
+  ld    iy, #_str_play_game
   call  cpct_drawStringM0_asm
   ret
 
@@ -217,7 +217,7 @@ sys_render_move_keys::
 sys_render_game_name::
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
+  ld    c, #20                 ;; C = x coordinate       
   ld    b, #32                      ;; B = y coordinate   
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
   
@@ -468,7 +468,7 @@ sys_render_menu::
   call  sys_render_game_name
   call  sys_render_move_keys
   call  sys_render_pause_key
-  call  sys_render_start_key
+  call  sys_render_play_key
   call  sys_render_restart_key
   ret  
 

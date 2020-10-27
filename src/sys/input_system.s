@@ -98,7 +98,7 @@ Esc_NotPressed:
   ret
 
 
-sys_input_press_start::
+sys_input_press_play::
   ld    a, #0
 
   call  cpct_scanKeyboard_f_asm
