@@ -46,12 +46,12 @@ man_game_menu::
   call  sys_render_menu
 
 man_game_menu_loop:
-  call  sys_input_press_start   ;; Returns in register A if start was pressed
+  call  sys_input_press_play   ;; Returns in register A if start was pressed
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
-  jr    z, man_game_not_start
+  jr    z, man_game_not_play
   jr    man_game_menu_remove
-man_game_not_start:
+man_game_not_play:
 
   call  sys_input_press_restart   ;; Returns in register A if start was pressed
 
