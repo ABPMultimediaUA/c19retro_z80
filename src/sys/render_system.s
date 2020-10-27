@@ -232,6 +232,21 @@ sys_render_game_name::
   call  cpct_drawStringM0_asm
   ret
 
+sys_render_game_num_lifes::
+
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #18                  ;; C = x coordinate       
+  ld    b, #58                  ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_life            ;; Source Sprite Pointer (array with pixel data)
+  ld    c, #4                  ;; Sprite width
+  ld    b, #16                  ;; Sprite height
+  call  cpct_drawSprite_asm 
+  ret
+
 ;;
 ;;  Render enemies and update their sp_ptr
 ;;  INPUT:
@@ -469,6 +484,13 @@ sys_render_menu::
   call  sys_render_move_keys
   call  sys_render_pause_key
   call  sys_render_start_key
+  call  sys_render_restart_key
+  ret  
+
+sys_render_menu_lifes::
+  call  sys_render_menu_background
+  call  sys_render_game_name
+  call  sys_render_game_num_lifes
   call  sys_render_restart_key
   ret  
 
