@@ -320,11 +320,11 @@ man_entity_set_enemy_dead::
 
 
 man_entity_terminate::
-  ld  a, #_enemy_array
-  ld  (_enemy_last), a
+  ; ld  a, #_enemy_array
+  ; ld  (_enemy_last), a
 
-  ld  a, #0
-  ld  (_enemy_num), a
+  ; ld  a, #0
+  ; ld  (_enemy_num), a
   ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

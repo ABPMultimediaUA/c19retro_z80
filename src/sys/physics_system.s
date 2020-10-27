@@ -230,6 +230,7 @@ _colision_x_enemy:
   ld    a, e_vx(ix)
   neg 
   ld    e_vx(ix), a
+  ld    a, #1
   ret
 
 _enemy_check_y:
@@ -273,6 +274,7 @@ _colision_y_enemy:
   ld    a, e_vy(ix)
   neg 
   ld    e_vy(ix), a
+  ld    a, #1
   ret
 
 end_update_y_enemy:
@@ -286,6 +288,7 @@ end_update_y_enemy:
   ; enemy collided player
   call  man_game_terminate
   call  man_game_init
+  ld    a, #0
   ret
 
 _enemy_check_colision_map:
@@ -389,6 +392,7 @@ _enemy_reupdate_y:
   ld    e_vy(ix), a
  
 _enemy_end_update:
+  ld    a, #1
   ret
 
 ; Input: ix pointer to entity
@@ -456,6 +460,8 @@ physics_enemies_loop:
   push  af
   
   call  sys_physics_update_enemy
+  or    a  
+  jr    z, _exit
   ;call  sys_physics_update_entity_bombs
 
   ld    bc, #sizeof_e
@@ -465,6 +471,9 @@ physics_enemies_loop:
   dec   a
   ret   z
   jr    physics_enemies_loop
+  
+_exit:
+  pop   af
   ret
 
 
