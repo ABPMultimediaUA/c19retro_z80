@@ -140,10 +140,13 @@ _row:
 
     ld    a, b_type(ix) ;;ld type of block
     xor   #exit_btype
-    jr    z, _draw_exit_box
-  
-    ld    a, #0x02  ;green
-    jr    _end_define_color_box
+    jr    z, _draw_exit_box            
+
+      ld    hl, #_sp_map_block          ;; Source Sprite Pointer (array with pixel data)
+      ld    c, #4                 ;; Sprite width
+      ld    b, #16                  ;; Sprite height
+      call  cpct_drawSprite_asm 
+      jr    _next_block
 
     _draw_default_box:
       ld    a, #0x33  
@@ -156,6 +159,7 @@ _row:
     ld    b, #16            ;; Sprite height
     call  cpct_drawSolidBox_asm 
     
+    _next_block:
     ld    bc, #sizeof_block ;size of block type
     add   ix, bc
     ;;====================
