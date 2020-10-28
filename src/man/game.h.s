@@ -8,6 +8,7 @@
 .globl  man_game_terminate
 .globl  man_game_init_next_lvl
 .globl  man_game_end
+.globl  man_game_terminate_dead
 
 
 ;;########################################################

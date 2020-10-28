@@ -53,7 +53,7 @@ man_game_menu_loop:
   jr    man_game_menu_remove
 man_game_not_play:
 
-  call  sys_input_press_restart   ;; Returns in register A if start was pressed
+  call  sys_input_press_restart   ;; Returns in register A if start was pressed (R)
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
   jr    z, man_game_not_restart
@@ -87,11 +87,10 @@ man_game_init::
   ret
 
 man_game_init_next_lvl::
-  call  man_entity_terminate
+  call  man_entity_terminate  
 
   call  man_map_update  
   call  man_map_get_lvl_map
-  
   call  man_entity_init      
   call  sys_input_init
   ;call  sys_ai_init
@@ -132,14 +131,31 @@ man_game_update::
 ;;
 ;;  Increases counter of entities and pointer to the last element.
 ;;  When user need to reset the game for any reason. Restart the game from ZERO.
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    none
-man_game_terminate::    
+man_game_terminate::
   call  man_entity_terminate  
+  ret
+
+
+;; Called when player lose 1 life
+;; Input: A number of lifes
+man_game_terminate_dead::
+  call  sys_render_menu_lifes
+
+_dead_man_game_menu_loop:
+  
+  call  sys_input_press_restart   ;; Returns in register A if start was pressed (R)
+
+  or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
+  jr    z, _dead_man_game_not_restart
+  call  man_game_terminate
+  call  man_game_init
+  jr    _dead_man_game_menu_remove
+_dead_man_game_not_restart:
+  jr    z, _dead_man_game_menu_loop
+
+_dead_man_game_menu_remove:
+  ;call  sys_render_remove_menu
+  call  sys_render_map
   ret
 
 

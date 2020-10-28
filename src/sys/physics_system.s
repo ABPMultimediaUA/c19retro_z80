@@ -286,8 +286,10 @@ end_update_y_enemy:
   jr  z, _enemy_check_colision_map
 
   ; enemy collided player
-  call  man_game_terminate
-  call  man_game_init
+
+  ; call  man_game_terminate
+  ; call  man_game_init
+  call  man_game_terminate_dead
   ld    a, #0
   ret
 

@@ -13,6 +13,7 @@
 .globl  sys_render_border_map
 .globl  sys_render_end_menu
 .globl  sys_render_remove_end_menu
+.globl  sys_render_menu_lifes
 
 
 ;;########################################################
