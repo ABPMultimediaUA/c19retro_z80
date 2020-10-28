@@ -70,7 +70,7 @@ sys_menu_game_name::
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
 
   ex    de, hl
-  ld    a, #15  
+  ld    a, #0xCC 
   ld    c, #60                      ;; Sprite width
   ld    b, #44                      ;; Sprite height
   call  cpct_drawSolidBox_asm
@@ -83,7 +83,7 @@ sys_menu_game_name::
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
 
   ex    de, hl
-  ld    a, #00  
+  ld    a, #0x3C
   ld    c, #60                      ;; Sprite width
   ld    b, #36                      ;; Sprite height
   call  cpct_drawSolidBox_asm
@@ -97,8 +97,8 @@ sys_menu_game_name::
   
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #10
+  ld    h, #06           
+  ld    l, #01
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -236,7 +236,7 @@ sys_menu_play_again_key::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #02
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -335,7 +335,7 @@ sys_menu_authors::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00          
-  ld    l, #02
+  ld    l, #04
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -353,7 +353,7 @@ sys_menu_authors::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #02
+  ld    l, #04
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -395,7 +395,7 @@ sys_menu_background::
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
 
   ex    de, hl
-  ld    a, #0x0F
+  ld    a, #0xCC
   ld    c, #62                      ;; Sprite width
   ld    b, #176                     ;; Sprite height
   call  cpct_drawSolidBox_asm
