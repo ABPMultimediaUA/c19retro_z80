@@ -62,6 +62,7 @@ _str_author_carlos:
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_menu_game_name::
+  ;; BORDER BACKGROUND
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
   ld    c, #10                      ;; C = x coordinate       
@@ -74,6 +75,20 @@ sys_menu_game_name::
   ld    b, #44                      ;; Sprite height
   call  cpct_drawSolidBox_asm
 
+  ;; COLOUR BACKGROUND
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #10                      ;; C = x coordinate       
+  ld    b, #18                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ex    de, hl
+  ld    a, #00  
+  ld    c, #60                      ;; Sprite width
+  ld    b, #36                      ;; Sprite height
+  call  cpct_drawSolidBox_asm
+
+  ;; TEXT
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
   ld    c, #20                      ;; C = x coordinate       
@@ -82,8 +97,8 @@ sys_menu_game_name::
   
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #10           
-  ld    l, #04
+  ld    h, #00           
+  ld    l, #10
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -372,6 +387,20 @@ sys_menu_num_lifes::
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_menu_background::
+  ;; BORDER
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, #09                      ;; C = x coordinate       
+  ld    b, #12                      ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ex    de, hl
+  ld    a, #0x0F
+  ld    c, #62                      ;; Sprite width
+  ld    b, #176                     ;; Sprite height
+  call  cpct_drawSolidBox_asm
+
+  ;; SOLID
   ;; Calculate a video-memory location for sprite
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
   ld    c, #10                      ;; C = x coordinate       
@@ -381,7 +410,7 @@ sys_menu_background::
   ex    de, hl
   ld    a, #0x00  
   ld    c, #60                      ;; Sprite width
-  ld    b, #172                     ;; Sprite height
+  ld    b, #171                     ;; Sprite height
   call  cpct_drawSolidBox_asm
   ret
 
@@ -410,5 +439,5 @@ sys_menu_lifes::
   call  sys_menu_background
   call  sys_menu_game_name
   call  sys_menu_num_lifes
-  call  sys_menu_restart_key
+  call  sys_menu_play_again_key     
   ret  
