@@ -3,4 +3,4 @@
 .globl  _sp_bomb
 .globl  _sp_border_block
 .globl  _sp_life
-.glob   _sp_map_block
+.globl   _sp_map_block
