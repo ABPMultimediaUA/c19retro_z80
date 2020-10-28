@@ -29,7 +29,25 @@
 
 ## 16 colours palette
 #PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
-PALETTE= 0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
+PALETTE= 0 1 2 3 6 9 11 12 10 15 19 16 20 21 22 26
+
+# 0  black
+# 1  blue
+# 2  bright blue
+# 3  red
+# 6  bright red
+# 9  green
+# 10 cyan
+# 11 skye_blue
+# 12 yellow
+# (14 pastel blue)
+# 15 orange 
+# 18 bright green
+# 19 sea green
+# 20 bright cyan
+# 21 lime
+# 22 pastel green
+# 26 bright white
 
 ## Default values
 #$(eval $(call IMG2SP, SET_MODE        , 0                  ))  { 0, 1, 2 }
