@@ -10,36 +10,28 @@
 ; _str_game_name:
 ;   .db 0
 _str_game_name:  
-  .ascii "Cell Block"
-  .db 0
+  .asciz "Cell Block"
 
 _str_move_up:
-  .ascii "Q up"
-  .db 0
+  .asciz "Q up"
 
 _str_move_down:
-  .ascii "A down"
-  .db 0
+  .asciz "A down"
 
 _str_move_left: 
-  .ascii "O left"
-  .db 0
+  .asciz "O left"
 
 _str_move_right:
-  .ascii "P right"
-  .db 0
+  .asciz "P right"
 
 _str_pause:
-  .ascii "Esc pause"
-  .db 0
+  .asciz "Esc pause"
 
 _str_restart: 
-  .ascii "R restart"
-  .db 0
+  .asciz "R restart"
 
 _str_play_game:
-  .ascii "Space to play"
-  .db 0
+  .asciz "Space to play"
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
