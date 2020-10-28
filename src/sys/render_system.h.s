@@ -8,7 +8,6 @@
 .globl  sys_render_update
 .globl  sys_render_remove_entity
 .globl  sys_render_remove_menu
-.globl  sys_render_remove_bomb
 .globl  sys_render_map
 .globl  sys_render_border_map
 .globl  sys_render_end_menu

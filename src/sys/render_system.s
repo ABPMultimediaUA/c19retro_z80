@@ -6,299 +6,14 @@
 .include "../man/game.h.s"
 .include "../man/map_manager.h.s"
 .include "../cpct_functions.h.s"
-.include "render_system.h.s"
 .include "../assets/assets.h.s"
+.include "render_system.h.s"
+.include "menu_system.h.s"
 
-_str_game_name: 
-  .ascii "Cell Block"
-  .db    0
-
-_str_move_up: 
-  .ascii "Q up"
-  .db    0
-
-_str_move_down: 
-  .ascii "A down"
-  .db    0
-
-_str_move_left: 
-  .ascii "O left"
-  .db    0
-
-_str_move_right: 
-  .ascii "P right"
-  .db    0
-
-_str_pause: 
-  .ascii "Esc pause"
-  .db    0
-
-_str_restart: 
-  .ascii "R restart"
-  .db    0
-
-_str_play_game: 
-  .ascii "Space to play"
-  .db    0
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_restart_key::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
-  ld    b, #117                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_restart
-  call  cpct_drawStringM0_asm
-  ret
-
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_play_key::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #14                       ;; C = x coordinate       
-  ld    b, #157                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #02
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_play_game
-  call  cpct_drawStringM0_asm
-  ret
-
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_pause_key::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
-  ld    b, #133                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_pause
-  call  cpct_drawStringM0_asm
-  ret
-
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_move_keys::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                      ;; C = x coordinate       
-  ld    b, #58                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_move_left
-  call  cpct_drawStringM0_asm
-
-  ;;#################################################################
-
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
-  ld    b, #72                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_move_right
-  call  cpct_drawStringM0_asm
-
-  ;;#################################################################
-
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
-  ld    b, #87                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_move_up
-  call  cpct_drawStringM0_asm
-
-  ;;#################################################################
-
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #22                  ;; C = x coordinate       
-  ld    b, #102                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #04
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_move_down
-  call  cpct_drawStringM0_asm 
-  ret
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_game_name::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #20                 ;; C = x coordinate       
-  ld    b, #32                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL  
-  
-  ;;  Draw sprite
-  push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #00           
-  ld    l, #07
-  call  cpct_setDrawCharM0_asm  
-  pop   hl
-
-  ld    iy, #_str_game_name
-  call  cpct_drawStringM0_asm
-  ret
-
-sys_render_game_num_lifes::
-
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #30                  ;; C = x coordinate       
-  ld    b, #58                  ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-
-  ;;  Draw sprite
-  ex    de, hl                      ;; DE = Destination video memory pointer
-  ld    hl, #_sp_life            ;; Source Sprite Pointer (array with pixel data)
-  ld    c, #4                  ;; Sprite width
-  ld    b, #16                  ;; Sprite height
-  call  cpct_drawSprite_asm 
-  ret
-
-;;
-;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    A,DE,BC,HL,IX
-sys_render_menu_background::
-  ;; Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #10                      ;; C = x coordinate       
-  ld    b, #14                      ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-
-  ex    de, hl
-  ld    a, #0x00  
-  ld    c, #60                      ;; Sprite width
-  ld    b, #172                     ;; Sprite height
-  call  cpct_drawSolidBox_asm
-  ret
-
-
-; Input: ix pointer to entity
-sys_render_entity_bombs::
-  ld    a,  bomb_type+sizeof_e_solo(ix)
-  xor   #invalid_type
-  ret   z   ;ret if invalid, nothing to update
-
-  ld    a,  bomb_type+sizeof_e_solo(ix)
-  xor   #alive_type
-  jr    z, draw_bomb
-
-  ; Bomb dead
-  ; TODO: dibujar la explansion
-  ld    e, bomb_x+sizeof_e_solo(ix)          
-  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
-  ld    a, #0x33  ;;verde fondo
-  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
-  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
-  call  cpct_drawSolidBox_asm
-  ret
-
-draw_bomb:
-  ld    e, bomb_x+sizeof_e_solo(ix)          
-  ld    d, bomb_y+sizeof_e_solo(ix)            ;; Destination video memory pointer
-  ld    a, #0xFF  ;;0xFF rojo
-  ld    c, bomb_w+sizeof_e_solo(ix)                  ;; Sprite width
-  ld    b, bomb_h+sizeof_e_solo(ix)                  ;; Sprite height
-  call  cpct_drawSolidBox_asm
-  ret 
-
 
 ;;  Render player and update its sp_ptr
 ;;  DESTROYED:
@@ -325,9 +40,7 @@ sys_render_player::
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height
   call  cpct_drawSprite_asm 
-
-
-  call  sys_render_entity_bombs
+  
   ret
 
 
@@ -473,25 +186,15 @@ ret
 ;;########################################################
 
 sys_render_end_menu::
-  call  sys_render_menu_background
-  call  sys_render_game_name
-  call  sys_render_restart_key
+  call  sys_menu_game_end
   ret
 
 sys_render_menu::
-  call  sys_render_menu_background
-  call  sys_render_game_name
-  call  sys_render_move_keys
-  call  sys_render_pause_key
-  call  sys_render_play_key
-  call  sys_render_restart_key
+  call  sys_menu_init_and_pause
   ret  
 
 sys_render_menu_lifes::
-  call  sys_render_menu_background
-  call  sys_render_game_name
-  call  sys_render_game_num_lifes
-  call  sys_render_restart_key
+  call  sys_menu_lifes
   ret  
 
 ;;
@@ -537,47 +240,6 @@ sys_render_init::
   ld    (map_ptr), ix
   call  sys_render_map
 
-  ; MEJOR NO DESCOMENTAR ESTAS CHAPUZAS
-  ; AVECES PRODUCEN BUGS IMPOSIBLES DE DEBUGUEAR
-  ; LA CHAPUZA SE HA MOVIDO A LA MACRO DE ENTIDADES
-  ; EL PUNTERO POR DEFECTO ES UNA POSICION HARDCODEADA
-  ;; ========== CHAPUZA para enemigos
-  ; _chapuza_render_enemies_loop:
-  ; call  man_entity_get_enemy_array
-  ;   push  af
-  ;   ;; Calculate a video-memory location for sprite
-  ;   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ;   ld    c, e_x(ix)                  ;; C = x coordinate       
-  ;   ld    b, e_y(ix)                  ;; B = y coordinate   
-  ;   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-    
-  ;   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-  ;   ld  e_sp_ptr_0(ix), l
-  ;   ld  e_sp_ptr_1(ix), h   
-
-  ;   ld   bc, #sizeof_e
-  ;   add  ix, bc
-
-  ;   pop   af
-  ;   dec   a
-  ;   jr    z, _chapuza_render_player
-  ;   jr    _chapuza_render_enemies_loop
-  ;;============= FIN CHAPUZA
-
-  ;; ========== CHAPUZA para poner el ultimo puntero del player a su posicion
-  ; _chapuza_render_player:
-  ; call  man_entity_get_player
-  ;   ;; Calculate a video-memory location for sprite
-  ; ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ; ld    c, e_x(ix)                  ;; C = x coordinate       
-  ; ld    b, e_y(ix)                  ;; B = y coordinate   
-  ; call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-  
-  ; ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-  ; ld  e_sp_ptr_0(ix), l
-  ; ld  e_sp_ptr_1(ix), h
-  ;;============= FIN CHAPUZA
-
   ret
 
 
@@ -591,8 +253,7 @@ sys_render_init::
 ;;    A,DE,BC,HL,IX
 sys_render_update::  
   call  sys_render_player
-  call  sys_render_enemies
-  ;call  sys_render_bombs
+  call  sys_render_enemies  
   ret  
 
 
@@ -642,24 +303,6 @@ sys_render_remove_menu::
   ld    c, #50                      ;; Sprite width
   ld    b, #100                     ;; Sprite height
   call  cpct_drawSolidBox_asm
-  ret
-
-;;
-;;  Remove an entity from screen (video-memory)
-;;  INPUT:
-;;    ix  with memory address of entity that must be removed
-;;  RETURN: 
-;;    none
-;;  DESTROYED:
-;;    AF,BC,DE,HL
-
-sys_render_remove_bomb::
-  ;ld    e, b_sp_ptr_0(ix)          
-  ;ld    d, b_sp_ptr_1(ix)           ;; Destination video memory pointer
-  ;ld    hl, #_sp_bomb               ;; Source Sprite Pointer (array with pixel data)
-  ;ld    b, b_w(ix)                  ;; Sprite width
-  ;ld    c, b_h(ix)                  ;; Sprite height
-  ;call  cpct_drawSpriteBlended_asm
   ret
 
 
@@ -769,41 +412,3 @@ sys_render_border_map::
   call sys_render_min_col_map
   call sys_render_max_col_map
   ret
-
-
-  ;; Deprecated, it just print all map green
-; ;   sys_render_map::
-; ;   map_ptr = .+2
-; ;   ld    ix, #0x0000 ;map_ptr NOT USED
-; ;   ld    c, #min_map_x_coord_valid         ;; C = x coordinate       
-; ;   ld    b, #min_map_y_coord_valid         ;; B = y coordinate  
-
-; ; _row:
-; ;   ld    c, #min_map_x_coord_valid         ;; C = x coordinate 
-; ;   _col:
-; ;     push bc
-; ;     call sys_render_one_default_block 
-; ;     pop bc
-; ;     ld  hl, #0x0004 ;c+=4 (x+=4)
-; ;     add hl, bc
-; ;     ld b, h
-; ;     ld c, l
-    
-; ;     ld a, #max_map_x_coord_valid-4
-; ;     cp c
-; ;     jr  nc, _col
-; ;   _endcol:
-  
-; ;   ld  hl, #0x1000   ;b+=16 (y+=16)
-; ;   add hl, bc
-; ;   ld b, h
-; ;   ld c, l
-
-; ;   ld a, #max_map_y_coord_valid-16
-; ;   cp b
-; ;   jr  nc, _row
-; ; ret
-  
-
-  
-
