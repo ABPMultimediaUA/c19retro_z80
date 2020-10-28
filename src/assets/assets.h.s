@@ -4,3 +4,4 @@
 .globl  _sp_border_block
 .globl  _sp_life
 .globl   _sp_map_block
+.globl   _sp_map_exit

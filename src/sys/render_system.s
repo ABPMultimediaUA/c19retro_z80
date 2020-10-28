@@ -152,7 +152,11 @@ _row:
       ld    a, #0x33  
       jr    _end_define_color_box
     _draw_exit_box:
-      ld    a, #0x00
+      ld    hl, #_sp_map_exit          ;; Source Sprite Pointer (array with pixel data)
+      ld    c, #4                 ;; Sprite width
+      ld    b, #16                  ;; Sprite height
+      call  cpct_drawSprite_asm 
+      jr    _next_block
     _end_define_color_box:
     
     ld    c, #4                 ;; Sprite width

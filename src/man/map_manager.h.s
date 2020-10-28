@@ -117,7 +117,7 @@
 b_type = 0
 sizeof_block  = 1
 sizeof_map    = 19*11
-max_maps = 1
+max_maps = 3
 
 ;;########################################################
 ;;                      BLOCK TYPES                     #             

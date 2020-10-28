@@ -50,6 +50,7 @@ $(eval $(call IMG2SP, CONVERT, src/assets/img/bomb/bomb.png , 8, 16, sp_bomb ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/life/life.png , 8, 16, sp_life ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/border_block_4x8.png , 4, 8, sp_border_block ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/block_map_8x16.png , 8, 16, sp_map_block ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/exit_map_8x16.png , 8, 16, sp_map_exit ))
 
 
 ##
