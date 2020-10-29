@@ -445,6 +445,9 @@ sys_physics_player_update::
   player_ptr = .+2
   ld    ix, #0x0000  
   call  sys_physics_update_entity
+
+  player_ptr2 = .+2
+  ld    ix, #0x0000
   ld  e_vx(ix), #0
   ld  e_vy(ix), #0
   ;call  sys_physics_update_entity_bombs 
@@ -523,6 +526,7 @@ _exit:
 sys_physics_init::
   call  man_entity_get_player
   ld    (player_ptr), ix
+  ld    (player_ptr2), ix
   ld    (player_ptr_colision), ix
 
   call  man_entity_get_enemy_array
