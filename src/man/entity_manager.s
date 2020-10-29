@@ -39,9 +39,9 @@ enemies_map2::
 
 enemies_map3::
   .db 5
-  DefineEntity alive_type,  1,  8,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type,  7,  2,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type, 10,  2,   0, 16,   0,  8,   no_ghost
+  DefineEntity alive_type,  2,  8,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  9,  2,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type, 12,  2,   0, 16,   0,  8,   no_ghost
   DefineEntity alive_type, 16,  8,   4,  0,   7,  0,   no_ghost
   DefineEntity alive_type, 16, 10,   4,  0,   9,  0,   no_ghost  
 
@@ -471,19 +471,21 @@ lvl_2:
 lvl_3:
   ld    hl, #enemies_map3
   ld    (_enemy_array), hl  
+  ret
 
 lvl_4:
   ld    hl, #enemies_map4
   ld    (_enemy_array), hl 
-
+  ret
 lvl_5:
   ld    hl, #enemies_map5
   ld    (_enemy_array), hl 
-
+  ret
 lvl_6:
   ld    hl, #enemies_map6
   ld    (_enemy_array), hl 
-
+  ret
+  
 lvl_7:
   ld    hl, #enemies_map7
   ld    (_enemy_array), hl 
