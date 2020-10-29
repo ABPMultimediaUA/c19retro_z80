@@ -12,8 +12,8 @@
 ;;                        VARIABLES                      #             
 ;;########################################################
 
-_player:  DefineEntity alive_type, 0, 0, 0, 0, 4, 16, 0, 0, 0, 0, 0, 0, #CPCT_VMEM_START_ASM+402, no_ghost
-;;DefineEntityArray _enemy, max_entities, DefineEntityDefault
+_player:    
+  DefineEntity alive_type, 0,  0,   0,  0,   0,  0,   no_ghost
 
 _enemy_num:
   .db 1
@@ -24,28 +24,75 @@ _enemy_last:
 _enemy_array:
   .dw enemies_map1
 
+
 enemies_map1::
   .db 2
-  DefineEntity alive_type, 5*4+2,   9*16+12,   5,  9,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 18*4+2,   6*16+12,   18,  6,   4, 16,  0,  0,   0, 0,   0, 0,   #CPCT_VMEM_START_ASM+402, ghost
+  DefineEntity alive_type, 16,  1,   0,  0,   0,  0,   no_ghost
+  DefineEntity alive_type, 16,  4,   4,  0,   2,  0,   no_ghost
 
 enemies_map2::
-  .db 5
-  DefineEntity alive_type, 3*4+2,   0*16+12,   3,  0,   4, 16,   0, 16,   0, 0,   0, 8,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 9*4+2,   1*16+12,   9,  1,   4, 16,   0, 16,   0, 0,   0, 9,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 12*4+2,  1*16+12,  12,  1,   4, 16,   0, 16,   0, 0,   0, 10,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 5*4+2,  10*16+12,   5, 10,   4, 16,   4,  0,   0, 0,   10, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 7*4+2,   8*16+12,   7,  8,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402 , no_ghost   
+  .db 4
+  DefineEntity alive_type,  8,  1,   0, 16,   0,  2,   no_ghost
+  DefineEntity alive_type, 13,  4,   4,  0,   4,  0,   no_ghost
+  DefineEntity alive_type,  7,  9,   0, 16,   0,  3,   no_ghost
+  DefineEntity alive_type, 10,  9,   0, 16,   0,  3,   no_ghost
 
 enemies_map3::
   .db 5
-  DefineEntity alive_type, 5*4+2,   1*16+12,   5,  1,   4, 16,   0, 16,   0, 0,   0, 10,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 10*4+2,  4*16+12,  10,  4,   4, 16,   4,  0,   0, 0,   10, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 12*4+2,  6*16+12,  12,  6,   4, 16,   4,  0,   0, 0,   8, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 14*4+2,  8*16+12,  14,  8,   4, 16,   4,  0,   0, 0,   9, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
-  DefineEntity alive_type, 16*4+2,  5*16+12,  16,  5,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402, no_ghost
+  DefineEntity alive_type,  1,  8,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  7,  2,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type, 10,  2,   0, 16,   0,  8,   no_ghost
+  DefineEntity alive_type, 16,  8,   4,  0,   7,  0,   no_ghost
+  DefineEntity alive_type, 16, 10,   4,  0,   9,  0,   no_ghost  
 
-;DefineBombArray _bomb, max_bombs, DefineBombDefault
+enemies_map4::
+  .db 3
+  DefineEntity alive_type,  6,  1,   0,  0,   3,  3,   ghost
+  DefineEntity alive_type,  8,  7,   4,  0,   5,  0,   no_ghost
+  DefineEntity alive_type,  9,  9,   4,  0,   9,  0,   no_ghost  
+
+enemies_map5::
+  .db 9
+  DefineEntity alive_type,  5,  0,   0,  0,   3,  3,   ghost
+  DefineEntity alive_type, 13,  0,   0, 16,   0,  6,   no_ghost
+  DefineEntity alive_type, 12,  1,   0, 16,   0, 10,   no_ghost
+  
+  DefineEntity alive_type, 16,  2,   0, 16,   0, 10,   no_ghost
+  DefineEntity alive_type,  1,  5,   4,  0,   7,  0,   no_ghost
+  DefineEntity alive_type,  9,  6,   0, 16,   0,  6,   no_ghost
+  
+  DefineEntity alive_type, 12,  7,   0, 16,   0,  9,   no_ghost
+  DefineEntity alive_type,  2,  8,   4,  0,   6,  0,   no_ghost
+  DefineEntity alive_type, 15,  8,   0, 16,   0,  8,   no_ghost
+
+
+enemies_map6::
+  .db 6
+  DefineEntity alive_type,  3,  1,   0,  0,   2,  2,   ghost
+  DefineEntity alive_type,  5,  1,   0, 16,   0,  8,   no_ghost
+  DefineEntity alive_type, 14,  4,   4,  0,   7,  0,   no_ghost
+  DefineEntity alive_type, 14,  6,   4,  0,   8,  0,   no_ghost
+  DefineEntity alive_type, 18,  6,   4,  0,   6,  0,   no_ghost
+  DefineEntity alive_type, 14,  8,   4,  0,  10,  0,   no_ghost  
+
+
+enemies_map7::
+  .db 11
+  DefineEntity alive_type,  3,  1,   0,  0,   2,  2,   ghost
+  DefineEntity alive_type,  5,  1,   0, 16,   0,  8,   no_ghost
+  DefineEntity alive_type, 14,  4,   4,  0,   7,  0,   no_ghost
+
+  DefineEntity alive_type, 14,  6,   4,  0,   8,  0,   no_ghost
+  DefineEntity alive_type, 18,  6,   4,  0,   6,  0,   no_ghost
+  DefineEntity alive_type, 14,  8,   4,  0,  10,  0,   no_ghost
+  
+  DefineEntity alive_type,  3,  1,   0,  0,   2,  2,   ghost
+  DefineEntity alive_type,  5,  1,   0, 16,   0,  8,   no_ghost
+  DefineEntity alive_type, 14,  4,   4,  0,   7,  0,   no_ghost
+
+  DefineEntity alive_type, 14,  6,   4,  0,   8,  0,   no_ghost
+  DefineEntity alive_type, 18,  6,   4,  0,   6,  0,   no_ghost  
+
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -395,6 +442,22 @@ man_entity_init_enemies::
   xor    #3
   jr    z, lvl_3
   
+  ld    a, b
+  xor    #4
+  jr    z, lvl_4
+
+  ld    a, b
+  xor    #5
+  jr    z, lvl_5
+
+  ld    a, b
+  xor    #6
+  jr    z, lvl_6
+
+  ld    a, b
+  xor    #7
+  jr    z, lvl_7
+
   ret
 lvl_1:
   ld    hl, #enemies_map1
@@ -408,4 +471,20 @@ lvl_2:
 lvl_3:
   ld    hl, #enemies_map3
   ld    (_enemy_array), hl  
+
+lvl_4:
+  ld    hl, #enemies_map4
+  ld    (_enemy_array), hl 
+
+lvl_5:
+  ld    hl, #enemies_map5
+  ld    (_enemy_array), hl 
+
+lvl_6:
+  ld    hl, #enemies_map6
+  ld    (_enemy_array), hl 
+
+lvl_7:
+  ld    hl, #enemies_map7
+  ld    (_enemy_array), hl 
   ret

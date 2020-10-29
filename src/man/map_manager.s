@@ -8,11 +8,6 @@
 .include "../sys/render_system.h.s"
 .include "../cpct_functions.h.s"
 
-.globl  man_map_init
-.globl  man_map_update
-.globl  man_map_terminate
-.globl  man_map_get_map_array
-
 ;;########################################################
 ;;                        VARIABLES                      #             
 ;;########################################################
@@ -24,6 +19,10 @@
 
 
 DefineMapsArray _maps
+; _maps_num:    .db 1    
+; _maps_last:   .dw _maps_array
+; _maps_array: .db 0
+
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
