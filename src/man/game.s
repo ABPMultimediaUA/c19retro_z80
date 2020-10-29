@@ -110,6 +110,7 @@ man_game_init_next_lvl::
 ;;    none
 man_game_update::
   call  sys_input_update
+  halt
   ;call  sys_ai_update
   call  sys_physics_update
   call  man_entity_update
