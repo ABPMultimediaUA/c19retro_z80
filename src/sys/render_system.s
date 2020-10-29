@@ -201,6 +201,7 @@ sys_render_menu::
   call  sys_menu_init_and_pause
   ret  
 
+; Input: A lifes
 sys_render_menu_lifes::
   call  sys_menu_lifes
   ret  

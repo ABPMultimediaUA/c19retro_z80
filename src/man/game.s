@@ -139,7 +139,14 @@ man_game_terminate::
 ;; Called when player lose 1 life
 ;; Input: A number of lifes
 man_game_terminate_dead::
+  ;call  man_entity_get_player
+  ;ld    a,  e_l(ix)
+  ld     a,  #3
+  dec     a
+  ;push    af
   call  sys_render_menu_lifes
+  ;pop    af
+  ;ld    e_l(ix),  #a
 
 _dead_man_game_menu_loop:
   

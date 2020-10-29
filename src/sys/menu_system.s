@@ -362,21 +362,72 @@ sys_menu_authors::
   ret
 
 
-
+;Input: A lifes
 sys_menu_num_lifes::
-
+  push  af
+  ld    b, a 
+  ld    a, #3
+  sub   b   ; a = 3 - alive hearts = dead hearts
+  
+  ld    c, #30  ; x coordinate
+  ld    b, #70  ; y coordinate
+_dead_hearts:
+  or    a 
+  jr    z, _alive_hearts   ; jr if a == 0
+  dec   a
+  push  af
+  
+  push  bc
   ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, #30                  ;; C = x coordinate       
-  ld    b, #58                  ;; B = y coordinate   
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
 
+  ; future c(x) += a
+  pop   bc
+  ld    a, #7
+  add   c 
+  ld    c, a
+  push  bc
   ;;  Draw sprite
   ex    de, hl                      ;; DE = Destination video memory pointer
-  ld    hl, #_sp_life            ;; Source Sprite Pointer (array with pixel data)
+  ld    hl, #_sp_life_dead            ;; Source Sprite Pointer (array with pixel data)
   ld    c, #4                  ;; Sprite width
   ld    b, #16                  ;; Sprite height
   call  cpct_drawSprite_asm 
+
+  pop   bc
+  pop   af
+  jr    _dead_hearts
+
+_alive_hearts:
+  pop   af  ; a = alive hearts
+_alive_hearts_loop:
+  or    a 
+  ret   z   
+  dec   a
+  push  af
+  
+  push  bc
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ; future c(x) += a
+  pop   bc
+  ld    a, #7
+  add   c 
+  ld    c, a
+  push  bc
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_life           ;; Source Sprite Pointer (array with pixel data)
+  ld    c, #4                  ;; Sprite width
+  ld    b, #16                  ;; Sprite height
+  call  cpct_drawSprite_asm 
+
+  pop   bc
+  pop   af
+  jr    _alive_hearts_loop
   ret
+
 
 ;;
 ;;  Render enemies and update their sp_ptr
@@ -435,9 +486,12 @@ sys_menu_game_end::
   call  sys_menu_play_again_key
   ret 
 
+;Input; A num lifes
 sys_menu_lifes::
+  push  af
   call  sys_menu_background
   call  sys_menu_game_name
+  pop   af
   call  sys_menu_num_lifes
   call  sys_menu_play_again_key     
   ret  
