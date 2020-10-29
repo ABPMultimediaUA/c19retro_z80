@@ -109,24 +109,22 @@ man_game_init_next_lvl::
 ;;  DESTROYED:
 ;;    none
 man_game_update::
-  call  sys_input_update
-  halt
-  ;call  sys_ai_update
-  call  sys_physics_update
-  call  man_entity_update
-
-  ; call man_entity_get_player
-  ; ld  e_vx(ix), #0
-  ; ld  e_vy(ix), #0
+  call  sys_input_update  
   
-  ; ld  a,  #1
-  ; loop_velocity:
-  ;   push af
-  ;   call  sys_physics_update
-  ;   call  man_entity_update
-  ;   pop af
-  ;   dec a
-  ;   jr nz, loop_velocity
+  ld  a,  #5
+  loop_velocity:
+    push af
+    
+    ;call  sys_ai_update  
+    call  sys_physics_update
+    call  man_entity_update
+
+    call  cpct_waitVSYNC_asm   
+    call  sys_render_update 
+    
+    pop af
+    dec a
+    jr nz, loop_velocity
   ret
 
 ;;
@@ -203,7 +201,8 @@ man_game_end_menu_loop:
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
   jr    z, man_game_end_menu_loop
 
-  call  man_map_init
-  call  sys_render_remove_end_menu
+  call  man_game_terminate
+  call  man_game_init
+  ;call  sys_render_remove_end_menu
   ret
 

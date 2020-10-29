@@ -46,12 +46,12 @@
 repeat_a::
    push af
    call  cpct_waitVSYNC_asm   
+   call  sys_render_update 
    halt
    pop af
    dec a
    jr nz, repeat_a
-
-   call  sys_render_update 
+   
    ret
 ;;
 ;; MAIN function. This is the entry point of the application.
@@ -69,8 +69,5 @@ _main::
 ;; Loop forever
 loop:
    call  man_game_update
-
-   ld    a, #7
-   call  repeat_a
 
    jr    loop   
