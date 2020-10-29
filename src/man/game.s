@@ -109,12 +109,13 @@ man_game_init_next_lvl::
 ;;  DESTROYED:
 ;;    none
 man_game_update::
-  call  sys_input_update
-  ;call  sys_ai_update  
+  call  sys_input_update  
   
   ld  a,  #4
   loop_velocity:
     push af
+    
+    ;call  sys_ai_update  
     call  sys_physics_update
     call  man_entity_update
 
@@ -137,7 +138,14 @@ man_game_terminate::
 ;; Called when player lose 1 life
 ;; Input: A number of lifes
 man_game_terminate_dead::
+  ;call  man_entity_get_player
+  ;ld    a,  e_l(ix)
+  ld     a,  #3
+  dec     a
+  ;push    af
   call  sys_render_menu_lifes
+  ;pop    af
+  ;ld    e_l(ix),  #a
 
 _dead_man_game_menu_loop:
   
