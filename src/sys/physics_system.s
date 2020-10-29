@@ -6,6 +6,8 @@
 .include "../man/game.h.s"
 .include "../man/map_manager.h.s"
 .include "physics_system.h.s"
+.include "colision_system.h.s"
+.include "ia_ghost_system.h.s"
 .include "render_system.h.s"
 .include "../cpct_functions.h.s"
 
@@ -281,7 +283,7 @@ end_update_y_enemy:
   
   player_ptr_colision = .+2
   ld  iy, #0x0000
-  call sys_physics_check_colision_entity_entity ; a=1 if colision
+  call sys_colision_entity_entity ; a=1 if colision
   and a 
   jr  z, _enemy_check_colision_map
 
@@ -397,46 +399,6 @@ _enemy_end_update:
   ld    a, #1
   ret
 
-; Input: ix pointer to entity
-sys_physics_update_entity_bombs::
-  ld    a,  bomb_type+sizeof_e_solo(ix)
-  xor   #invalid_type
-  ret   z   ;ret if invalid, nothing to update
-
-  ld    a,  bomb_timer+sizeof_e_solo(ix)
-  and   a
-  jr    nz, dec_timer ; if a != 0 : timer--
-  
-  ld    bomb_type+sizeof_e_solo(ix), #dead_type
-  ret
-
-dec_timer:
-  dec   bomb_timer+sizeof_e_solo(ix)
-  ret
-
-; Input ix, iy (2 entities)
-; Return a { 1 if colision, 0 if not}
-sys_physics_check_colision_entity_entity::
-  ld  a, e_xcell(ix)
-  ld  b, a
-  ld  a, e_xcell(iy)
-
-  sub b   ; a - b (x2-x1)
-  jr  nz, _no_colision
-
-  ld  a, e_ycell(ix)
-  ld  b, a
-  ld  a, e_ycell(iy)
-
-  sub b   ; a - b (y2-y1)
-  jr  nz, _no_colision
-
-_colision:
-  ld  a, #1
-  ret
-_no_colision:
-  ld  a, #0
-  ret
 
 
 ;;  DESTROYED:
@@ -450,9 +412,25 @@ sys_physics_player_update::
   ld    ix, #0x0000
   ld  e_vx(ix), #0
   ld  e_vy(ix), #0
-  ;call  sys_physics_update_entity_bombs 
   ret
 
+sys_physics_update_ghost::
+  
+  player_ptr_for_ghost = .+2
+  ld  iy, #0x0000
+  call sys_colision_ghost_player ; a=1 if colision
+  and a 
+  jr  z, update_xy_ghost
+
+  ; ghost collided player
+  call  man_game_terminate_dead
+  ld    a, #0
+  ret
+
+update_xy_ghost:
+  call  sys_ia_ghost
+  ld    a, #1
+  ret
 
 ;;  DESTROYED:
 ;;    A,BC,IX
@@ -465,6 +443,14 @@ sys_physics_enemies_update::
 
 physics_enemies_loop:
   push  af
+
+  ld    a, e_ghost(ix)
+  xor   #ghost
+  jr    nz, update_enemy_vx
+
+update_ghost:
+  call sys_physics_update_ghost
+  jr  next_enemy
   
 update_enemy_vx:  
   ;;  Increment vx counter
@@ -517,7 +503,31 @@ _exit:
   pop   af
   ret
 
+sys_physics_init_ghosts::
+  enemy_ptr_for_ghost_init = .+2
+  ld    ix, #0x0000
+  enemy_num_for_ghost_init = .+1
+  ld     a, #0
+  _ghosts_loop:
+    push  af
 
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    jr    nz,   _end_init_ghost
+    
+    ld    e_x(ix),  #max_map_x_coord_valid - 4
+    ld    e_y(ix),  #(max_map_y_coord_valid - 16)/2
+    _end_init_ghost:
+
+    ld   bc, #sizeof_e
+    add  ix, bc
+
+    pop   af
+    dec   a
+    ret   z
+    jr    _ghosts_loop
+    ret
+  ret
 
 ;;########################################################
 ;;                   PUBLIC FUNCTIONS                    #             
@@ -528,10 +538,15 @@ sys_physics_init::
   ld    (player_ptr), ix
   ld    (player_ptr2), ix
   ld    (player_ptr_colision), ix
+  ld    (player_ptr_for_ghost), ix
 
   call  man_entity_get_enemy_array
   ld    (enemy_ptr), ix
+  ld    (enemy_ptr_for_ghost_init), ix
   ld    (enemy_num), a
+  ld    (enemy_num_for_ghost_init), a
+
+  call sys_physics_init_ghosts
 
   call  man_map_get_lvl_map
   call  man_map_get_map_array

@@ -93,6 +93,7 @@ A_NotPressed:
 Esc_Pressed:
   call  man_game_menu
   call  sys_render_map
+  call  sys_render_init
   
 Esc_NotPressed:
   ret

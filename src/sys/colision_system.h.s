@@ -1,0 +1,2 @@
+.globl sys_colision_ghost_player
+.globl sys_colision_entity_entity

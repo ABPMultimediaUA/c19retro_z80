@@ -68,6 +68,33 @@ sys_render_draw_ghost::
   call  cpct_drawSpriteBlended_asm 
   ret
 
+sys_render_draw_ghost_first_time::
+
+  ; ld    hl, #CPCT_VMEM_START_ASM+402
+  ; ld    e_sp_ptr_0(ix), h
+  ; ld    e_sp_ptr_1(ix), l
+
+  ; ld    e, e_sp_ptr_0(ix)          
+  ; ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
+  ; ld    a, #0x33  ;;0xFF rojo
+  ; ;;TODO sprite del suelo (default)
+  ; ld    c, e_w(ix)                  ;; Sprite width
+  ; ld    b, e_h(ix)                  ;; Sprite height
+  ; call  cpct_drawSolidBox_asm
+
+   ;;Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, e_x(ix)                  ;; C = x coordinate       
+  ld    b, e_y(ix)                  ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  
+  ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ld  e_sp_ptr_0(ix), l
+  ld  e_sp_ptr_1(ix), h
+  call  sys_render_draw_ghost
+  ;call  sys_render_draw_ghost
+  ret
+
 ;;
 ;;
 sys_render_draw_enemy::
@@ -109,6 +136,7 @@ sys_render_enemies::
     jr    _end_draw_ghost
 
     _draw_ghost:
+    call  sys_render_remove_ghost
     call  sys_render_draw_ghost
     _end_draw_ghost:
 
@@ -119,6 +147,32 @@ sys_render_enemies::
     dec   a
     ret   z
     jr    render_enemies_loop
+    ret
+
+sys_render_remove_ghosts::
+  enemy_ptr_remove_ghosts = .+2
+  ld    ix, #0x0000
+  enemy_num_remove_ghosts = .+1
+  ld     a, #0
+  render_enemies_loop_ghost:
+    push  af
+
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    jr    z,   _remove_ghost 
+    jr    _end_remove_ghost
+
+    _remove_ghost:
+    call  sys_render_remove_ghost
+    _end_remove_ghost:
+
+    ld   bc, #sizeof_e
+    add  ix, bc
+
+    pop   af
+    dec   a
+    ret   z
+    jr    render_enemies_loop_ghost
     ret
 
 
@@ -256,6 +310,30 @@ sys_render_init_config::
 
   ret
 
+sys_render_init_ghosts::
+  enemy_ptr_ghost = .+2
+  ld    ix, #0x0000
+  enemy_num_ghost = .+1
+  ld     a, #0
+  render_ghosts_loop:
+    push  af
+
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    jr    nz,   _end_init_ghost
+    
+    call  sys_render_draw_ghost_first_time
+    _end_init_ghost:
+
+    ld   bc, #sizeof_e
+    add  ix, bc
+
+    pop   af
+    dec   a
+    ret   z
+    jr    render_ghosts_loop
+    ret
+  ret
 
 ;;
 ;;  Render map, borders and init pointers
@@ -271,7 +349,11 @@ sys_render_init::
 
   call  man_entity_get_enemy_array
   ld    (enemy_ptr), ix
-  ld    (enemy_num), a    
+  ld    (enemy_ptr_ghost), ix
+  ld    (enemy_ptr_remove_ghosts), ix
+  ld    (enemy_num), a  
+  ld    (enemy_num_ghost), a
+  ld    (enemy_num_remove_ghosts), a 
 
   call  sys_render_border_map
 
@@ -279,7 +361,7 @@ sys_render_init::
   call  man_map_get_map_array
   ld    (map_ptr), ix
   call  sys_render_map
-
+  call  sys_render_init_ghosts
   ret
 
 
@@ -313,6 +395,15 @@ sys_render_remove_entity::
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height
   call  cpct_drawSolidBox_asm
+  ret
+
+sys_render_remove_ghost::
+  ld    e, e_sp_ptr_0(ix)          
+  ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
+  ld    hl, #_sp_ghost             ;; Source Sprite Pointer (array with pixel data)
+  ld    c, e_h(ix)                  
+  ld    b, e_w(ix)                 
+  call  cpct_drawSpriteBlended_asm 
   ret
 
 

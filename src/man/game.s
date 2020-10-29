@@ -57,6 +57,7 @@ man_game_not_play:
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
   jr    z, man_game_not_restart
+  ;call  sys_render_remove_ghosts
   call  man_game_terminate
   call  man_game_init
   jr    man_game_menu_remove
@@ -150,7 +151,6 @@ man_game_terminate_dead::
   or    a
   jr    z, _dead_man_game_wait_restart
 
-
 _dead_man_game_wait_continue:
   call  sys_input_press_play   ;; Returns in register A if start was pressed
 
@@ -166,6 +166,10 @@ _dead_man_game_wait_continue:
   ld    e_sp_ptr_0(ix), h
   ld    e_sp_ptr_1(ix), l
   
+
+  call  sys_render_remove_ghosts
+  call  sys_physics_init_ghosts
+  call  sys_render_init_ghosts
   jr    _dead_man_game_menu_remove
   ret
 
@@ -182,6 +186,7 @@ _dead_man_game_wait_restart:
 _dead_man_game_menu_remove:
   ;call  sys_render_remove_menu
   call  sys_render_map
+  call  sys_render_init
   ret
 
 

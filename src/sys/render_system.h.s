@@ -13,7 +13,9 @@
 .globl  sys_render_end_menu
 .globl  sys_render_remove_end_menu
 .globl  sys_render_menu_lifes
-
+.globl  sys_render_draw_ghost_first_time
+.globl  sys_render_remove_ghosts
+.globl sys_render_init_ghosts
 
 ;;########################################################
 ;;                       CONSTANTS                       #             
