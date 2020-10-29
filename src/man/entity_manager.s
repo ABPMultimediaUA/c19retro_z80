@@ -26,24 +26,24 @@ _enemy_array:
 
 enemies_map1::
   .db 1
-  DefineEntity alive_type, 5*4+2,   9*16+12,   5,  9,   4, 16,   4,  0,   0, 0,   50, 0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 5*4+2,   9*16+12,   5,  9,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402
 
 enemies_map2::
   .db 5
-  DefineEntity alive_type, 3*4+2,   0*16+12,   3,  0,   4, 16,   0, 16,   0, 0,   0, 100,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 9*4+2,   1*16+12,   9,  1,   4, 16,   0, 16,   0, 0,   0, 50,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 12*4+2,  1*16+12,  12,  1,   4, 16,   0, 16,   0, 0,   0, 100,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 5*4+2,  10*16+12,   5, 10,   4, 16,   4,  0,   0, 0,   50, 0,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 7*4+2,   8*16+12,   7,  8,   4, 16,   4,  0,   0, 0,   100, 0,   #CPCT_VMEM_START_ASM+402    
+  DefineEntity alive_type, 3*4+2,   0*16+12,   3,  0,   4, 16,   0, 16,   0, 0,   0, 8,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 9*4+2,   1*16+12,   9,  1,   4, 16,   0, 16,   0, 0,   0, 9,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 12*4+2,  1*16+12,  12,  1,   4, 16,   0, 16,   0, 0,   0, 10,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 5*4+2,  10*16+12,   5, 10,   4, 16,   4,  0,   0, 0,   10, 0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 7*4+2,   8*16+12,   7,  8,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402    
 
 
 enemies_map3::
   .db 5
-  DefineEntity alive_type, 5*4+2,   1*16+12,   5,  1,   4, 16,   0, 16,   0, 0,   0, 100,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 10*4+2,  4*16+12,  10,  4,   4, 16,   4,  0,   0, 0,   100, 0,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 12*4+2,  6*16+12,  12,  6,   4, 16,   4,  0,   0, 0,   50, 0,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 14*4+2,  8*16+12,  14,  8,   4, 16,   4,  0,   0, 0,   50, 0,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 16*4+2,  5*16+12,  16,  5,   4, 16,   4,  0,   0, 0,   50, 50,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 5*4+2,   1*16+12,   5,  1,   4, 16,   0, 16,   0, 0,   0, 10,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 10*4+2,  4*16+12,  10,  4,   4, 16,   4,  0,   0, 0,   10, 0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 12*4+2,  6*16+12,  12,  6,   4, 16,   4,  0,   0, 0,   8, 0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 14*4+2,  8*16+12,  14,  8,   4, 16,   4,  0,   0, 0,   9, 0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 16*4+2,  5*16+12,  16,  5,   4, 16,   4,  0,   0, 0,   7, 0,   #CPCT_VMEM_START_ASM+402
 
 ;DefineBombArray _bomb, max_bombs, DefineBombDefault
 

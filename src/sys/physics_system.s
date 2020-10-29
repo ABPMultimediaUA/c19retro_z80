@@ -445,6 +445,8 @@ sys_physics_player_update::
   player_ptr = .+2
   ld    ix, #0x0000  
   call  sys_physics_update_entity
+  ld  e_vx(ix), #0
+  ld  e_vy(ix), #0
   ;call  sys_physics_update_entity_bombs 
   ret
 
