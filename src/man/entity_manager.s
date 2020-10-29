@@ -40,8 +40,8 @@ enemies_map2::
 enemies_map3::
   .db 5
   DefineEntity alive_type, 5*4+2,   1*16+12,   5,  1,   4, 16,   0, 16,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 14*4+2,  4*16+12,  14,  4,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
-  DefineEntity alive_type, 14*4+2,  6*16+12,  14,  6,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 10*4+2,  4*16+12,  10,  4,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
+  DefineEntity alive_type, 12*4+2,  6*16+12,  12,  6,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
   DefineEntity alive_type, 14*4+2,  8*16+12,  14,  8,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
   DefineEntity alive_type, 16*4+2,  5*16+12,  16,  5,   4, 16,   4,  0,   #CPCT_VMEM_START_ASM+402
 
