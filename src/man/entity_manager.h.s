@@ -20,13 +20,14 @@
 ;;########################################################
 
 ;;-----------------------  ENTITY  -----------------------
-.macro DefineEntity _type, _x, _y, _xcell, _ycell, _w, _h, _vx, _vy, _counter_vx, _counter_vy, _sp_ptr
+.macro DefineEntity _type, _x, _y, _xcell, _ycell, _w, _h, _vx, _vy, _counter_vx, _counter_vy, _increment_vx, _increment_vy, _sp_ptr
     .db _type
     .db _x, _y
     .db _xcell, _ycell
     .db _w, _h      ;; both in bytes
     .db _vx, _vy    
     .db _counter_vx, _counter_vy 
+    .db _increment_vx, _increment_vy 
     .dw _sp_ptr
     .rept max_bombs 
         DefineBombDefault
@@ -89,9 +90,11 @@ e_vx = 7
 e_vy = 8
 e_counter_vx = 9
 e_counter_vy = 10
-e_sp_ptr_0 = 11
-e_sp_ptr_1 = 12
-sizeof_e_solo = 13
+e_increment_vx = 11
+e_increment_vy = 12
+e_sp_ptr_0 = 13
+e_sp_ptr_1 = 14
+sizeof_e_solo = 15
 sizeof_e = sizeof_e_solo + (sizeof_b * max_bombs)
 max_entities = 6
 
@@ -114,6 +117,8 @@ max_bombs = 1
 alive_type = 0x01
 dead_type = 0xFE
 invalid_type = 0xFF
+
+move_type = 0xDD
 
 
 ;;########################################################

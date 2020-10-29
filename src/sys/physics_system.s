@@ -461,11 +461,45 @@ sys_physics_enemies_update::
 physics_enemies_loop:
   push  af
   
-  call  sys_physics_update_enemy
-  or    a  
-  jr    z, _exit
-  ;call  sys_physics_update_entity_bombs
+update_enemy_vx:  
+  ;;  Increment vx counter
+  ld    a, e_counter_vx(ix)
+  add   e_increment_vx(ix)
+  ld    e_counter_vx(ix), a
 
+;;  Increment vy counter
+  ld    a, e_counter_vy(ix)
+  add   e_increment_vy(ix)
+  ld    e_counter_vy(ix), a
+
+check_vx_counter:
+;;  Check if vx counter allow movement
+  ld    a, e_counter_vx(ix)
+  cp    #100
+  jr    c, check_vy_counter
+  ld    e_counter_vx(ix), #0    ;; IF counter < 100 THEN enemy cant move and check Y ELSE move enemy
+  ld    e_type(ix), #move_type
+
+check_vy_counter:
+  ;;  Check if vy counter allow movement
+  ld    a, e_counter_vy(ix)
+  cp    #100
+  jr    c, update_enemy          ;; IF counter < 100 THEN enemy cant move ELSE move enemy
+  ld    e_counter_vy(ix), #0
+  ld    e_type(ix), #move_type
+
+update_enemy:
+
+  ld    a, e_type(ix)
+  cp    #move_type
+  jr    nz, next_enemy
+
+  call  sys_physics_update_enemy
+  ld    e_type(ix), #alive_type
+  or    a  
+  jr    z, _exit  
+
+next_enemy:
   ld    bc, #sizeof_e
   add   ix, bc
 
