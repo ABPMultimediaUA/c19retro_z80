@@ -105,6 +105,8 @@ man_entity_initialize_entity::
   ld    e_sp_ptr_0(ix), h
   ld    e_sp_ptr_1(ix), l
 
+  ld    e_l(ix),  #max_lifes
+
   ld    bomb_type+sizeof_e_solo(ix), #invalid_type
   ld    bomb_w+sizeof_e_solo(ix), #4
   ld    bomb_h+sizeof_e_solo(ix), #16   

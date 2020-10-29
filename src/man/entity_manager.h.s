@@ -29,6 +29,7 @@
     .db _counter_vx, _counter_vy 
     .db _increment_vx, _increment_vy 
     .dw _sp_ptr
+    .db max_lifes
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -42,6 +43,7 @@
     .dw 0xADDE 
     .dw 0xADDE 
     .dw #CPCT_VMEM_START_ASM+402
+    .db max_lifes
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -94,7 +96,8 @@ e_increment_vx = 11
 e_increment_vy = 12
 e_sp_ptr_0 = 13
 e_sp_ptr_1 = 14
-sizeof_e_solo = 15
+e_l = 15
+sizeof_e_solo = 16
 sizeof_e = sizeof_e_solo + (sizeof_b * max_bombs)
 max_entities = 6
 
@@ -119,6 +122,7 @@ dead_type = 0xFE
 invalid_type = 0xFF
 
 move_type = 0xDD
+max_lifes = 3
 
 
 ;;########################################################

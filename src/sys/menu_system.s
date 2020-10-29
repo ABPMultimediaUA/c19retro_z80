@@ -562,6 +562,15 @@ sys_menu_lifes::
   call  sys_menu_background
   call  sys_menu_game_name
   pop   af
+  push  af
   call  sys_menu_num_lifes
+  pop   af
+
+  or    a
+  jr    z, _game_over
+  call  sys_menu_play_key
+  ret
+
+_game_over:
   call  sys_menu_play_again_key     
   ret  

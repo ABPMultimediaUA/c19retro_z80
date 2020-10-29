@@ -140,26 +140,46 @@ man_game_terminate::
 ;; Called when player lose 1 life
 ;; Input: A number of lifes
 man_game_terminate_dead::
-  ;call  man_entity_get_player
-  ;ld    a,  e_l(ix)
-  ld     a,  #3
+  call  man_entity_get_player
+  ld    a,  e_l(ix)
   dec     a
-  ;push    af
+  push    af
   call  sys_render_menu_lifes
-  ;pop    af
-  ;ld    e_l(ix),  #a
+  call  man_entity_get_player
+  pop    af
+  ld    e_l(ix),  a
 
-_dead_man_game_menu_loop:
+  or    a
+  jr    z, _dead_man_game_wait_restart
+
+
+_dead_man_game_wait_continue:
+  call  sys_input_press_play   ;; Returns in register A if start was pressed
+
+  or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
+  jr    z, _dead_man_game_wait_continue
+  call  man_entity_get_player
+  ld    e_x(ix),  #min_map_x_coord_valid
+  ld    e_y(ix),  #min_map_y_coord_valid
+  ld    e_xcell(ix), #0
+  ld    e_ycell(ix), #0
+
+  ld    hl, #CPCT_VMEM_START_ASM+402
+  ld    e_sp_ptr_0(ix), h
+  ld    e_sp_ptr_1(ix), l
   
+  jr    _dead_man_game_menu_remove
+  ret
+
+
+_dead_man_game_wait_restart:
   call  sys_input_press_restart   ;; Returns in register A if start was pressed (R)
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
-  jr    z, _dead_man_game_not_restart
+  jr    z, _dead_man_game_wait_restart
   call  man_game_terminate
   call  man_game_init
   jr    _dead_man_game_menu_remove
-_dead_man_game_not_restart:
-  jr    z, _dead_man_game_menu_loop
 
 _dead_man_game_menu_remove:
   ;call  sys_render_remove_menu
