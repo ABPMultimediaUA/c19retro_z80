@@ -43,13 +43,53 @@ sys_render_player::
   
   ret
 
+;;
+;;
+sys_render_draw_ghost::
+; (2B DE) memory	Destination video memory pointer
+; (1B C ) height	Sprite Height in bytes (>0)
+; (1B B ) width	Sprite Width in bytes (>0) (Beware, not in pixels!)
+; (2B HL) sprite	Source Sprite Pointer (array with pixel data)
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, e_x(ix)                  ;; C = x coordinate       
+  ld    b, e_y(ix)                  ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  
+  ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ld  e_sp_ptr_0(ix), l
+  ld  e_sp_ptr_1(ix), h
+
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_ghost             ;; Source Sprite Pointer (array with pixel data)
+  ld    c, e_h(ix)                  
+  ld    b, e_w(ix)                 
+  call  cpct_drawSpriteBlended_asm 
+  ret
 
 ;;
+;;
+sys_render_draw_enemy::
+  ;; Calculate a video-memory location for sprite
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ld    c, e_x(ix)                  ;; C = x coordinate       
+  ld    b, e_y(ix)                  ;; B = y coordinate   
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  
+  ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
+  ld  e_sp_ptr_0(ix), l
+  ld  e_sp_ptr_1(ix), h
+
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
+  ld    c, e_w(ix)                  ;; Sprite width
+  ld    b, e_h(ix)                  ;; Sprite height
+  call  cpct_drawSprite_asm 
+  ret
+;;
 ;;  Render enemies and update their sp_ptr
-;;  INPUT:
-;;    none
-;;  RETURN: 
-;;    none
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
 sys_render_enemies::
@@ -60,26 +100,17 @@ sys_render_enemies::
   render_enemies_loop:
     push  af
 
-    ;call  sys_render_entity_bombs
-    call  sys_render_remove_entity
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    jr    z,   _draw_ghost
     
-    ;; Calculate a video-memory location for sprite
-      ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-      ld    c, e_x(ix)                  ;; C = x coordinate       
-      ld    b, e_y(ix)                  ;; B = y coordinate   
-      call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-      
-      ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-      ld  e_sp_ptr_0(ix), l
-      ld  e_sp_ptr_1(ix), h
+    call  sys_render_remove_entity
+    call  sys_render_draw_enemy  
+    jr    _end_draw_ghost
 
-      ;;  Draw sprite
-      ex    de, hl                      ;; DE = Destination video memory pointer
-      ld    hl, #_sp_enemy              ;; Source Sprite Pointer (array with pixel data)
-      ld    c, e_w(ix)                  ;; Sprite width
-      ld    b, e_h(ix)                  ;; Sprite height
-      call  cpct_drawSprite_asm    
-  
+    _draw_ghost:
+    call  sys_render_draw_ghost
+    _end_draw_ghost:
 
     ld   bc, #sizeof_e
     add  ix, bc

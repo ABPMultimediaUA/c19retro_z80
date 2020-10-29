@@ -20,7 +20,7 @@
 ;;########################################################
 
 ;;-----------------------  ENTITY  -----------------------
-.macro DefineEntity _type, _x, _y, _xcell, _ycell, _w, _h, _vx, _vy, _counter_vx, _counter_vy, _increment_vx, _increment_vy, _sp_ptr
+.macro DefineEntity _type, _x, _y, _xcell, _ycell, _w, _h, _vx, _vy, _counter_vx, _counter_vy, _increment_vx, _increment_vy, _sp_ptr, _ghost
     .db _type
     .db _x, _y
     .db _xcell, _ycell
@@ -30,6 +30,7 @@
     .db _increment_vx, _increment_vy 
     .dw _sp_ptr
     .db max_lifes
+    .db _ghost
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -44,6 +45,7 @@
     .dw 0xADDE 
     .dw #CPCT_VMEM_START_ASM+402
     .db max_lifes
+    .db 0x00        ;ghost
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -97,7 +99,8 @@ e_increment_vy = 12
 e_sp_ptr_0 = 13
 e_sp_ptr_1 = 14
 e_l = 15
-sizeof_e_solo = 16
+e_ghost = 16
+sizeof_e_solo = 17
 sizeof_e = sizeof_e_solo + (sizeof_b * max_bombs)
 max_entities = 6
 
@@ -120,6 +123,9 @@ max_bombs = 1
 alive_type = 0x01
 dead_type = 0xFE
 invalid_type = 0xFF
+no_ghost = 0x00
+ghost = 0xAA
+
 
 move_type = 0xDD
 max_lifes = 3
