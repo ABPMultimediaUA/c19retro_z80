@@ -442,19 +442,9 @@ sys_physics_enemies_update::
   ;ret   ;; CAMBIAR
 
 physics_enemies_loop:
-  push  af
-
-  ld    a, e_ghost(ix)
-  xor   #ghost
-  jr    nz, update_enemy_vx
-
-update_ghost:
-  call sys_physics_update_ghost  ;; ret a=0 if collision
-  or    a  
-  jr    z, _exit  ;; exit if terminated game (collision ghost with player)
-  jr  next_enemy
+  push  af  
   
-update_enemy_vx:  
+update_enemy_counter:  
   ;;  Increment vx counter
   ld    a, e_counter_vx(ix)
   add   e_increment_vx(ix)
@@ -481,6 +471,17 @@ check_vy_counter:
   ld    e_counter_vy(ix), #0
   ld    e_type(ix), #move_type
 
+check_ghost:
+  ld    a, e_ghost(ix)
+  xor   #ghost
+  jr    nz, update_enemy
+
+update_ghost:
+  call sys_physics_update_ghost  ;; ret a=0 if collision
+  or    a  
+  jr    z, _exit  ;; exit if terminated game (collision ghost with player)
+  jr  next_enemy
+
 update_enemy:
 
   ld    a, e_type(ix)
@@ -489,10 +490,10 @@ update_enemy:
 
   call  sys_physics_update_enemy  
   or    a  
-  jr    z, _exit  
-  ld    e_type(ix), #alive_type
+  jr    z, _exit    
 
 next_enemy:
+  ld    e_type(ix), #alive_type
   ld    bc, #sizeof_e
   add   ix, bc
 
