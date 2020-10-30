@@ -18,11 +18,32 @@ _move_ghost_right:
     ld  b, #1
     add b 
     ld  e_x(ix), a
-    ret
+    jr  check_y
 
 _move_ghost_left:
     ld  a, e_x(ix)
     ld  b, #-1
     add b 
     ld  e_x(ix), a
+    jr  check_y
+
+check_y:
+    ld  a, e_y(iy)
+    ld  b, e_y(ix)
+
+    ; if a < b: C-flag = 1
+    cp  b
+    jr  c, _move_ghost_up
+_move_ghost_down:
+    ld  a, e_y(ix)
+    ld  b, #1
+    add b 
+    ld  e_y(ix), a
+    ret
+
+_move_ghost_up:
+    ld  a, e_y(ix)
+    ld  b, #-1
+    add b 
+    ld  e_y(ix), a
     ret
