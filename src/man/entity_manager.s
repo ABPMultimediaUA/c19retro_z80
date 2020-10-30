@@ -84,7 +84,7 @@ enemies_map7::
   DefineEntity alive_type,  7,  5,   4,  0,  17,  0,   no_ghost
   DefineEntity alive_type, 11,  5,   4,  0,  17,  0,   no_ghost
 
-  DefineEntity alive_type, 17,  6,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type, 17,  7,   0, 16,   0, 12,   no_ghost
   DefineEntity alive_type,  2,  9,   0, 16,   0,  7,   no_ghost
   DefineEntity alive_type,  6, 10,   0, 16,   0,  7,   no_ghost  
 
