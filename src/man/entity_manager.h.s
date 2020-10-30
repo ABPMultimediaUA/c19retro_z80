@@ -6,14 +6,9 @@
 .globl  man_entity_update
 .globl  man_entity_terminate
 
-.globl  man_entity_create_entity
-.globl  man_entity_create_bomb
-
 .globl  man_entity_get_player
 .globl  man_entity_get_enemy_array
 
-.globl  man_entity_set_player_dead
-.globl  man_entity_set_enemy_dead
 
 ;;########################################################
 ;;                        MACROS                         #              
@@ -120,7 +115,7 @@ max_bombs = 1
 ;;########################################################
 ;;                      ENTITY TYPES                     #             
 ;;########################################################
-alive_type = 0x01
+alive_type = 0x0A
 dead_type = 0xFE
 invalid_type = 0xFF
 no_ghost = 0x00
