@@ -11,6 +11,7 @@ sys_ia_ghost::
 
     ; if a < b: C-flag = 1
     cp  b
+    jr  z, _check_y
     jr  c, _move_ghost_left
 
 _move_ghost_right:
@@ -18,21 +19,22 @@ _move_ghost_right:
     ld  b, #1
     add b 
     ld  e_x(ix), a
-    jr  check_y
+    jr  _check_y
 
 _move_ghost_left:
     ld  a, e_x(ix)
     ld  b, #-1
     add b 
     ld  e_x(ix), a
-    jr  check_y
+    jr  _check_y
 
-check_y:
+_check_y:
     ld  a, e_y(iy)
     ld  b, e_y(ix)
 
     ; if a < b: C-flag = 1
     cp  b
+    ret z
     jr  c, _move_ghost_up
 _move_ghost_down:
     ld  a, e_y(ix)
