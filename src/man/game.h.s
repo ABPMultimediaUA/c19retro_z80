@@ -15,7 +15,6 @@
 ;;                       CONSTANTS                       #             
 ;;########################################################
 
-
 ;; in bytes
 move_right = 4
 move_left = -move_right

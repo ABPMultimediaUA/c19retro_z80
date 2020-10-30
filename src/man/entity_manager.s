@@ -26,7 +26,8 @@ _enemy_array:
 
 
 enemies_map1::
-  .db 2
+  .db 3
+  DefineEntity alive_type, 18, 10,   1,  1,  25, 25,   ghost
   DefineEntity alive_type, 16,  1,   0, 16,   0,  2,   no_ghost
   DefineEntity alive_type, 16,  4,   4,  0,   3,  0,   no_ghost
 
