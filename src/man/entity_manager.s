@@ -35,7 +35,7 @@ enemies_map2::
   DefineEntity alive_type,  8,  1,   0, 16,   0,  2,   no_ghost
   DefineEntity alive_type, 13,  4,   4,  0,   4,  0,   no_ghost
   DefineEntity alive_type,  7,  9,   0, 16,   0,  3,   no_ghost
-  DefineEntity alive_type, 10,  10,   0, 16,   0,  3,   no_ghost
+  DefineEntity alive_type, 10,  10,  0, 16,   0,  3,   no_ghost
 
 enemies_map3::
   .db 5
@@ -46,13 +46,18 @@ enemies_map3::
   DefineEntity alive_type, 16,  8,   4,  0,   7,  0,   no_ghost
   DefineEntity alive_type, 16, 10,   4,  0,   9,  0,   no_ghost  
 
+
 enemies_map4::
+  .db 1
+  DefineEntity alive_type,  6,  1,   1,  4,  34, 34,   ghost  
+
+enemies_map5::
   .db 3
   DefineEntity alive_type,  6,  1,   1,  4,  17, 17,   ghost
   DefineEntity alive_type,  8,  7,   4,  0,   5,  0,   no_ghost
   DefineEntity alive_type,  9,  9,   4,  0,   9,  0,   no_ghost  
 
-enemies_map5::
+enemies_map6::
   .db 5
   DefineEntity alive_type,  5,  0,   1,  4,  17, 17,   ghost  
 
@@ -64,7 +69,7 @@ enemies_map5::
   DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
 
 
-enemies_map6::
+enemies_map7::
   .db 6
   DefineEntity alive_type,  3,  1,   1,  4,  17, 17,   ghost
 
@@ -76,7 +81,7 @@ enemies_map6::
   DefineEntity alive_type, 14,  8,   4,  0,  10,  0,   no_ghost  
 
 
-enemies_map7::
+enemies_map8::
   .db 7
   DefineEntity alive_type,  0, 10,   1,  4,  17, 17,   ghost
 
@@ -252,6 +257,10 @@ man_entity_init_enemies::
   xor    #7
   jr    z, lvl_7
 
+  ld    a, b
+  xor    #8
+  jr    z, lvl_8
+
   ret
 lvl_1:
   ld    hl, #enemies_map1
@@ -284,5 +293,10 @@ lvl_6:
   
 lvl_7:
   ld    hl, #enemies_map7
+  ld    (_enemy_array), hl 
+  ret
+
+lvl_8:
+  ld    hl, #enemies_map8
   ld    (_enemy_array), hl 
   ret
