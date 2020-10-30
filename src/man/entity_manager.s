@@ -35,11 +35,11 @@ enemies_map2::
   DefineEntity alive_type,  8,  1,   0, 16,   0,  2,   no_ghost
   DefineEntity alive_type, 13,  4,   4,  0,   4,  0,   no_ghost
   DefineEntity alive_type,  7,  9,   0, 16,   0,  3,   no_ghost
-  DefineEntity alive_type, 10,  9,   0, 16,   0,  3,   no_ghost
+  DefineEntity alive_type, 10,  10,   0, 16,   0,  3,   no_ghost
 
 enemies_map3::
   .db 5
-  DefineEntity alive_type,  2,  8,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  3,  8,   0, 16,   0,  7,   no_ghost
   
   DefineEntity alive_type,  9,  2,   0, 16,   0,  7,   no_ghost
   DefineEntity alive_type, 12,  2,   0, 16,   0,  8,   no_ghost
