@@ -36,14 +36,14 @@ check_y:
     jr  c, _move_ghost_up
 _move_ghost_down:
     ld  a, e_y(ix)
-    ld  b, #1
+    ld  b, #2
     add b 
     ld  e_y(ix), a
     ret
 
 _move_ghost_up:
     ld  a, e_y(ix)
-    ld  b, #-1
+    ld  b, #-2
     add b 
     ld  e_y(ix), a
     ret
