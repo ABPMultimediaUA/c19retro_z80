@@ -168,6 +168,26 @@ man_entity_init::
   ;call  man_entity_init_entities
   ret
 
+;;
+;;  Initialize data for all enemies, player and reset bombs data.
+;;  INPUT:  
+;;    A with level map number
+;;  DESTROYED:
+;;    AF,DE,IX,HL,BC
+man_entity_next_lvl::
+  call  man_entity_init_enemies
+  
+  ld    ix, #_player
+  ld    e_x(ix), #min_map_x_coord_valid
+  ld    e_y(ix), #min_map_y_coord_valid
+  ld    e_xcell(ix), #0
+  ld    e_ycell(ix), #0
+  ld    hl, #CPCT_VMEM_START_ASM+402
+  ld    e_sp_ptr_0(ix), h
+  ld    e_sp_ptr_1(ix), l
+
+  ;call  man_entity_init_entities
+  ret
 
 ;;  DESTROYED:
 ;;    AF,DE,IX,HL,BC

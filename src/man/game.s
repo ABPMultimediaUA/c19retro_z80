@@ -92,7 +92,7 @@ man_game_init_next_lvl::
 
   call  man_map_update  
   call  man_map_get_lvl_map
-  call  man_entity_init      
+  call  man_entity_next_lvl      
   call  sys_input_init
   ;call  sys_ai_init
   call  sys_physics_init

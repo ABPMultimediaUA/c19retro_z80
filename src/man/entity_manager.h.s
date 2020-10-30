@@ -8,7 +8,7 @@
 
 .globl  man_entity_get_player
 .globl  man_entity_get_enemy_array
-
+.globl  man_entity_next_lvl
 
 ;;########################################################
 ;;                        MACROS                         #              
