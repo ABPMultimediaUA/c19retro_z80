@@ -7,6 +7,7 @@
 .include "../cpct_functions.h.s"
 .include "input_system.h.s"
 .include "render_system.h.s"
+.include "physics_system.h.s"
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -92,8 +93,10 @@ A_NotPressed:
   jr    z, Esc_NotPressed
 Esc_Pressed:
   call  man_game_menu
-  call  sys_render_map
+  call  man_entity_init
   call  sys_render_init
+  call  sys_render_map  
+  call  sys_physics_init
   
 Esc_NotPressed:
   ret
@@ -108,7 +111,9 @@ sys_input_press_play::
   call  cpct_isKeyPressed_asm
   jr    z, Start_NotPressed
   ld    a, #1
-Start_NotPressed:
+  ret
+Start_NotPressed:  
+  ld    a, #0
   ret
 
 
@@ -121,5 +126,7 @@ sys_input_press_restart::
   call  cpct_isKeyPressed_asm
   jr    z, Restart_NotPressed
   ld    a, #1
+  ret
 Restart_NotPressed:
+  ld    a, #0
   ret
