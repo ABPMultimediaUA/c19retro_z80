@@ -449,7 +449,9 @@ physics_enemies_loop:
   jr    nz, update_enemy_vx
 
 update_ghost:
-  call sys_physics_update_ghost
+  call sys_physics_update_ghost  ;; ret a=0 if collision
+  or    a  
+  jr    z, _exit  ;; exit if terminated game (collision ghost with player)
   jr  next_enemy
   
 update_enemy_vx:  
@@ -485,10 +487,10 @@ update_enemy:
   cp    #move_type
   jr    nz, next_enemy
 
-  call  sys_physics_update_enemy
-  ld    e_type(ix), #alive_type
+  call  sys_physics_update_enemy  
   or    a  
   jr    z, _exit  
+  ld    e_type(ix), #alive_type
 
 next_enemy:
   ld    bc, #sizeof_e

@@ -154,7 +154,7 @@ sys_render_remove_ghosts::
   ld    ix, #0x0000
   enemy_num_remove_ghosts = .+1
   ld     a, #0
-  render_enemies_loop_ghost:
+  _render_enemies_loop_ghost:
     push  af
 
     ld    a, e_ghost(ix)
@@ -172,7 +172,7 @@ sys_render_remove_ghosts::
     pop   af
     dec   a
     ret   z
-    jr    render_enemies_loop_ghost
+    jr    _render_enemies_loop_ghost
     ret
 
 

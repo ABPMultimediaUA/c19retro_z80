@@ -118,7 +118,7 @@ man_game_update::
     
     ;call  sys_ai_update  
     call  sys_physics_update
-    call  man_entity_update
+    ;call  man_entity_update
 
     call  cpct_waitVSYNC_asm   
     call  sys_render_update 
@@ -142,20 +142,21 @@ man_game_terminate_dead::
   call  man_entity_get_player
   ld    a,  e_l(ix)
   dec     a
-  push    af
+  ld    e_l(ix),  a
+  
   call  sys_render_menu_lifes
   call  man_entity_get_player
-  pop    af
-  ld    e_l(ix),  a
+  
 
+  ld    a,  e_l(ix)
   or    a
   jr    z, _dead_man_game_wait_restart
 
 _dead_man_game_wait_continue:
-  call  sys_input_press_play   ;; Returns in register A if start was pressed
+  call  sys_input_press_play   ;; Returns in register A if start was pressed (Space)
 
-  or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
-  jr    z, _dead_man_game_wait_continue
+  or    a                       
+  jr    z, _dead_man_game_wait_continue  ;; Loop while a=0 not pressed (Space)
   call  man_entity_get_player
   ld    e_x(ix),  #min_map_x_coord_valid
   ld    e_y(ix),  #min_map_y_coord_valid
@@ -183,9 +184,7 @@ _dead_man_game_wait_restart:
   call  man_game_init
   jr    _dead_man_game_menu_remove
 
-_dead_man_game_menu_remove:
-  ;call  sys_render_remove_menu
-  call  sys_render_map
+_dead_man_game_menu_remove:  
   call  sys_render_init
   ret
 

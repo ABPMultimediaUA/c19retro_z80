@@ -11,6 +11,7 @@
 ;Input: ix ghost, iy player
 ;Ret: a = 1 if colision
 sys_colision_ghost_player::
+    ld   a, #0
     ret
 
 
