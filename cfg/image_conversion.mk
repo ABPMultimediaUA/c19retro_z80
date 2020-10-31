@@ -29,7 +29,8 @@
 
 ## 16 colours palette
 #PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
-PALETTE= 0 1 2 3 6 9 11 12 13 15 16 19 20 21 22 26
+# PALETTE= 0 1 3 4 5 7 8 11 12 13 16 17 26
+PALETTE = 0 1 2 3 6 9 11 12 13 16 18 19 20 21 22 26  
 
 # 0  black
 # 1  blue
@@ -60,6 +61,7 @@ PALETTE= 0 1 2 3 6 9 11 12 13 15 16 19 20 21 22 26
 #$(eval $(call IMG2SP, CONVERT_PALETTE , $(PALETTE), g_palette ))
 #$(eval $(call IMG2SP, CONVERT         , img.png , w, h, array, palette, tileset))
 
+$(eval $(call IMG2SP, SET_MODE        , 0                  ))
 $(eval $(call IMG2SP, SET_FOLDER      , src/assets/sprites/ ))
 $(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE) ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/player/player.png , 8, 16, sp_player ))
