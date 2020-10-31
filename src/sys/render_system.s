@@ -83,16 +83,15 @@ sys_render_draw_ghost_first_time::
   ; call  cpct_drawSolidBox_asm
 
    ;;Calculate a video-memory location for sprite
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  ld    c, e_x(ix)                  ;; C = x coordinate       
-  ld    b, e_y(ix)                  ;; B = y coordinate   
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+  ; ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  ; ld    c, e_x(ix)                  ;; C = x coordinate       
+  ; ld    b, e_y(ix)                  ;; B = y coordinate   
+  ; call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
   
   ;;  Store in _sp_ptr the video-memory location where the sprite is going to be written
-  ld  e_sp_ptr_0(ix), l
-  ld  e_sp_ptr_1(ix), h
+  ; ld  e_sp_ptr_0(ix), l
+  ; ld  e_sp_ptr_1(ix), h  
   call  sys_render_draw_ghost
-  ;call  sys_render_draw_ghost
   ret
 
 ;;
@@ -136,15 +135,14 @@ sys_render_enemies::
     jr    nz,   _end_draw_ghost
     
     call  sys_render_remove_entity
-    call  sys_render_draw_enemy  
-    ld    e_type(ix), #alive_type
+    call  sys_render_draw_enemy      
     jr    _end_draw_ghost
 
     _draw_ghost:
     call  sys_render_remove_ghost
     call  sys_render_draw_ghost
     _end_draw_ghost:
-  
+    ld    e_type(ix), #alive_type
     ld   bc, #sizeof_e
     add  ix, bc
 
