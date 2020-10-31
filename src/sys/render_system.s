@@ -131,15 +131,20 @@ sys_render_enemies::
     xor   #ghost
     jr    z,   _draw_ghost
     
+    ld    a, e_type(ix)
+    cp    #move_type
+    jr    nz,   _end_draw_ghost
+    
     call  sys_render_remove_entity
     call  sys_render_draw_enemy  
+    ld    e_type(ix), #alive_type
     jr    _end_draw_ghost
 
     _draw_ghost:
     call  sys_render_remove_ghost
     call  sys_render_draw_ghost
     _end_draw_ghost:
-
+  
     ld   bc, #sizeof_e
     add  ix, bc
 

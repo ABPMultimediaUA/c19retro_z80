@@ -194,6 +194,13 @@ _go_next_lvl:
   ret
 
 sys_physics_update_enemy::
+  ptr_player_update_enemy = .+2
+  ld    iy, #0000
+
+  call  sys_colision_entity_entity ; a=1 if colision  
+  and   a 
+  jr    nz, player_terminate_dead
+
   ld    a, e_x(ix)
   add   e_vx(ix)
   ld    b, a
@@ -291,6 +298,7 @@ end_update_y_enemy:
 
   ; call  man_game_terminate
   ; call  man_game_init
+player_terminate_dead:
   call  man_game_terminate_dead
   ld    a, #0
   ret
@@ -492,8 +500,7 @@ update_enemy:
   or    a  
   jr    z, _exit    
 
-next_enemy:
-  ld    e_type(ix), #alive_type
+next_enemy:  
   ld    bc, #sizeof_e
   add   ix, bc
 
@@ -542,6 +549,7 @@ sys_physics_init::
   ld    (player_ptr2), ix
   ld    (player_ptr_colision), ix
   ld    (player_ptr_for_ghost), ix
+  ld    (ptr_player_update_enemy), ix
 
   call  man_entity_get_enemy_array
   ld    (enemy_ptr), ix
@@ -559,7 +567,7 @@ sys_physics_init::
 
 
 sys_physics_update::
-  call  sys_physics_player_update
   call  sys_physics_enemies_update
+  call  sys_physics_player_update  
   ret
   
