@@ -1,3 +1,25 @@
+; ; ; ; MIT License
+
+; ; ; ; Copyright (c) 2020 Carlos Eduardo Arismendi Sánchez / Antón Chernysh / Sergio Cortés Espinosa
+
+; ; ; ; Permission is hereby granted, free of charge, to any person obtaining a copy
+; ; ; ; of this software and associated documentation files (the "Software"), to deal
+; ; ; ; in the Software without restriction, including without limitation the rights
+; ; ; ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+; ; ; ; copies of the Software, and to permit persons to whom the Software is
+; ; ; ; furnished to do so, subject to the following conditions:
+
+; ; ; ; The above copyright notice and this permission notice shall be included in all
+; ; ; ; copies or substantial portions of the Software.
+
+; ; ; ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+; ; ; ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+; ; ; ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+; ; ; ; AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+; ; ; ; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+; ; ; ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+; ; ; ; SOFTWARE.
+
 ;;
 ;;  INPUT SYSTEM
 ;;
@@ -6,6 +28,8 @@
 .include "../man/game.h.s"
 .include "../cpct_functions.h.s"
 .include "input_system.h.s"
+.include "render_system.h.s"
+.include "physics_system.h.s"
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -76,24 +100,55 @@ Q_NotPressed:
 A_Pressed:
   ld    e_vy(ix), #move_down    
   ret
-A_NotPressed:    
-  ld    hl, #Key_R
+A_NotPressed:   
+
+; ;   ld    hl, #Key_Space
+; ;   call  cpct_isKeyPressed_asm
+; ;   jr    z, Space_NotPressed
+; ; Space_Pressed:
+; ;   call  man_entity_create_bomb    
+; ;   ret
+; ; Space_NotPressed: 
+
+  ld    hl, #Key_Esc
   call  cpct_isKeyPressed_asm
-  jr    z, R_NotPressed
-R_Pressed:
-  call  man_game_terminate
-R_NotPressed:
+  jr    z, Esc_NotPressed
+Esc_Pressed:
+  call  man_game_menu
+  ;call  man_entity_init
+  ; call  sys_render_init
+  call  sys_render_map  
+  ; call  sys_physics_init
+  
+Esc_NotPressed:
   ret
 
 
-sys_input_press_start::
+sys_input_press_play::
   ld    a, #0
 
   call  cpct_scanKeyboard_f_asm
 
-  ld    hl, #Key_X
+  ld    hl, #Key_Space
   call  cpct_isKeyPressed_asm
-  jr    z, X_NotPressed
+  jr    z, Start_NotPressed
   ld    a, #1
-X_NotPressed:
+  ret
+Start_NotPressed:  
+  ld    a, #0
+  ret
+
+
+sys_input_press_restart::
+  ld    a, #0
+
+  call  cpct_scanKeyboard_f_asm
+
+  ld    hl, #Key_R
+  call  cpct_isKeyPressed_asm
+  jr    z, Restart_NotPressed
+  ld    a, #1
+  ret
+Restart_NotPressed:
+  ld    a, #0
   ret

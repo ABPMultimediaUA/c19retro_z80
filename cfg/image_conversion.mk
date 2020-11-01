@@ -28,7 +28,27 @@
 ##
 
 ## 16 colours palette
-PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
+#PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
+# PALETTE= 0 1 3 4 5 7 8 11 12 13 16 17 26
+PALETTE = 0 1 2 3 6 9 11 24 13 16 18 19 20 21 22 26  
+
+# 0  black
+# 1  blue
+# 2  bright blue
+# 3  red
+# 6  bright red
+# 9  green
+# 10 cyan
+# 11 skye_blue
+# 12 yellow
+# (14 pastel blue)
+# 15 orange 
+# 18 bright green
+# 19 sea green
+# 20 bright cyan
+# 21 lime
+# 22 pastel green
+# 26 bright white
 
 ## Default values
 #$(eval $(call IMG2SP, SET_MODE        , 0                  ))  { 0, 1, 2 }
@@ -41,14 +61,19 @@ PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
 #$(eval $(call IMG2SP, CONVERT_PALETTE , $(PALETTE), g_palette ))
 #$(eval $(call IMG2SP, CONVERT         , img.png , w, h, array, palette, tileset))
 
+$(eval $(call IMG2SP, SET_MODE        , 0                  ))
 $(eval $(call IMG2SP, SET_FOLDER      , src/assets/sprites/ ))
 $(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE) ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/player/player.png , 8, 16, sp_player ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/enemy/enemy.png , 8, 16, sp_enemy ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/enemy/ghost.png , 8, 16, sp_ghost ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/bomb/bomb.png , 8, 16, sp_bomb ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/life/life.png , 8, 16, sp_life ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/life/life_dead.png , 8, 16, sp_life_dead ))
 $(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/border_block_4x8.png , 4, 8, sp_border_block ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/block_map_8x16.png , 8, 16, sp_map_block ))
+$(eval $(call IMG2SP, CONVERT, src/assets/img/tiles/exit_map_8x16.png , 8, 16, sp_map_exit ))
 
-$(eval $(call IMG2SP, CONVERT, src/assets/img/menu/menu.png , 100, 100, sp_menu ))
 
 ##
 ## OLD MACROS (For compatibility)

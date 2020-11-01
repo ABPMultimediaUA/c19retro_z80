@@ -1,5 +1,9 @@
 .globl  _sp_player
 .globl  _sp_enemy
+.globl  _sp_ghost
 .globl  _sp_bomb
 .globl  _sp_border_block
-.globl  _sp_menu
+.globl  _sp_life
+.globl  _sp_life_dead
+.globl   _sp_map_block
+.globl   _sp_map_exit
