@@ -227,6 +227,8 @@ _dead_man_game_menu_remove:
 man_game_end::
   call  sys_render_end_menu
 man_game_end_menu_loop:
+  call  cpct_waitVSYNC_asm
+  call  cpct_akp_musicPlay_asm
   call  sys_input_press_restart   ;; Returns in register A if start was pressed
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
