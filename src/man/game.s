@@ -121,7 +121,7 @@ man_game_update::
     ;call  man_entity_update
 
     call  cpct_waitVSYNC_asm   
-    call  sys_render_update 
+    call  sys_render_update   
     
     pop af
     dec a
@@ -151,6 +151,7 @@ man_game_terminate_dead::
   ld    a,  e_l(ix)
   or    a
   jr    z, _dead_man_game_wait_restart
+  ;ld    e_l(ix), #3
 
 _dead_man_game_wait_continue:
   call  sys_input_press_play   ;; Returns in register A if start was pressed (Space)

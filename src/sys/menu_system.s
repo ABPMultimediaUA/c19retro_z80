@@ -434,15 +434,45 @@ sys_menu_thanks::
 ;Input: A lifes
 sys_menu_num_lifes::
   push  af
-  ld    b, a 
-  ld    a, #3
-  sub   b   ; a = 3 - alive hearts = dead hearts
-  
   ld    c, #30  ; x coordinate
   ld    b, #70  ; y coordinate
+
+_alive_hearts_loop:
+  or    a 
+  jr    z, _dead_hearts_start   
+  dec   a
+  push  af
+  
+  push  bc
+  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
+  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
+
+  ; future c(x) += a
+  pop   bc
+  ld    a, #7
+  add   c 
+  ld    c, a
+  push  bc
+  ;;  Draw sprite
+  ex    de, hl                      ;; DE = Destination video memory pointer
+  ld    hl, #_sp_life           ;; Source Sprite Pointer (array with pixel data)
+  ld    c, #4                  ;; Sprite width
+  ld    b, #16                  ;; Sprite height
+  call  cpct_drawSprite_asm 
+
+  pop   bc
+  pop   af
+  jr    _alive_hearts_loop
+
+_dead_hearts_start:
+  pop   af
+  ld    l, a 
+  ld    a, #3
+  sub   l   ; a = 3 - alive hearts = dead hearts
+
 _dead_hearts:
   or    a 
-  jr    z, _alive_hearts   ; jr if a == 0
+  ret   z   ; jr if a == 0
   dec   a
   push  af
   
@@ -467,34 +497,6 @@ _dead_hearts:
   pop   af
   jr    _dead_hearts
 
-_alive_hearts:
-  pop   af  ; a = alive hearts
-_alive_hearts_loop:
-  or    a 
-  ret   z   
-  dec   a
-  push  af
-  
-  push  bc
-  ld    de, #CPCT_VMEM_START_ASM    ;; DE = Pointer to start of the screen
-  call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
-
-  ; future c(x) += a
-  pop   bc
-  ld    a, #7
-  add   c 
-  ld    c, a
-  push  bc
-  ;;  Draw sprite
-  ex    de, hl                      ;; DE = Destination video memory pointer
-  ld    hl, #_sp_life           ;; Source Sprite Pointer (array with pixel data)
-  ld    c, #4                  ;; Sprite width
-  ld    b, #16                  ;; Sprite height
-  call  cpct_drawSprite_asm 
-
-  pop   bc
-  pop   af
-  jr    _alive_hearts_loop
   ret
 
 
