@@ -10,6 +10,7 @@
 .include "render_system.h.s"
 .include "menu_system.h.s"
 
+color_map=0x0F
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -198,7 +199,7 @@ sys_render_one_default_block::
 
   ex    de, hl                      ;; DE = Destination video memory pointer
   ;ld    hl, #_sp_floor_block          ;; Source Sprite Pointer (array with pixel data)
-  ld    a, #0x33  ;green
+  ld    a, #color_map  ;green
   ld    c, #4                 ;; Sprite width
   ld    b, #16            ;; Sprite height
   call  cpct_drawSolidBox_asm 
@@ -237,7 +238,7 @@ _row:
       jr    _next_block
 
     _draw_default_box:
-      ld    a, #0x33  
+      ld    a, #color_map 
       jr    _end_define_color_box
     _draw_exit_box:
       ld    hl, #_sp_map_exit          ;; Source Sprite Pointer (array with pixel data)
@@ -393,7 +394,7 @@ sys_render_update::
 sys_render_remove_entity::
   ld    e, e_sp_ptr_0(ix)          
   ld    d, e_sp_ptr_1(ix)           ;; Destination video memory pointer
-  ld    a, #0x33  ;;0xFF rojo
+  ld    a, #color_map  ;;0xFF rojo
   ;;TODO sprite del suelo (default)
   ld    c, e_w(ix)                  ;; Sprite width
   ld    b, e_h(ix)                  ;; Sprite height

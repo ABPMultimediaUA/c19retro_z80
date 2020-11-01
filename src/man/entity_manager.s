@@ -28,6 +28,7 @@ _enemy_array:
 enemies_map1::
   .db 1
   DefineEntity alive_type,  8,  5,   4,  0,   40,  0,   no_ghost  
+  ; DefineEntity alive_type,  6,  1,   1,  4,  15, 15,   ghost
 
 enemies_map2::
   .db 2
