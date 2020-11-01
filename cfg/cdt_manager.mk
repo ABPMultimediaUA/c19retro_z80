@@ -25,6 +25,7 @@
 
 ## Set the name of your main game file in the CDT here
 $(eval $(call CDTMAN, SET_FILENAME, Cell Block))
+$(eval $(call CDTMAN, GEN_MINILOADER, src/assets/img/loadscreen/loadscreenv2.png))
 
 ###############################################################################
 ##                    CASSETE FILE MANAGER HELP INDEX                        ##
