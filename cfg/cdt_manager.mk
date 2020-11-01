@@ -30,7 +30,7 @@
 # $(eval $(call CDTMAN, SET_FILENAME, Cell Block))
 # $(eval $(call CDTMAN, GEN_MINILOADER, src/assets/img/loadscreen/loadscreenv2.png))
 
-SCR_PAL = 0 1 2 3 6 9 11 12 13 16 18 19 20 21 22 26                                      ##
+SCR_PAL = 0 1 2 3 6 9 11 24 13 16 18 19 20 21 22 26
 # SCR_PAL= 0 1 3 4 5 7 8 11 12 13 16 17 26
 $(eval $(call CDTMAN, SET_FILENAME, Cell Block))
 $(eval $(call CDTMAN, SET_MINILOAD_MODE       , 0               ))        ##

@@ -93,10 +93,10 @@ A_NotPressed:
   jr    z, Esc_NotPressed
 Esc_Pressed:
   call  man_game_menu
-  call  man_entity_init
-  call  sys_render_init
+  ;call  man_entity_init
+  ; call  sys_render_init
   call  sys_render_map  
-  call  sys_physics_init
+  ; call  sys_physics_init
   
 Esc_NotPressed:
   ret

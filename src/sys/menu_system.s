@@ -92,7 +92,7 @@ sys_menu_game_name::
   call  cpct_getScreenPtr_asm       ;; Calculate video memory location and return it in HL
 
   ex    de, hl
-  ld    a, #0x3C
+  ld    a, #0x0C
   ld    c, #60                      ;; Sprite width
   ld    b, #36                      ;; Sprite height
   call  cpct_drawSolidBox_asm
@@ -106,8 +106,8 @@ sys_menu_game_name::
   
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
-  ld    h, #06           
-  ld    l, #01
+  ld    h, #02          
+  ld    l, #07
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -135,7 +135,7 @@ sys_menu_move_keys::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -153,7 +153,7 @@ sys_menu_move_keys::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -171,7 +171,7 @@ sys_menu_move_keys::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -189,7 +189,7 @@ sys_menu_move_keys::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -218,7 +218,7 @@ sys_menu_restart_key::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -245,7 +245,7 @@ sys_menu_play_again_key::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #02
+  ld    l, #11
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -272,7 +272,7 @@ sys_menu_play_key::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #02
+  ld    l, #11
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -299,7 +299,7 @@ sys_menu_pause_key::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -344,7 +344,7 @@ sys_menu_authors::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00          
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -362,7 +362,7 @@ sys_menu_authors::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
@@ -380,7 +380,7 @@ sys_menu_authors::
   ;;  Draw sprite
   push  hl                      ;; DE = Destination video memory pointer
   ld    h, #00           
-  ld    l, #04
+  ld    l, #15
   call  cpct_setDrawCharM0_asm  
   pop   hl
 
