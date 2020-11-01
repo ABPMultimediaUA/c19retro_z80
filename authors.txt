@@ -13,7 +13,7 @@ CELL BLOCK
 Authors
 -------
 Code & Graphics: Anton Chernysh / Carlos Eduardo Arismendi Sánchez
-Loading screen: Sergio Cortes Espinosa
+Loading screen & Music: Sergio Cortes Espinosa
 
 
 Third Party source code used
