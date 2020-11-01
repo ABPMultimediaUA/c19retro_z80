@@ -64,6 +64,9 @@
 ;; symbols for functions you do not use.
 ;;
 
+.globl _song_intro
+.globl _song_ingame
+
 ;Input a
 repeat_a::
    push af
@@ -86,10 +89,16 @@ _main::
    cpctm_setBorder_asm #HW_BLACK
    call  sys_render_init_config
    
+   ld    de, #_song_intro
+   call  cpct_akp_musicInit_asm 
    call  man_game_menu
-   call  man_game_init   
+   call  man_game_init
+   ld    de, #_song_ingame
+   call  cpct_akp_musicInit_asm 
 ;; Loop forever
 loop:
+   call  cpct_waitVSYNC_asm
+   call  cpct_akp_musicPlay_asm
    call  man_game_update
 
    jr    loop   

@@ -33,7 +33,8 @@
 #$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) { yes, no       }
 #$(eval $(call AKS2DATA, SET_EXTRAPAR ,      )) 
 # Conversion
-#$(eval $(call AKS2DATA, CONVERT      , music.aks , array , mem_address ))
+$(eval $(call AKS2DATA, CONVERT, src/assets/music/ingame.aks , song_ingame , 0x3C00))
+$(eval $(call AKS2DATA, CONVERT, src/assets/music/intro.aks , song_intro , 0x3C83))
 
 
 

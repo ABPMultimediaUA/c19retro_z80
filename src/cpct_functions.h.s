@@ -54,3 +54,8 @@
 .globl  Key_R
 .globl  Key_Space
 .globl  Key_Esc
+
+
+;; Music functions
+.globl  cpct_akp_musicInit_asm
+.globl  cpct_akp_musicPlay_asm

@@ -68,6 +68,8 @@ man_game_menu::
   call  sys_render_menu
 
 man_game_menu_loop:
+  call  cpct_waitVSYNC_asm
+  call  cpct_akp_musicPlay_asm
   call  sys_input_press_play   ;; Returns in register A if start was pressed
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
@@ -176,6 +178,8 @@ man_game_terminate_dead::
   ;ld    e_l(ix), #3
 
 _dead_man_game_wait_continue:
+  call  cpct_waitVSYNC_asm
+  call  cpct_akp_musicPlay_asm
   call  sys_input_press_play   ;; Returns in register A if start was pressed (Space)
 
   or    a                       
