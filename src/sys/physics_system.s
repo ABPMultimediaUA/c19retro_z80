@@ -43,7 +43,7 @@ sys_physics_update_entity::
   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
   ld    a, e_vx(ix)
   ld    b, e_vy(ix)
-  or    b 
+  add   b 
   ret   z
   
   ld    a, e_x(ix)
@@ -53,8 +53,8 @@ sys_physics_update_entity::
 
   ;; Check is new X coordinate is greater than min allowed
   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-  cp    #min_map_x_coord_valid
-  jr    c, check_y
+  cp    #min_map_x_coord_valid  
+  ret   c
 
   ;; Calculate max X coordinate where an entity could be
   ld    a, #max_map_x_coord_valid
@@ -63,7 +63,7 @@ sys_physics_update_entity::
   ;; Check is new X coordinate is smaller than max allowed
   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
   cp    b
-  jr    c, check_y
+  ret   c
 
 
   ld    a, e_vx(ix)
@@ -96,9 +96,13 @@ check_y:
 
   ;; Check is new Y coordinate is greater than min allowed
   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-  cp    #min_map_y_coord_valid
-  ret   c
+  cp    #min_map_y_coord_valid  
+  jr    nc, check_max_map_y
+  
+  ld    e_vy(ix), #0
+  jr    end_update_y
 
+check_max_map_y:
   ;; Calculate max X coordinate where an entity could be
   ld    a, #max_map_y_coord_valid
   sub   e_h(ix)  
@@ -106,8 +110,11 @@ check_y:
   ;; Check is new Y coordinate is smaller than max allowed
   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
   cp    b
-  ret   c
+  jr    nc, update_y_ok
+  ld    e_vy(ix), #0
+  jr    end_update_y  
 
+update_y_ok:
   ld    a, e_vy(ix)
   and   a 
   jr    z, end_update_y ; vy = 0

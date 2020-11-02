@@ -75,7 +75,7 @@ sys_input_update::
   jr    z, O_NotPressed
 O_Pressed:
   ld    e_vx(ix), #move_left
-  ret
+  jr    P_NotPressed
 O_NotPressed:
 
   ld    hl, #Key_P
@@ -83,7 +83,7 @@ O_NotPressed:
   jr    z, P_NotPressed
 P_Pressed:
   ld    e_vx(ix), #move_right
-  ret
+    
 P_NotPressed:
 
   ld    hl, #Key_Q
