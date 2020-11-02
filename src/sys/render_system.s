@@ -34,6 +34,9 @@
 
 color_map=0x0F
 
+_ghost_ptr:
+  .dw 0x0000
+
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
@@ -141,38 +144,64 @@ sys_render_draw_enemy::
 ;;  Render enemies and update their sp_ptr
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
-sys_render_enemies::
-  enemy_ptr = .+2
-  ld    ix, #0x0000
+sys_render_enemies::  
   enemy_num = .+1
-  ld     a, #0
-  render_enemies_loop:
-    push  af
+  ld    a, #0  
+  
+  push  af
 
-    ld    a, e_ghost(ix)
-    xor   #ghost
-    jr    z,   _draw_ghost
+  ld    ix, (_ghost_ptr)
+  
+  ld    a, e_type(ix)
+  cp    #move_type
+  jr    nz, _render_normal_enemies
+
+  ld    a, e_ghost(ix)
+  xor   #ghost
+  jr    nz, _render_normal_enemies  
+  call  sys_render_remove_ghost   
+ 
+  pop   af
+  dec   a 
+  jr    z, draw_ghost
+  push  af
+  ld    bc, #sizeof_e
+  add   ix, bc
+
+_render_normal_enemies:
+  pop   af
+
+  render_enemies_loop:
+    push  af    
     
     ld    a, e_type(ix)
     cp    #move_type
-    jr    nz,   _end_draw_ghost
+    jr    nz, _render_next_enemy
     
     call  sys_render_remove_entity
-    call  sys_render_draw_enemy      
-    jr    _end_draw_ghost
+    call  sys_render_draw_enemy          
 
-    _draw_ghost:
-    call  sys_render_remove_ghost
-    call  sys_render_draw_ghost
-    _end_draw_ghost:
+    _render_next_enemy:
     ld    e_type(ix), #alive_type
-    ld   bc, #sizeof_e
-    add  ix, bc
+    ld    bc, #sizeof_e
+    add   ix, bc
 
     pop   af
     dec   a
-    ret   z
+    jr    z, draw_ghost
     jr    render_enemies_loop
+
+  draw_ghost:
+    ld    ix, (_ghost_ptr)
+    ld    a, e_type(ix)
+    cp    #move_type
+    ret   nz
+
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    ret   nz
+    call  sys_render_draw_ghost
+    ld    e_type(ix), #alive_type
     ret
 
 sys_render_remove_ghosts::
@@ -374,9 +403,9 @@ sys_render_init::
   ld    (player_ptr), ix
 
   call  man_entity_get_enemy_array
-  ld    (enemy_ptr), ix
+  ld    (_ghost_ptr), ix  
   ld    (enemy_ptr_ghost), ix
-  ld    (enemy_ptr_remove_ghosts), ix
+  ld    (enemy_ptr_remove_ghosts), ix  
   ld    (enemy_num), a  
   ld    (enemy_num_ghost), a
   ld    (enemy_num_remove_ghosts), a 
