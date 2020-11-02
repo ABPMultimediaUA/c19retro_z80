@@ -62,10 +62,10 @@ enemies_map3::
   .db 5
   DefineEntity alive_type,  3,  8,   0, 16,   0, 25,   no_ghost
   
-  DefineEntity alive_type,  9,  2,   0, 16,   0, 11,   no_ghost
-  DefineEntity alive_type, 12,  4,   0, 16,   0, 11,   no_ghost
-  DefineEntity alive_type, 16,  8,   4,  0,  20,  0,   no_ghost
-  DefineEntity alive_type, 16, 10,   4,  0,  25,  0,   no_ghost  
+  DefineEntity alive_type,  9,  2,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type, 12,  4,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type, 16,  8,   4,  0,  25,  0,   no_ghost
+  DefineEntity alive_type, 16, 10,   4,  0,  34,  0,   no_ghost  
 
 
 enemies_map4::
@@ -79,16 +79,16 @@ enemies_map5::
   DefineEntity alive_type,  9,  9,   4,  0,   9,  0,   no_ghost  
 
 enemies_map6::
-  .db 5
-  DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
+  .db 7
+  DefineEntity alive_type,  0, 10,   1,  4,  15, 15,   ghost
 
-  DefineEntity alive_type,  2,  8,   4,  0,  10,  0,   no_ghost
-  DefineEntity alive_type, 12,  1,   0, 16,   0, 15,   no_ghost  
-  ;DefineEntity alive_type,  0,  2,   4,  0,  12,  0,   no_ghost  
+  DefineEntity alive_type,  6,  4,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  7,  5,   4,  0,  17,  0,   no_ghost
+  DefineEntity alive_type, 11,  5,   4,  0,  17,  0,   no_ghost
 
-  DefineEntity alive_type, 11,  6,   0, 16,   0, 10,   no_ghost  
-  DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
-
+  DefineEntity alive_type, 17,  7,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type,  2,  9,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  6, 10,   0, 16,   0,  7,   no_ghost  
 
 enemies_map7::
   .db 6
@@ -101,18 +101,16 @@ enemies_map7::
   DefineEntity alive_type, 18,  6,   4,  0,   6,  0,   no_ghost
   DefineEntity alive_type, 14,  8,   4,  0,  10,  0,   no_ghost  
 
-
 enemies_map8::
-  .db 7
-  DefineEntity alive_type,  0, 10,   1,  4,  15, 15,   ghost
+  .db 5
+  DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
 
-  DefineEntity alive_type,  6,  4,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type,  7,  5,   4,  0,  17,  0,   no_ghost
-  DefineEntity alive_type, 11,  5,   4,  0,  17,  0,   no_ghost
+  DefineEntity alive_type,  2,  8,   4,  0,  10,  0,   no_ghost
+  DefineEntity alive_type, 12,  1,   0, 16,   0, 15,   no_ghost  
+  ;DefineEntity alive_type,  0,  2,   4,  0,  12,  0,   no_ghost  
 
-  DefineEntity alive_type, 17,  7,   0, 16,   0, 12,   no_ghost
-  DefineEntity alive_type,  2,  9,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type,  6, 10,   0, 16,   0,  7,   no_ghost  
+  DefineEntity alive_type, 11,  6,   0, 16,   0, 10,   no_ghost  
+  DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
 
 
 ;;########################################################
