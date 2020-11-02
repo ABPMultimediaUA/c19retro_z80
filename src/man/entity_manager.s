@@ -112,7 +112,23 @@ enemies_map8::
   DefineEntity alive_type, 11,  6,   0, 16,   0, 10,   no_ghost  
   DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
 
+enemies_map9::
+  .db 6
+  DefineEntity alive_type,  0,  2,   4,  0,  30,  0,   no_ghost 
+  DefineEntity alive_type,  1,  8,   4,  0,  35,  0,   no_ghost 
+  DefineEntity alive_type,  14, 5,   4,  0,  30,  0,   no_ghost 
+  DefineEntity alive_type,  3,  2,   0,  16,  0,  35,   no_ghost 
+  DefineEntity alive_type,  6,  2,   0,  16,  0,  35,   no_ghost 
+  DefineEntity alive_type,  12, 2,   0,  16,  0,  35,   no_ghost 
 
+enemies_map10::
+  .db 6
+  DefineEntity alive_type,  3,  2,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type,  5,  4,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type,  7,  2,   0, 16,    0, 50,   no_ghost
+  DefineEntity alive_type, 11,  2,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type, 18,  4,   4,  0,   25,  0,   no_ghost
+  DefineEntity alive_type, 12,  8,   4,  0,   50,  0,   no_ghost
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
@@ -282,6 +298,14 @@ man_entity_init_enemies::
   xor    #8
   jr    z, lvl_8
 
+  ld    a, b
+  xor    #9
+  jr    z, lvl_9
+
+   ld    a, b
+  xor    #10
+  jr    z, lvl_10
+
   ret
 lvl_1:
   ld    hl, #enemies_map1
@@ -319,5 +343,15 @@ lvl_7:
 
 lvl_8:
   ld    hl, #enemies_map8
+  ld    (_enemy_array), hl 
+  ret
+
+lvl_9:
+  ld    hl, #enemies_map9
+  ld    (_enemy_array), hl 
+  ret
+
+lvl_10:
+  ld    hl, #enemies_map10
   ld    (_enemy_array), hl 
   ret
