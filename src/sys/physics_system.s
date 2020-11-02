@@ -41,7 +41,11 @@
 ;;  INPUT:  ix  address memory where entity starts
 sys_physics_update_entity::
   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
-
+  ld    a, e_vx(ix)
+  ld    b, e_vy(ix)
+  or    b 
+  ret   z
+  
   ld    a, e_x(ix)
   add   e_vx(ix)
   ;add   #2
@@ -68,11 +72,18 @@ sys_physics_update_entity::
   sub   #4
   jr    z, inc_x ;if a != 4 (moved left)
 
+_dec_player_x_cell:
   dec   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  sub   #1
+  ld    e_map_index(ix), a
   jr    update_x
 
 inc_x:
   inc   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  add   #1
+  ld    e_map_index(ix), a
 
 update_x:
   ld    e_x(ix), b    ;; Update X coordinate
@@ -105,10 +116,16 @@ check_y:
   jr    z, inc_y ;;if a != 16 (moved up)
 
   dec   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  sub   #map_width_cell
+  ld    e_map_index(ix), a
   jr    update_y
 
 inc_y:
   inc   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  add   #map_width_cell
+  ld    e_map_index(ix), a
 
 update_y:
   ld    e_y(ix), b    ;; Update Y coordinate
@@ -117,54 +134,57 @@ end_update_y:
 
   map_ptr = .+2
   ld  iy, #0x0000
-  ld  c,  e_ycell(ix) ;future row cell 
-  ;ld  b,  e_xcell(ix) ;future col cell
-  ld  b,  #map_width_cell ;cells in a row
+  ; ld  c,  e_ycell(ix) ;future row cell 
+  ; ;ld  b,  e_xcell(ix) ;future col cell
+  ; ld  b,  #map_width_cell ;cells in a row
   
 
 ; ; loop for iy += y*map_width_cell
 ; ;----------------------
-ld  a,  c
-_loop_row:
+; ld  a,  c
+; _loop_row:
 
-  and  a
-  jr  z, _endloop_row ;if row == 0
-  ld  d, a
+;   and  a
+;   jr  z, _endloop_row ;if row == 0
+;   ld  d, a
   
-  _start_loop_col:
-  ld  a, b 
-  _loop_col:
-    or  a
-    jr  z, _endloop_col ; if col == 0
-    dec a
+;   _start_loop_col:
+;   ld  a, b 
+;   _loop_col:
+;     or  a
+;     jr  z, _endloop_col ; if col == 0
+;     dec a
         
-    inc   iy  ;,sp
+;     inc   iy  ;,sp
 
-    jr  _loop_col 
-  _endloop_col:
+;     jr  _loop_col 
+;   _endloop_col:
 
-  ld  a, d
-  dec a     ; row --
-  jr  _loop_row
-_endloop_row:
+;   ld  a, d
+;   dec a     ; row --
+;   jr  _loop_row
+; _endloop_row:
 
-; iy += xcell
-_for_init_sum_iy_xcell:
-  ld  a, e_xcell(ix) 
-_for_sum_iy_xcell:
-  or  a
-  jr  z, _endfor_sum_iy_xcell ; if a == 0
-  dec a
+; ; iy += xcell
+; _for_init_sum_iy_xcell:
+;   ld  a, e_xcell(ix) 
+; _for_sum_iy_xcell:
+;   or  a
+;   jr  z, _endfor_sum_iy_xcell ; if a == 0
+;   dec a
       
-  inc   iy
+;   inc   iy
 
-  jr  _for_sum_iy_xcell 
-_endfor_sum_iy_xcell:
+;   jr  _for_sum_iy_xcell 
+; _endfor_sum_iy_xcell:
 
-  ;now iy is pointer to future cell
-  ld    a, b_type(iy) ;;ld type of block
-  xor   #default_btype
-  jr   z, _end_update ; the cell is equal to default z = 0 (xor -> 1 if different)
+;   ;now iy is pointer to future cell
+;   ld    a, b_type(iy) ;;ld type of block
+;   xor   #default_btype
+;   jr   z, _end_update ; the cell is equal to default z = 0 (xor -> 1 if different)
+  call  sys_colision_entity_map ; ret a=1 if colision
+  or    a 
+  ret   z
 
   ld    a, b_type(iy) ;;ld type of block
   xor   #exit_btype
@@ -179,10 +199,16 @@ _endfor_sum_iy_xcell:
   jr    z, dec_xcell ;if a != 4 (moved left)
 
   inc   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  add   #1
+  ld    e_map_index(ix), a
   jr    reupdate_x
 
 dec_xcell:
   dec   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  sub   #1
+  ld    e_map_index(ix), a
 reupdate_x:
   ld    a, e_x(ix)
   sub   e_vx(ix)
@@ -198,10 +224,16 @@ update_ycell:
   jr    z, dec_ycell ;;if a != 16 (moved up)
 
   inc   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  add   #map_width_cell
+  ld    e_map_index(ix), a
   jr    reupdate_y
 
 dec_ycell:
   dec   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  sub   #map_width_cell
+  ld    e_map_index(ix), a
 
 reupdate_y:
   ld    a, e_y(ix)
@@ -217,11 +249,11 @@ _go_next_lvl:
 
 sys_physics_update_enemy::
   ptr_player_update_enemy = .+2
-  ld    iy, #0000
+  ld    iy, #0x0000
 
   call  sys_colision_entity_entity ; a=1 if colision  
   and   a 
-  jr    nz, player_terminate_dead
+  jp    nz, player_terminate_dead
 
   ld    a, e_x(ix)
   add   e_vx(ix)
@@ -247,11 +279,18 @@ sys_physics_update_enemy::
   sub   #4
   jr    z, inc_x_enemy ;if a != 4 (moved left)
 
+_dec_x_cell:
   dec   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  sub   #1
+  ld    e_map_index(ix), a
   jr    update_x_enemy
 
 inc_x_enemy:
   inc   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  add   #1
+  ld    e_map_index(ix), a
 
 update_x_enemy:
   ld    e_x(ix), b    ;; Update X coordinate
@@ -291,11 +330,18 @@ _enemy_check_y:
   sub   #16
   jr    z, inc_y_enemy ;;if a != 16 (moved up)
 
+dec_y_enemy:
   dec   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  sub   #map_width_cell
+  ld    e_map_index(ix), a
   jr    update_y_enemy
 
 inc_y_enemy:
   inc   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  add   #map_width_cell
+  ld    e_map_index(ix), a
 
 update_y_enemy:
   ld    e_y(ix), b    ;; Update Y coordinate
@@ -316,10 +362,6 @@ end_update_y_enemy:
   and a 
   jr  z, _enemy_check_colision_map
 
-  ; enemy collided player
-
-  ; call  man_game_terminate
-  ; call  man_game_init
 player_terminate_dead:
   call  man_game_terminate_dead
   ld    a, #0
@@ -328,54 +370,58 @@ player_terminate_dead:
 _enemy_check_colision_map:
   map_ptr_colision = .+2
   ld  iy, #0x0000
-  ld  c,  e_ycell(ix) ;future row cell 
-  ;ld  b,  e_xcell(ix) ;future col cell
-  ld  b,  #map_width_cell ;cells in a row
+  ; ld  c,  e_ycell(ix) ;future row cell 
+  ; ;ld  b,  e_xcell(ix) ;future col cell
+  ; ld  b,  #map_width_cell ;cells in a row
   
 
 ; ; loop for iy += y*map_width_cell
 ; ;----------------------
-ld  a,  c
-_enemy_loop_row:
+; ld  a,  c
+; _enemy_loop_row:
 
-  and  a
-  jr  z, _enemy_endloop_row ;if row == 0
-  ld  d, a
+;   and  a
+;   jr  z, _enemy_endloop_row ;if row == 0
+;   ld  d, a
   
-  _enemy_start_loop_col:
-  ld  a, b 
-  _enemy_loop_col:
-    or  a
-    jr  z, _enemy_endloop_col ; if col == 0
-    dec a
+;   _enemy_start_loop_col:
+;   ld  a, b 
+;   _enemy_loop_col:
+;     or  a
+;     jr  z, _enemy_endloop_col ; if col == 0
+;     dec a
         
-    inc   iy  ;,sp
+;     inc   iy  ;,sp
 
-    jr  _enemy_loop_col 
-  _enemy_endloop_col:
+;     jr  _enemy_loop_col 
+;   _enemy_endloop_col:
 
-  ld  a, d
-  dec a     ; row --
-  jr  _enemy_loop_row
-_enemy_endloop_row:
+;   ld  a, d
+;   dec a     ; row --
+;   jr  _enemy_loop_row
+; _enemy_endloop_row:
 
 ; iy += xcell
-_enemy_for_init_sum_iy_xcell:
-  ld  a, e_xcell(ix) 
-_enemy_for_sum_iy_xcell:
-  or  a
-  jr  z, _enemy_endfor_sum_iy_xcell ; if a == 0
-  dec a
+; _enemy_for_init_sum_iy_xcell:
+;   ld  a, e_xcell(ix) 
+; _enemy_for_sum_iy_xcell:
+;   or  a
+;   jr  z, _enemy_endfor_sum_iy_xcell ; if a == 0
+;   dec a
       
-  inc   iy
+;   inc   iy
 
-  jr  _enemy_for_sum_iy_xcell 
-_enemy_endfor_sum_iy_xcell:
+;   jr  _enemy_for_sum_iy_xcell 
+; _enemy_endfor_sum_iy_xcell:
 
   ;now iy is pointer to future cell
-  ld    a, b_type(iy) ;;ld type of block
-  xor   #default_btype
-  jr   z, _enemy_end_update ; the cell is equal to default z = 0 (xor -> 1 if different)
+  ; ld    a, b_type(iy) ;;ld type of block
+  ; xor   #default_btype
+  ; jr   z, _enemy_end_update ; the cell is equal to default z = 0 (xor -> 1 if different)
+
+  call  sys_colision_entity_map ; ret a=1 if colision
+  or    a 
+  ret   z
 
 ;; Rehacer el cambio de posicion x y xcell
   ld    a, e_vx(ix)
@@ -385,10 +431,16 @@ _enemy_endfor_sum_iy_xcell:
   jr    z, _enemy_dec_xcell ;if a != 4 (moved left)
 
   inc   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  add   #1
+  ld    e_map_index(ix), a
   jr    _enemy_reupdate_x
 
 _enemy_dec_xcell:
   dec   e_xcell(ix)
+  ld    a, e_map_index(ix)
+  sub   #1
+  ld    e_map_index(ix), a
 _enemy_reupdate_x:
   ld    a, e_x(ix)
   sub   e_vx(ix)
@@ -409,10 +461,16 @@ _enemy_update_ycell:
   jr    z, _enemy_dec_ycell ;;if a != 16 (moved up)
 
   inc   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  add   #map_width_cell
+  ld    e_map_index(ix), a
   jr    _enemy_reupdate_y
 
 _enemy_dec_ycell:
   dec   e_ycell(ix)
+  ld    a, e_map_index(ix)
+  sub   #map_width_cell
+  ld    e_map_index(ix), a
 
 _enemy_reupdate_y:
   ld    a, e_y(ix)

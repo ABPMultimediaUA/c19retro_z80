@@ -49,6 +49,7 @@
     .dw #CPCT_VMEM_START_ASM+402
     .db max_lifes
     .db _ghost
+    .db _ycell*19+_xcell
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -64,6 +65,7 @@
     .dw #CPCT_VMEM_START_ASM+402
     .db max_lifes
     .db 0x00        ;ghost
+    .db 0x00        ;_map_index
     .rept max_bombs 
         DefineBombDefault
     .endm
@@ -121,7 +123,8 @@ e_sp_ptr_0 = 13
 e_sp_ptr_1 = 14
 e_l = 15
 e_ghost = 16
-sizeof_e_solo = 17
+e_map_index = 17
+sizeof_e_solo = 18
 sizeof_e = sizeof_e_solo + (sizeof_b * max_bombs)
 max_entities = 11
 

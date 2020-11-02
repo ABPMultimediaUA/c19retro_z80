@@ -194,6 +194,7 @@ _dead_man_game_wait_continue:
   ld    e_sp_ptr_0(ix), h
   ld    e_sp_ptr_1(ix), l
   
+  ld    e_map_index(ix), #0
 
   call  sys_render_remove_ghosts
   call  sys_physics_init_ghosts

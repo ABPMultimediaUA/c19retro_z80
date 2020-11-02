@@ -98,3 +98,22 @@ _colision:
 _no_colision:
   ld  a, #0
   ret
+
+; Input ix, iy {entity, map}
+; Return a { 1 if colision, 0 if not}
+sys_colision_entity_map::
+  
+  ld  b, #0
+  ld  c, e_map_index(ix)
+  add iy, bc
+
+  ld    a, b_type(iy) ;;ld type of block
+  xor   #default_btype
+  jr   z, _no_map_colision ; the cell is equal to default z = 0 (xor -> 1 if different)
+
+_map_colision:
+  ld  a, #1
+  ret
+_no_map_colision:
+  ld  a, #0
+  ret

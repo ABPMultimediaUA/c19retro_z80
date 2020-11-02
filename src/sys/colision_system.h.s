@@ -22,3 +22,4 @@
 
 .globl sys_colision_ghost_player
 .globl sys_colision_entity_entity
+.globl sys_colision_entity_map

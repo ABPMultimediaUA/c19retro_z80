@@ -171,6 +171,7 @@ man_entity_init_player::
   ld    d, #0     ;; set X velocity
   ld    e, #0     ;; set Y velocity
   call  man_entity_initialize_entity
+  ld    e_map_index(ix), #0
   ret
 
 
@@ -211,6 +212,7 @@ man_entity_next_lvl::
   ld    hl, #CPCT_VMEM_START_ASM+402
   ld    e_sp_ptr_0(ix), h
   ld    e_sp_ptr_1(ix), l
+  ld    e_map_index(ix), #0
 
   ;call  man_entity_init_entities
   ret
