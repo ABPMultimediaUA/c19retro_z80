@@ -5,9 +5,11 @@ CELL BLOCK
 
 Authors
 -------
-Code & Graphics: Anton Chernysh / Carlos Eduardo Arismendi Sánchez
-Loading screen & Music: Sergio Cortes Espinosa
-
+Code & Graphics: 
+    Anton Chernysh: anton_chernysh@outlook.es 
+    Carlos Eduardo Arismendi SÃ¡nchez: carlos.arismendisanchez@gmail.com
+Loading screen & Music: 
+    Sergio Cortes Espinosa: sercotes93@gmail.com
 
 Third Party source code used
 ----------------------------

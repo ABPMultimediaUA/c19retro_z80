@@ -1,17 +1,17 @@
 ; ; ; ; MIT License
-
+; ; ; ; 
 ; ; ; ; Copyright (c) 2020 Carlos Eduardo Arismendi Sánchez / Antón Chernysh / Sergio Cortés Espinosa
-
+; ; ; ; 
 ; ; ; ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; ; ; ; of this software and associated documentation files (the "Software"), to deal
 ; ; ; ; in the Software without restriction, including without limitation the rights
 ; ; ; ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; ; ; ; copies of the Software, and to permit persons to whom the Software is
 ; ; ; ; furnished to do so, subject to the following conditions:
-
+; ; ; ; 
 ; ; ; ; The above copyright notice and this permission notice shall be included in all
 ; ; ; ; copies or substantial portions of the Software.
-
+; ; ; ;
 ; ; ; ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; ; ; ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; ; ; ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +19,19 @@
 ; ; ; ; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 ; ; ; ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ; ; ; ; SOFTWARE.
+
+; ; ; ; ----------------- AUTHORS ------------------
+; ; ; ; Code & Graphics: 
+; ; ; ;     Anton Chernysh: anton_chernysh@outlook.es 
+; ; ; ;     Carlos Eduardo Arismendi Sánchez: carlos.arismendisanchez@gmail.com
+; ; ; ; Loading screen & Music: 
+; ; ; ;     Sergio Cortes Espinosa: sercotes93@gmail.com
+; ; ; ; ---------------------------------------------
+
+; ; ; ; Third Party source code used
+; ; ; ; ----------------------------
+; ; ; ; CPCtelera - owned by ronaldo / (Cheesetea, Fremos, ByteRealms) - GNU Lesser General Public License.
+
 
 ;;
 ;;  RENDER SYSTEM
@@ -33,6 +46,27 @@
 .include "menu_system.h.s"
 
 color_map=0x0F
+
+_PALLETE:
+  .db   HW_BLACK 
+  .db   HW_BLUE 
+  .db   HW_BRIGHT_BLUE
+  .db   HW_RED
+  .db   HW_BRIGHT_RED
+  .db   HW_GREEN
+  .db   HW_SKY_BLUE
+  .db   HW_BRIGHT_YELLOW
+  .db   HW_WHITE
+  .db   HW_PINK
+  .db   HW_BRIGHT_GREEN
+  .db   HW_SEA_GREEN 
+  .db   HW_BRIGHT_CYAN
+  .db   HW_LIME
+  .db   HW_PASTEL_GREEN
+  .db   HW_BRIGHT_WHITE
+
+_ghost_ptr:
+  .dw 0x0000
 
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
@@ -141,38 +175,64 @@ sys_render_draw_enemy::
 ;;  Render enemies and update their sp_ptr
 ;;  DESTROYED:
 ;;    A,DE,BC,HL,IX
-sys_render_enemies::
-  enemy_ptr = .+2
-  ld    ix, #0x0000
+sys_render_enemies::  
   enemy_num = .+1
-  ld     a, #0
-  render_enemies_loop:
-    push  af
+  ld    a, #0  
+  
+  push  af
 
-    ld    a, e_ghost(ix)
-    xor   #ghost
-    jr    z,   _draw_ghost
+  ld    ix, (_ghost_ptr)
+  
+  ld    a, e_type(ix)
+  cp    #move_type
+  jr    nz, _render_normal_enemies
+
+  ld    a, e_ghost(ix)
+  xor   #ghost
+  jr    nz, _render_normal_enemies  
+  call  sys_render_remove_ghost   
+ 
+  pop   af
+  dec   a 
+  jr    z, draw_ghost
+  push  af
+  ld    bc, #sizeof_e
+  add   ix, bc
+
+_render_normal_enemies:
+  pop   af
+
+  render_enemies_loop:
+    push  af    
     
     ld    a, e_type(ix)
     cp    #move_type
-    jr    nz,   _end_draw_ghost
+    jr    nz, _render_next_enemy
     
     call  sys_render_remove_entity
-    call  sys_render_draw_enemy      
-    jr    _end_draw_ghost
+    call  sys_render_draw_enemy          
 
-    _draw_ghost:
-    call  sys_render_remove_ghost
-    call  sys_render_draw_ghost
-    _end_draw_ghost:
+    _render_next_enemy:
     ld    e_type(ix), #alive_type
-    ld   bc, #sizeof_e
-    add  ix, bc
+    ld    bc, #sizeof_e
+    add   ix, bc
 
     pop   af
     dec   a
-    ret   z
+    jr    z, draw_ghost
     jr    render_enemies_loop
+
+  draw_ghost:
+    ld    ix, (_ghost_ptr)
+    ld    a, e_type(ix)
+    cp    #move_type
+    ret   nz
+
+    ld    a, e_ghost(ix)
+    xor   #ghost
+    ret   nz
+    call  sys_render_draw_ghost
+    ld    e_type(ix), #alive_type
     ret
 
 sys_render_remove_ghosts::
@@ -329,10 +389,10 @@ sys_render_menu_lifes::
 sys_render_init_config::
   ld    c, #0
   call  cpct_setVideoMode_asm    
-
-  ld    l, #0
-  ld    h, #HW_BLACK
-  call  cpct_setPALColour_asm
+  
+  ld    hl, #_PALLETE
+  ld    de, #16
+  call  cpct_setPalette_asm
 
   ret
 
@@ -374,9 +434,9 @@ sys_render_init::
   ld    (player_ptr), ix
 
   call  man_entity_get_enemy_array
-  ld    (enemy_ptr), ix
+  ld    (_ghost_ptr), ix  
   ld    (enemy_ptr_ghost), ix
-  ld    (enemy_ptr_remove_ghosts), ix
+  ld    (enemy_ptr_remove_ghosts), ix  
   ld    (enemy_num), a  
   ld    (enemy_num_ghost), a
   ld    (enemy_num_remove_ghosts), a 

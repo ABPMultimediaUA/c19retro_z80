@@ -1,17 +1,17 @@
 ; ; ; ; MIT License
-
+; ; ; ; 
 ; ; ; ; Copyright (c) 2020 Carlos Eduardo Arismendi Sánchez / Antón Chernysh / Sergio Cortés Espinosa
-
+; ; ; ; 
 ; ; ; ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; ; ; ; of this software and associated documentation files (the "Software"), to deal
 ; ; ; ; in the Software without restriction, including without limitation the rights
 ; ; ; ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; ; ; ; copies of the Software, and to permit persons to whom the Software is
 ; ; ; ; furnished to do so, subject to the following conditions:
-
+; ; ; ; 
 ; ; ; ; The above copyright notice and this permission notice shall be included in all
 ; ; ; ; copies or substantial portions of the Software.
-
+; ; ; ;
 ; ; ; ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; ; ; ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; ; ; ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +19,18 @@
 ; ; ; ; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 ; ; ; ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ; ; ; ; SOFTWARE.
+
+; ; ; ; ----------------- AUTHORS ------------------
+; ; ; ; Code & Graphics: 
+; ; ; ;     Anton Chernysh: anton_chernysh@outlook.es 
+; ; ; ;     Carlos Eduardo Arismendi Sánchez: carlos.arismendisanchez@gmail.com
+; ; ; ; Loading screen & Music: 
+; ; ; ;     Sergio Cortes Espinosa: sercotes93@gmail.com
+; ; ; ; ---------------------------------------------
+
+; ; ; ; Third Party source code used
+; ; ; ; ----------------------------
+; ; ; ; CPCtelera - owned by ronaldo / (Cheesetea, Fremos, ByteRealms) - GNU Lesser General Public License.
 
 
 ;;
@@ -62,10 +74,10 @@ enemies_map3::
   .db 5
   DefineEntity alive_type,  3,  8,   0, 16,   0, 25,   no_ghost
   
-  DefineEntity alive_type,  9,  2,   0, 16,   0, 11,   no_ghost
-  DefineEntity alive_type, 12,  4,   0, 16,   0, 11,   no_ghost
-  DefineEntity alive_type, 16,  8,   4,  0,  20,  0,   no_ghost
-  DefineEntity alive_type, 16, 10,   4,  0,  25,  0,   no_ghost  
+  DefineEntity alive_type,  9,  2,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type, 12,  4,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type, 16,  8,   4,  0,  25,  0,   no_ghost
+  DefineEntity alive_type, 16, 10,   4,  0,  34,  0,   no_ghost  
 
 
 enemies_map4::
@@ -79,16 +91,16 @@ enemies_map5::
   DefineEntity alive_type,  9,  9,   4,  0,   9,  0,   no_ghost  
 
 enemies_map6::
-  .db 5
-  DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
+  .db 7
+  DefineEntity alive_type,  0, 10,   1,  4,  15, 15,   ghost
 
-  DefineEntity alive_type,  2,  8,   4,  0,  10,  0,   no_ghost
-  DefineEntity alive_type, 12,  1,   0, 16,   0, 15,   no_ghost  
-  ;DefineEntity alive_type,  0,  2,   4,  0,  12,  0,   no_ghost  
+  DefineEntity alive_type,  6,  4,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  7,  5,   4,  0,  17,  0,   no_ghost
+  DefineEntity alive_type, 11,  5,   4,  0,  17,  0,   no_ghost
 
-  DefineEntity alive_type, 11,  6,   0, 16,   0, 10,   no_ghost  
-  DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
-
+  DefineEntity alive_type, 17,  7,   0, 16,   0, 12,   no_ghost
+  DefineEntity alive_type,  2,  9,   0, 16,   0,  7,   no_ghost
+  DefineEntity alive_type,  6, 10,   0, 16,   0,  7,   no_ghost  
 
 enemies_map7::
   .db 6
@@ -101,20 +113,34 @@ enemies_map7::
   DefineEntity alive_type, 18,  6,   4,  0,   6,  0,   no_ghost
   DefineEntity alive_type, 14,  8,   4,  0,  10,  0,   no_ghost  
 
-
 enemies_map8::
-  .db 7
-  DefineEntity alive_type,  0, 10,   1,  4,  15, 15,   ghost
+  .db 5
+  ; DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
 
-  DefineEntity alive_type,  6,  4,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type,  7,  5,   4,  0,  17,  0,   no_ghost
-  DefineEntity alive_type, 11,  5,   4,  0,  17,  0,   no_ghost
+  DefineEntity alive_type,  2,  8,   4,  0,  20,  0,   no_ghost
+  DefineEntity alive_type, 12,  1,   0, 16,   0, 25,   no_ghost  
+  DefineEntity alive_type,  0,  2,   4,  0,  20,  0,   no_ghost  
 
-  DefineEntity alive_type, 17,  7,   0, 16,   0, 12,   no_ghost
-  DefineEntity alive_type,  2,  9,   0, 16,   0,  7,   no_ghost
-  DefineEntity alive_type,  6, 10,   0, 16,   0,  7,   no_ghost  
+  DefineEntity alive_type, 11,  6,   0, 16,   0, 40,   no_ghost  
+  DefineEntity alive_type, 15,  8,   0, 16,   0, 40,   no_ghost
 
+enemies_map9::
+  .db 6
+  DefineEntity alive_type,  0,  2,   4,  0,  30,  0,   no_ghost 
+  DefineEntity alive_type,  1,  8,   4,  0,  35,  0,   no_ghost 
+  DefineEntity alive_type,  14, 5,   4,  0,  30,  0,   no_ghost 
+  DefineEntity alive_type,  3,  2,   0,  16,  0,  35,   no_ghost 
+  DefineEntity alive_type,  6,  2,   0,  16,  0,  35,   no_ghost 
+  DefineEntity alive_type,  12, 2,   0,  16,  0,  35,   no_ghost 
 
+enemies_map10::
+  .db 6
+  DefineEntity alive_type,  3,  2,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type,  5,  4,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type,  7,  2,   0, 16,    0, 50,   no_ghost
+  DefineEntity alive_type, 11,  2,   0, 16,    0, 40,   no_ghost
+  DefineEntity alive_type, 18,  4,   4,  0,   25,  0,   no_ghost
+  DefineEntity alive_type, 12,  8,   4,  0,   50,  0,   no_ghost
 ;;########################################################
 ;;                   PRIVATE FUNCTIONS                   #             
 ;;########################################################
@@ -171,6 +197,7 @@ man_entity_init_player::
   ld    d, #0     ;; set X velocity
   ld    e, #0     ;; set Y velocity
   call  man_entity_initialize_entity
+  ld    e_map_index(ix), #0
   ret
 
 
@@ -211,6 +238,7 @@ man_entity_next_lvl::
   ld    hl, #CPCT_VMEM_START_ASM+402
   ld    e_sp_ptr_0(ix), h
   ld    e_sp_ptr_1(ix), l
+  ld    e_map_index(ix), #0
 
   ;call  man_entity_init_entities
   ret
@@ -282,6 +310,14 @@ man_entity_init_enemies::
   xor    #8
   jr    z, lvl_8
 
+  ld    a, b
+  xor    #9
+  jr    z, lvl_9
+
+   ld    a, b
+  xor    #10
+  jr    z, lvl_10
+
   ret
 lvl_1:
   ld    hl, #enemies_map1
@@ -319,5 +355,15 @@ lvl_7:
 
 lvl_8:
   ld    hl, #enemies_map8
+  ld    (_enemy_array), hl 
+  ret
+
+lvl_9:
+  ld    hl, #enemies_map9
+  ld    (_enemy_array), hl 
+  ret
+
+lvl_10:
+  ld    hl, #enemies_map10
   ld    (_enemy_array), hl 
   ret
