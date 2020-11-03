@@ -28,10 +28,9 @@
 .globl  cpct_getScreenPtr_asm
 .globl  cpct_waitVSYNC_asm
 .globl  cpct_setPALColour_asm
+.globl  cpct_setPalette_asm
 
 .globl  CPCT_VMEM_START_ASM
-.globl  HW_BLACK
-.globl  HW_WHITE
 
 ;; Draw functions
 .globl  cpct_drawSpriteBlended_asm
@@ -59,3 +58,21 @@
 ;; Music functions
 .globl  cpct_akp_musicInit_asm
 .globl  cpct_akp_musicPlay_asm
+
+;; HW COLORS
+.globl  HW_BLACK 
+.globl  HW_BLUE 
+.globl  HW_BRIGHT_BLUE
+.globl  HW_RED
+.globl  HW_BRIGHT_RED
+.globl  HW_GREEN
+.globl  HW_SKY_BLUE
+.globl  HW_BRIGHT_YELLOW
+.globl  HW_WHITE
+.globl  HW_PINK
+.globl  HW_BRIGHT_GREEN
+.globl  HW_SEA_GREEN 
+.globl  HW_BRIGHT_CYAN
+.globl  HW_LIME
+.globl  HW_PASTEL_GREEN
+.globl  HW_BRIGHT_WHITE

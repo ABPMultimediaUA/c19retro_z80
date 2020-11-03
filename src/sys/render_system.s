@@ -34,6 +34,24 @@
 
 color_map=0x0F
 
+_PALLETE:
+  .db   HW_BLACK 
+  .db   HW_BLUE 
+  .db   HW_BRIGHT_BLUE
+  .db   HW_RED
+  .db   HW_BRIGHT_RED
+  .db   HW_GREEN
+  .db   HW_SKY_BLUE
+  .db   HW_BRIGHT_YELLOW
+  .db   HW_WHITE
+  .db   HW_PINK
+  .db   HW_BRIGHT_GREEN
+  .db   HW_SEA_GREEN 
+  .db   HW_BRIGHT_CYAN
+  .db   HW_LIME
+  .db   HW_PASTEL_GREEN
+  .db   HW_BRIGHT_WHITE
+
 _ghost_ptr:
   .dw 0x0000
 
@@ -358,10 +376,10 @@ sys_render_menu_lifes::
 sys_render_init_config::
   ld    c, #0
   call  cpct_setVideoMode_asm    
-
-  ld    l, #0
-  ld    h, #HW_BLACK
-  call  cpct_setPALColour_asm
+  
+  ld    hl, #_PALLETE
+  ld    de, #16
+  call  cpct_setPalette_asm
 
   ret
 
