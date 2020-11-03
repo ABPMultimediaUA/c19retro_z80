@@ -136,7 +136,7 @@ man_game_init_next_lvl::
 man_game_update::
   call  sys_input_update  
   
-  ld  a,  #4
+  ld  a,  #3
   loop_velocity:
     push af
     
