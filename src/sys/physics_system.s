@@ -1,17 +1,17 @@
 ; ; ; ; MIT License
-
+; ; ; ; 
 ; ; ; ; Copyright (c) 2020 Carlos Eduardo Arismendi Sánchez / Antón Chernysh / Sergio Cortés Espinosa
-
+; ; ; ; 
 ; ; ; ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; ; ; ; of this software and associated documentation files (the "Software"), to deal
 ; ; ; ; in the Software without restriction, including without limitation the rights
 ; ; ; ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; ; ; ; copies of the Software, and to permit persons to whom the Software is
 ; ; ; ; furnished to do so, subject to the following conditions:
-
+; ; ; ; 
 ; ; ; ; The above copyright notice and this permission notice shall be included in all
 ; ; ; ; copies or substantial portions of the Software.
-
+; ; ; ;
 ; ; ; ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; ; ; ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; ; ; ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +19,19 @@
 ; ; ; ; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 ; ; ; ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ; ; ; ; SOFTWARE.
+
+; ; ; ; ----------------- AUTHORS ------------------
+; ; ; ; Code & Graphics: 
+; ; ; ;     Anton Chernysh: anton_chernysh@outlook.es 
+; ; ; ;     Carlos Eduardo Arismendi Sánchez: carlos.arismendisanchez@gmail.com
+; ; ; ; Loading screen & Music: 
+; ; ; ;     Sergio Cortes Espinosa: sercotes93@gmail.com
+; ; ; ; ---------------------------------------------
+
+; ; ; ; Third Party source code used
+; ; ; ; ----------------------------
+; ; ; ; CPCtelera - owned by ronaldo / (Cheesetea, Fremos, ByteRealms) - GNU Lesser General Public License.
+
 
 ;;
 ;;  PHYSICS SYSTEM
@@ -43,7 +56,7 @@ sys_physics_update_entity::
   ;; Calculate the X coordinate where the entity should be positioned and stores result in B
   ld    a, e_vx(ix)
   ld    b, e_vy(ix)
-  or    b 
+  add   b 
   ret   z
   
   ld    a, e_x(ix)
@@ -53,8 +66,8 @@ sys_physics_update_entity::
 
   ;; Check is new X coordinate is greater than min allowed
   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-  cp    #min_map_x_coord_valid
-  jr    c, check_y
+  cp    #min_map_x_coord_valid  
+  ret   c
 
   ;; Calculate max X coordinate where an entity could be
   ld    a, #max_map_x_coord_valid
@@ -63,7 +76,7 @@ sys_physics_update_entity::
   ;; Check is new X coordinate is smaller than max allowed
   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
   cp    b
-  jr    c, check_y
+  ret   c
 
 
   ld    a, e_vx(ix)
@@ -96,9 +109,13 @@ check_y:
 
   ;; Check is new Y coordinate is greater than min allowed
   ;; IF new(A)<min(B) THEN C-flag=1, new position is invalid, position is not updated
-  cp    #min_map_y_coord_valid
-  ret   c
+  cp    #min_map_y_coord_valid  
+  jr    nc, check_max_map_y
+  
+  ld    e_vy(ix), #0
+  jr    end_update_y
 
+check_max_map_y:
   ;; Calculate max X coordinate where an entity could be
   ld    a, #max_map_y_coord_valid
   sub   e_h(ix)  
@@ -106,8 +123,11 @@ check_y:
   ;; Check is new Y coordinate is smaller than max allowed
   ;; IF new(B)>max(A) THEN C-flag=1, new position is invalid, position is not updated
   cp    b
-  ret   c
+  jr    nc, update_y_ok
+  ld    e_vy(ix), #0
+  jr    end_update_y  
 
+update_y_ok:
   ld    a, e_vy(ix)
   and   a 
   jr    z, end_update_y ; vy = 0

@@ -1,17 +1,17 @@
 ; ; ; ; MIT License
-
+; ; ; ; 
 ; ; ; ; Copyright (c) 2020 Carlos Eduardo Arismendi Sánchez / Antón Chernysh / Sergio Cortés Espinosa
-
+; ; ; ; 
 ; ; ; ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; ; ; ; of this software and associated documentation files (the "Software"), to deal
 ; ; ; ; in the Software without restriction, including without limitation the rights
 ; ; ; ; to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 ; ; ; ; copies of the Software, and to permit persons to whom the Software is
 ; ; ; ; furnished to do so, subject to the following conditions:
-
+; ; ; ; 
 ; ; ; ; The above copyright notice and this permission notice shall be included in all
 ; ; ; ; copies or substantial portions of the Software.
-
+; ; ; ;
 ; ; ; ; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 ; ; ; ; IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 ; ; ; ; FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +19,18 @@
 ; ; ; ; LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 ; ; ; ; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ; ; ; ; SOFTWARE.
+
+; ; ; ; ----------------- AUTHORS ------------------
+; ; ; ; Code & Graphics: 
+; ; ; ;     Anton Chernysh: anton_chernysh@outlook.es 
+; ; ; ;     Carlos Eduardo Arismendi Sánchez: carlos.arismendisanchez@gmail.com
+; ; ; ; Loading screen & Music: 
+; ; ; ;     Sergio Cortes Espinosa: sercotes93@gmail.com
+; ; ; ; ---------------------------------------------
+
+; ; ; ; Third Party source code used
+; ; ; ; ----------------------------
+; ; ; ; CPCtelera - owned by ronaldo / (Cheesetea, Fremos, ByteRealms) - GNU Lesser General Public License.
 
 
 ;;
@@ -103,14 +115,14 @@ enemies_map7::
 
 enemies_map8::
   .db 5
-  DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
+  ; DefineEntity alive_type,  5,  0,   1,  4,  15, 15,   ghost  
 
-  DefineEntity alive_type,  2,  8,   4,  0,  10,  0,   no_ghost
-  DefineEntity alive_type, 12,  1,   0, 16,   0, 15,   no_ghost  
-  ;DefineEntity alive_type,  0,  2,   4,  0,  12,  0,   no_ghost  
+  DefineEntity alive_type,  2,  8,   4,  0,  20,  0,   no_ghost
+  DefineEntity alive_type, 12,  1,   0, 16,   0, 25,   no_ghost  
+  DefineEntity alive_type,  0,  2,   4,  0,  20,  0,   no_ghost  
 
-  DefineEntity alive_type, 11,  6,   0, 16,   0, 10,   no_ghost  
-  DefineEntity alive_type, 15,  8,   0, 16,   0,  9,   no_ghost
+  DefineEntity alive_type, 11,  6,   0, 16,   0, 40,   no_ghost  
+  DefineEntity alive_type, 15,  8,   0, 16,   0, 40,   no_ghost
 
 enemies_map9::
   .db 6
