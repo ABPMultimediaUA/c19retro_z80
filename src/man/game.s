@@ -216,6 +216,8 @@ _dead_man_game_wait_continue:
 
 
 _dead_man_game_wait_restart:
+  call  cpct_waitVSYNC_asm
+  call  cpct_akp_musicPlay_asm
   call  sys_input_press_restart   ;; Returns in register A if start was pressed (R)
 
   or    a                       ;; If A=00 THEN do not start (loop) ELSE start game (ret)
