@@ -114,10 +114,12 @@ A_NotPressed:
   call  cpct_isKeyPressed_asm
   jr    z, Esc_NotPressed
 Esc_Pressed:
-  call  man_game_menu
+  call  sys_render_remove_ghosts
+  call  man_game_menu  
   ;call  man_entity_init
   ; call  sys_render_init
   call  sys_render_map  
+  call  sys_render_remove_ghosts
   ; call  sys_physics_init
   
 Esc_NotPressed:
